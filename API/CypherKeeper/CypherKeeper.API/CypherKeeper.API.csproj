@@ -37,5 +37,11 @@
     <ProjectReference Include="..\CypherKeeper.Utility\CypherKeeper.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CrystalAuthLayer">
+      <HintPath>..\..\..\..\..\Henry's Projects\Transfers\API\transfer-api\Catagories\CC\External DLLs\CrystalAuthLayer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
 
