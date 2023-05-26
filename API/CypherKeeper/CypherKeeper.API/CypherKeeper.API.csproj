@@ -39,7 +39,7 @@
 
   <ItemGroup>
     <Reference Include="CrystalAuthLayer">
-      <HintPath>..\..\..\..\..\Henry's Projects\Transfers\API\transfer-api\Catagories\CC\External DLLs\CrystalAuthLayer.dll</HintPath>
+      <HintPath>..\..\CrystalAuthLayer\crystalauthlayer\Publish\CrystalAuthLayer.dll</HintPath>
     </Reference>
   </ItemGroup>
 

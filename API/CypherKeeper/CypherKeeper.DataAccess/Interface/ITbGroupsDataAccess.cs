@@ -10,6 +10,11 @@ namespace CypherKeeper.DataAccess.Interface
 {
     public interface ITbGroupsDataAccess
     {
-        public List<tbGroupsModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null);
+        List<tbGroupsModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true);
+        tbGroupsModel GetById(Guid Id, bool onlyNonDeleted = true);
+        tbGroupsModel Add(tbGroupsModel model);
+        bool Update(Guid Id, tbGroupsModel model);
+        bool Delete(Guid Id);
+        bool Restore(Guid Id);
     }
 }
