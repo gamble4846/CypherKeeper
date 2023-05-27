@@ -18,8 +18,8 @@ namespace CypherKeeper.Model
         public Guid? WebsiteId { get; set; }
         public String Notes { get; set; }
         public Boolean isDeleted { get; set; } = false;
-        public DateTime DeletedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

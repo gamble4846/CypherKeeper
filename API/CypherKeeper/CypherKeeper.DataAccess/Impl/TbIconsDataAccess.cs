@@ -69,7 +69,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
             var WhereCondition = " WHERE Id = @Id ";
-            return _EC.Update(model, WhereCondition, Parameters, "Id", true) == "true";
+            return _EC.Update(model, WhereCondition, Parameters, "Id", true).ToUpper() == "TRUE";
         }
 
         public bool Delete(Guid Id)
@@ -77,7 +77,8 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
-            var Query = "UPDATE tbIcons SET isDeleted = 1 WHERE Id = @Id";
+            Parameters.Add(new SqlParameter("@DeletedDate", DateTime.UtcNow.ToString()));
+            var Query = "UPDATE tbIcons SET isDeleted = 1, DeletedDate = @DeletedDate WHERE Id = @Id";
             return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
 
@@ -90,10 +91,15 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
 
-        public int Total()
+        public int Total(bool onlyNonDeleted = true)
         {
             var _EC = new EasyCrud(ConnectionString);
-            return _EC.Count<tbIconsModel>(null, null, GSEnums.WithInQuery.ReadPast);
+            var WhereCondition = "  ";
+            if (onlyNonDeleted)
+            {
+                WhereCondition = " WHERE isDeleted = 0 ";
+            }
+            return _EC.Count<tbIconsModel>(WhereCondition, null, GSEnums.WithInQuery.ReadPast);
         }
     }
 }

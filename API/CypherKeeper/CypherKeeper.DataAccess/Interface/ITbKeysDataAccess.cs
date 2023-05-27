@@ -16,6 +16,6 @@ namespace CypherKeeper.DataAccess.SQL.Interface
         bool Update(Guid Id, tbKeysModel model);
         bool Delete(Guid Id);
         bool Restore(Guid Id);
-        int Total();
+        int Total(bool onlyNonDeleted = true);
     }
 }

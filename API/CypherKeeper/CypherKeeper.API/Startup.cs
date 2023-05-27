@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using CypherKeeper.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using CypherKeeper.Manager.Interface;
+using CypherKeeper.Manager.Impl;
 
 namespace CypherKeeper.API
 {
@@ -68,6 +70,7 @@ namespace CypherKeeper.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             #region Dependency
+            services.AddTransient<ITbGroupsManager, TbGroupsManager>();
             #endregion
 
         }
