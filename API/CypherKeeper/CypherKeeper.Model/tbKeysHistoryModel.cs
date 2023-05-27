@@ -15,5 +15,6 @@ namespace CypherKeeper.Model
         public String KeysJSON { get; set; }
         public String Type { get; set; }
         public Boolean isDeleted { get; set; } = false;
+        public DateTime Date { get; set; }
     }
 }

@@ -15,5 +15,8 @@ namespace CypherKeeper.Model
         public String Value { get; set; }
         public Guid ParentKeyId { get; set; }
         public Boolean isDeleted { get; set; } = false;
+        public DateTime DeletedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

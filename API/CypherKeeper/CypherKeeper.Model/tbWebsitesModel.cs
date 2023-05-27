@@ -15,5 +15,8 @@ namespace CypherKeeper.Model
         public String Link { get; set; }
         public Guid IconId { get; set; }
         public Boolean isDeleted { get; set; } = false;
+        public DateTime DeletedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
