@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CypherKeeper.DataAccess\CypherKeeper.DataAccess.csproj" />
+    <ProjectReference Include="..\CypherKeeper.DataAccess\CypherKeeper.DataAccess.SQL.csproj" />
     <ProjectReference Include="..\CypherKeeper.Model\CypherKeeper.Model.csproj" />
   </ItemGroup>
 
@@ -26,12 +26,6 @@
     <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="CrystalAuthLayer">
-      <HintPath>..\..\CrystalAuthLayer\crystalauthlayer\Publish\CrystalAuthLayer.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

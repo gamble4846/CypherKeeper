@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -31,16 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CypherKeeper.DataAccess\CypherKeeper.DataAccess.csproj" />
+    <ProjectReference Include="..\CypherKeeper.DataAccess\CypherKeeper.DataAccess.SQL.csproj" />
     <ProjectReference Include="..\CypherKeeper.Manager\CypherKeeper.Manager.csproj" />
     <ProjectReference Include="..\CypherKeeper.Model\CypherKeeper.Model.csproj" />
     <ProjectReference Include="..\CypherKeeper.Utility\CypherKeeper.Utility.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="CrystalAuthLayer">
-      <HintPath>..\..\CrystalAuthLayer\crystalauthlayer\Publish\CrystalAuthLayer.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

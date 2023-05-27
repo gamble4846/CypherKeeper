@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 
 namespace CypherKeeper.DataAccess.SQL.Impl
 {
-    public class TbGroupsDataAccess : ITbGroupsDataAccess
+    public class TbKeysDataAccess : ITbKeysDataAccess
     {
         private CommonFunctions _CF { get; set; }
         private string ConnectionString { get; set; }
-        public TbGroupsDataAccess(string connectionString, CommonFunctions _cf)
+        public TbKeysDataAccess(string connectionString, CommonFunctions _cf)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             catch (Exception) { }
         }
 
-        public List<tbGroupsModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
+        public List<tbKeysModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
         {
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
@@ -40,10 +40,10 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             {
                 WhereCondition = " WHERE isDeleted = 0 ";
             }
-            return _EC.GetList<tbGroupsModel>(page, itemsPerPage, orderBy, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
+            return _EC.GetList<tbKeysModel>(page, itemsPerPage, orderBy, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
 
-        public tbGroupsModel GetById(Guid Id, bool onlyNonDeleted = true)
+        public tbKeysModel GetById(Guid Id, bool onlyNonDeleted = true)
         {
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
@@ -53,17 +53,17 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             {
                 WhereCondition += " AND isDeleted = 0 ";
             }
-            return _EC.GetFirstOrDefault<tbGroupsModel>(WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
+            return _EC.GetFirstOrDefault<tbKeysModel>(WhereCondition, Parameters, GSEnums.WithInQuery.NoLock);
         }
 
-        public tbGroupsModel Add(tbGroupsModel model)
+        public tbKeysModel Add(tbKeysModel model)
         {
             var _EC = new EasyCrud(ConnectionString);
-            var newId = _EC.Add(model,"Id","Id", true);
-            return GetById(Guid.Parse(newId),false);
+            var newId = _EC.Add(model, "Id", "Id", true);
+            return GetById(Guid.Parse(newId), false);
         }
 
-        public bool Update(Guid Id, tbGroupsModel model)
+        public bool Update(Guid Id, tbKeysModel model)
         {
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
@@ -77,8 +77,8 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
-            var Query = "UPDATE tbGroups SET isDeleted = 1 WHERE Id = @Id";
-            return _EC.Query(Query, Parameters,true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
+            var Query = "UPDATE tbKeys SET isDeleted = 1 WHERE Id = @Id";
+            return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
 
         public bool Restore(Guid Id)
@@ -86,7 +86,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
-            var Query = "UPDATE tbGroups SET isDeleted = 0 WHERE Id = @Id";
+            var Query = "UPDATE tbKeys SET isDeleted = 0 WHERE Id = @Id";
             return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
     }

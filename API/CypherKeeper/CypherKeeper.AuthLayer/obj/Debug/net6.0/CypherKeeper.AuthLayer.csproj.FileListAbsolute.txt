@@ -1,0 +1,12 @@
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.csproj.AssemblyReference.cache
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.AssemblyInfoInputs.cache
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.AssemblyInfo.cs
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.csproj.CoreCompileInputs.cache
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\bin\Debug\net6.0\CypherKeeper.AuthLayer.deps.json
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\bin\Debug\net6.0\CypherKeeper.AuthLayer.dll
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\bin\Debug\net6.0\CypherKeeper.AuthLayer.pdb
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.dll
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\refint\CypherKeeper.AuthLayer.dll
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\CypherKeeper.AuthLayer.pdb
+D:\Github\Rohan's Projects\CypherKeeper\API\CypherKeeper\CypherKeeper.AuthLayer\obj\Debug\net6.0\ref\CypherKeeper.AuthLayer.dll

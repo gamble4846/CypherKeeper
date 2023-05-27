@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CypherKeeper.DataAccess.Interface
+namespace CypherKeeper.DataAccess.SQL.Interface
 {
     public interface ITbIconsDataAccess
     {

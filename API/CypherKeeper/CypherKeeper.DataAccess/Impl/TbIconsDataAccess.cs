@@ -1,5 +1,6 @@
-﻿using AuthLayer.Utility;
-using CypherKeeper.DataAccess.Interface;
+﻿using CypherKeeper.AuthLayer.Models;
+using CypherKeeper.AuthLayer.Utility;
+using CypherKeeper.DataAccess.SQL.Interface;
 using CypherKeeper.Model;
 using EasyCrudLibrary;
 using EasyCrudLibrary.Model;
@@ -14,18 +15,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CypherKeeper.DataAccess.Impl
+namespace CypherKeeper.DataAccess.SQL.Impl
 {
     public class TbIconsDataAccess : ITbIconsDataAccess
     {
-        private CommonFunctions _cf { get; set; }
+        private CommonFunctions _CF { get; set; }
         private string ConnectionString { get; set; }
-        public TbIconsDataAccess(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHostingEnvironment env)
+        public TbIconsDataAccess(string connectionString, CommonFunctions _cf)
         {
             try
             {
-                _cf = new CommonFunctions(configuration, env.ContentRootPath, httpContextAccessor);
-                ConnectionString = _cf.GetNewConnectionString();
+                ConnectionString = connectionString;
+                _CF = _cf;
             }
             catch (Exception) { }
         }

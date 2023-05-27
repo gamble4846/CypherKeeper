@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CypherKeeper.AuthLayer\CypherKeeper.AuthLayer.csproj" />
+    <ProjectReference Include="..\CypherKeeper.Model\CypherKeeper.Model.csproj" />
+    <ProjectReference Include="..\CypherKeeper.Utility\CypherKeeper.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EasyCrudLibrary" Version="1.0.7" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
@@ -21,6 +27,12 @@
     <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CrystalAuthLayer">
+      <HintPath>..\..\CrystalAuthLayer\crystalauthlayer\Publish\CrystalAuthLayer.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
