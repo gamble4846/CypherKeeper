@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CypherKeeper.Manager.Interface
 {
-    public interface ITbWebsitesModelManager
+    public interface ITbWebsitesManager
     {
         APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true);
         APIResponse Add(tbWebsitesModel model);

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace CypherKeeper.Manager.Impl
 {
-    public class TbWebsitesModelManager : ITbWebsitesModelManager
+    public class TbWebsitesManager : ITbWebsitesManager
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbWebsitesDataAccess SQLTbWebsitesDataAccess { get; set; }
@@ -23,7 +23,7 @@ namespace CypherKeeper.Manager.Impl
         public string ConnectionString { get; set; }
         public string ServerType { get; set; }
 
-        public TbWebsitesModelManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public TbWebsitesManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
             TokenData = CommonFunctions.GetTokenData();
