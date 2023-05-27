@@ -82,5 +82,11 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var Query = "UPDATE tbWebsites SET isDeleted = 0 WHERE Id = @Id";
             return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
+
+        public int Total()
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            return _EC.Count<tbWebsitesModel>(null, null, GSEnums.WithInQuery.ReadPast);
+        }
     }
 }
