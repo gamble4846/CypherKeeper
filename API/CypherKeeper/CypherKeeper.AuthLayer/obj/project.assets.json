@@ -12135,19 +12135,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chint\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
+      "projectUniqueName": "D:\\Github\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
       "projectName": "CypherKeeper.AuthLayer",
-      "projectPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
-      "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
-      "outputPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\obj\\",
+      "projectPath": "D:\\Github\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "D:\\Github\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12258,7 +12258,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -1,4 +1,6 @@
 /API/CypherKeeper/.vs/
+/API/CypherKeeper/CypherKeeper.AuthLayer/bin/
+/API/CypherKeeper/CypherKeeper.AuthLayer/obj/
 /API/CypherKeeper/CypherKeeper.API/bin/
 /API/CypherKeeper/CypherKeeper.API/obj/
 /API/CypherKeeper/CypherKeeper.DataAccess/bin/
