@@ -19,7 +19,7 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbStringKeyFieldsDataAccess SQLTbStringKeyFieldsDataAccess { get; set; }
-        public TokenModel TokenData { get; set; }
+        public SettingsModel TokenData { get; set; }
         public string ConnectionString { get; set; }
         public string ServerType { get; set; }
 

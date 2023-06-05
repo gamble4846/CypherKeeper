@@ -29,7 +29,7 @@ namespace CypherKeeper.AuthLayer.Utility
 
         }
 
-        public TokenModel GetTokenData()
+        public SettingsModel GetTokenData()
         {
             try
             {
@@ -56,8 +56,8 @@ namespace CypherKeeper.AuthLayer.Utility
                 var claims = handler.ValidateToken(token, validations, out var tokenSecure);
                 var otherClaims = claims.Identities.ToList()[0].Claims.ToList();
 
-                TokenModel TokenData = new TokenModel();
-                TokenData = JsonConvert.DeserializeObject<TokenModel>(otherClaims.Find(x => x.Type == "TokenData").Value);
+                SettingsModel TokenData = new SettingsModel();
+                TokenData = JsonConvert.DeserializeObject<SettingsModel>(otherClaims.Find(x => x.Type == "TokenData").Value);
                 return TokenData;
             }
             catch (Exception)

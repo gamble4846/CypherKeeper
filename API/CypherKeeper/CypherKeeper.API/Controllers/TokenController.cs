@@ -31,7 +31,7 @@ namespace CypherKeeper.API.Controllers
 
         [HttpPost]
         [Route("/api/CreateToken")]
-        public ActionResult CreateToken(TokenModel model)
+        public ActionResult CreateToken(SettingsModel model)
         {
             var jwtSection = Configuration.GetSection("Jwt");
             var Secret = jwtSection.GetValue<string>("Secret");

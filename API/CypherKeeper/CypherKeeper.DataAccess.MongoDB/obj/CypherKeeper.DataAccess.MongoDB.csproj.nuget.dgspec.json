@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {}
+    "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.DataAccess.MongoDB\\CypherKeeper.DataAccess.MongoDB.csproj": {}
   },
   "projects": {
-    "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
+    "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.DataAccess.MongoDB\\CypherKeeper.DataAccess.MongoDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
-        "projectName": "CypherKeeper.AuthLayer",
-        "projectPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
+        "projectUniqueName": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.DataAccess.MongoDB\\CypherKeeper.DataAccess.MongoDB.csproj",
+        "projectName": "CypherKeeper.DataAccess.MongoDB",
+        "projectPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.DataAccess.MongoDB\\CypherKeeper.DataAccess.MongoDB.csproj",
         "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.AuthLayer\\obj\\",
+        "outputPath": "D:\\Github\\Rohan's Projects\\CypherKeeper\\API\\CypherKeeper\\CypherKeeper.DataAccess.MongoDB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",

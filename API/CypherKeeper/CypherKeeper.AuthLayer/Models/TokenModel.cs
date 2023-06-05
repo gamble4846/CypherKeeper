@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CypherKeeper.AuthLayer.Models
 {
-    public class TokenModel
+    public class SettingsModel
     {
         public List<Server> Servers { get; set; }
     }
