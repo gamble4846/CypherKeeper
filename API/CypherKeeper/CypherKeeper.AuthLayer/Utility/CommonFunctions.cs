@@ -32,36 +32,12 @@ namespace CypherKeeper.AuthLayer.Utility
 
         }
 
-        public SettingsModel GetTokenData()
+        public SettingsModel GetSettings()
         {
             try
             {
-                string token = GetTokenFromHeader();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    return null;
-                }
-
-                token = token.Replace("Bearer ", "");
-                var jwtSection = Configuration.GetSection("Jwt");
-                var Secret = Encoding.ASCII.GetBytes(jwtSection.GetValue<string>("Secret"));
-                var ValidIssuer = jwtSection.GetValue<string>("ValidIssuer");
-                var ValidAudience = jwtSection.GetValue<string>("ValidAudience");
-                var handler = new JwtSecurityTokenHandler();
-                var validations = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Secret),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-                var claims = handler.ValidateToken(token, validations, out var tokenSecure);
-                var otherClaims = claims.Identities.ToList()[0].Claims.ToList();
-
-                SettingsModel TokenData = new SettingsModel();
-                TokenData = JsonConvert.DeserializeObject<SettingsModel>(otherClaims.Find(x => x.Type == "TokenData").Value);
-                return TokenData;
+                var currentUser = GetCurrentUser();
+                return currentUser.Settings;
             }
             catch (Exception)
             {

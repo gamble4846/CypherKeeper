@@ -19,16 +19,16 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbKeysDataAccess SQLTbKeysDataAccess { get; set; }
-        public SettingsModel TokenData { get; set; }
+        public SettingsModel SettingsData { get; set; }
         public string ConnectionString { get; set; }
         public string ServerType { get; set; }
 
         public TbKeysManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
-            TokenData = CommonFunctions.GetTokenData();
-            ConnectionString = TokenData.Servers.Find(x => x.IsSelected).ConnectionString;
-            ServerType = TokenData.Servers.Find(x => x.IsSelected).DatabaseType;
+            SettingsData = CommonFunctions.GetSettings();
+            ConnectionString = SettingsData.Servers.Find(x => x.IsSelected).ConnectionString;
+            ServerType = SettingsData.Servers.Find(x => x.IsSelected).DatabaseType;
         }
 
         public APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)

@@ -59,14 +59,14 @@ namespace CypherKeeper.API.Controllers
         {
             try
             {
-                var tokenData = CommonFunctions.GetTokenData();
+                var tokenData = CommonFunctions.GetSettings();
                 if (tokenData == null)
                 {
                     return StatusCode(500, new APIResponse(ResponseCode.ERROR, "Token Not Found", null));
                 }
                 else
                 {
-                    return Ok(new APIResponse(ResponseCode.SUCCESS, "Token Recieved", CommonFunctions.GetTokenData()));
+                    return Ok(new APIResponse(ResponseCode.SUCCESS, "Token Recieved", CommonFunctions.GetSettings()));
                 }
             }
             catch (Exception ex)
