@@ -40,7 +40,7 @@ namespace CypherKeeper.AuthLayer.Utility
             return clearText;
         }
 
-        public dynamic Decrypt(string cipherText)
+        public string Decrypt(string cipherText)
         {
             var jwtSection = Configuration.GetSection("Jwt");
             string EncryptionKey = jwtSection.GetValue<String>("Secret");
@@ -61,7 +61,7 @@ namespace CypherKeeper.AuthLayer.Utility
                     cipherText = Encoding.Unicode.GetString(ms.ToArray());
                 }
             }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(cipherText);
+            return cipherText;
         }
     }
 }

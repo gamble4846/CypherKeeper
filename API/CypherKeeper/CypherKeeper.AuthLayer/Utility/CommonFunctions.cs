@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using CypherKeeper.AuthLayer.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace CypherKeeper.AuthLayer.Utility
 {
@@ -100,7 +102,7 @@ namespace CypherKeeper.AuthLayer.Utility
 
             var claims = new List<Claim>();
 
-            foreach(var claim in Claims)
+            foreach (var claim in Claims)
             {
                 claims.Add(new Claim(claim.ClaimName, JsonConvert.SerializeObject(claim.Data)));
             }
@@ -135,7 +137,49 @@ namespace CypherKeeper.AuthLayer.Utility
 
                 return otherClaims;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public tbAccessModel GetCurrentUser()
+        {
+            try
+            {
+                var _cryptography = new Cryptography(Configuration);
+
+                var accessToken = GetTokenFromHeader();
+                if (string.IsNullOrEmpty(accessToken)) { return null; }
+
+                var claims = GetClaimsFromToken(accessToken);
+                if (claims == null) { return null; }
+
+                var LoginDataClaim = claims.Find(x => x.Type == "LoginData");
+                if (LoginDataClaim == null) { return null; }
+
+                var LoginData = JsonConvert.DeserializeObject<LoginModel>(LoginDataClaim.Value);
+                if (LoginData == null) { return null; }
+                LoginData.Password = _cryptography.Decrypt(LoginData.Password);
+
+                var MongoValues = GetMongoDBValues();
+                var Settings = MongoClientSettings.FromConnectionString(MongoValues.ConnectionString);
+                Settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+                var Client = new MongoClient(Settings);
+                var Database = Client.GetDatabase(MongoValues.Database);
+                var Collection = "tbAccess";
+                var collection = Database.GetCollection<tbAccessModel>(Collection);
+                var filter = Builders<tbAccessModel>.Filter.Eq("Username", LoginData.Username);
+                var documents = collection.Find(filter).ToList();
+                if (documents.Count == 0) { return null; }
+
+                var CurrentUserData = documents[0];
+                var VerifyPassword = SecureHasher.Verify(LoginData.Password, CurrentUserData.Password);
+                if (!VerifyPassword) { return null; }
+
+                return CurrentUserData;
+            }
+            catch (Exception)
             {
                 return null;
             }

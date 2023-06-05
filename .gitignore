@@ -13,3 +13,4 @@
 /API/CypherKeeper/CypherKeeper.Model/obj/
 /API/CypherKeeper/CypherKeeper.Utility/bin/
 /API/CypherKeeper/CypherKeeper.Utility/obj/
+*.dll
