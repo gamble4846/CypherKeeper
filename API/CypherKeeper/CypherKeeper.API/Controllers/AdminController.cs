@@ -35,7 +35,7 @@ namespace CypherKeeper.API.Controllers
             AdminManager = adminManager;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/api/Admin/Register")]
         public ActionResult Register(RegisterModel model)
         {
@@ -45,6 +45,20 @@ namespace CypherKeeper.API.Controllers
             }
             catch (Exception ex)
             { 
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
+        [HttpGet]
+        [Route("/api/Admin/Login")]
+        public ActionResult Login(string Username, string Password)
+        {
+            try
+            {
+                return Ok(AdminManager.Login(Username, Password));
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }

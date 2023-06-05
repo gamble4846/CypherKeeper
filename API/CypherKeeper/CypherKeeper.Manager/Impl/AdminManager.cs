@@ -21,6 +21,7 @@ namespace CypherKeeper.Manager.Impl
     public class AdminManager : IAdminManager
     {
         public CommonFunctions CommonFunctions { get; set; }
+        public Cryptography _Cryptography { get; set; }
         public MongoDBValues MongoValues { get; set; }
         public IAdminDataAccess DataAccess { get; set; }
 
@@ -29,6 +30,7 @@ namespace CypherKeeper.Manager.Impl
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
             MongoValues = CommonFunctions.GetMongoDBValues();
             DataAccess = new AdminDataAccess(configuration, httpContextAccessor);
+            _Cryptography = new Cryptography(configuration);
         }
 
         public APIResponse Register(RegisterModel model)
@@ -49,7 +51,7 @@ namespace CypherKeeper.Manager.Impl
             {
                 _id = Guid.NewGuid().ToString(),
                 Username = model.Username,
-                Password = model.Password,
+                Password = SecureHasher.Hash(model.Password),
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -58,6 +60,37 @@ namespace CypherKeeper.Manager.Impl
 
             var data = DataAccess.Register(ToInsertModel);
             return new APIResponse(ResponseCode.SUCCESS, "Register Success", data);
+        }
+
+        public APIResponse Login(string Username, string Password)
+        {
+            var UsernameCheck = DataAccess.GetByUsername(Username);
+            if (UsernameCheck == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "Username And Password did not match");
+            }
+
+            var VerifyPassword = SecureHasher.Verify(Password, UsernameCheck.Password);
+
+            if (VerifyPassword)
+            {
+                var model = new LoginModel()
+                {
+                    Username = Username,
+                    Password = _Cryptography.Encrypt(Password),
+                };
+
+                var claims = new List<ClaimModel>();
+                claims.Add(new ClaimModel () { ClaimName = "LoginData", Data = model });
+
+                var token = CommonFunctions.CreateJWTToken(claims);
+
+                return new APIResponse(ResponseCode.SUCCESS, "Login Success", token);
+            }
+            else
+            {
+                return new APIResponse(ResponseCode.ERROR, "Username And Password did not match");
+            }
         }
     }
 }

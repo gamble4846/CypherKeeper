@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using CypherKeeper.AuthLayer.Models;
+using System.Security.Claims;
 
 namespace CypherKeeper.AuthLayer.Utility
 {
@@ -87,6 +88,57 @@ namespace CypherKeeper.AuthLayer.Utility
             model.Database = mongoSection.GetValue<string>("Database");
 
             return model;
+        }
+
+        public string CreateJWTToken(List<ClaimModel> Claims)
+        {
+            var jwtSection = Configuration.GetSection("Jwt");
+            var Secret = jwtSection.GetValue<string>("Secret");
+            var ValidIssuer = jwtSection.GetValue<string>("ValidIssuer");
+            var ValidAudience = jwtSection.GetValue<string>("ValidAudience");
+
+
+            var claims = new List<Claim>();
+
+            foreach(var claim in Claims)
+            {
+                claims.Add(new Claim(claim.ClaimName, JsonConvert.SerializeObject(claim.Data)));
+            }
+
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(issuer: ValidIssuer, audience: ValidAudience, claims: claims, expires: DateTime.Now.AddYears(1), signingCredentials: signinCredentials);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+            return tokenString;
+        }
+
+        public List<Claim> GetClaimsFromToken(string JWTToken)
+        {
+            try
+            {
+                JWTToken = JWTToken.Replace("Bearer ", "");
+                var jwtSection = Configuration.GetSection("Jwt");
+                var Secret = Encoding.ASCII.GetBytes(jwtSection.GetValue<string>("Secret"));
+                var ValidIssuer = jwtSection.GetValue<string>("ValidIssuer");
+                var ValidAudience = jwtSection.GetValue<string>("ValidAudience");
+                var handler = new JwtSecurityTokenHandler();
+                var validations = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Secret),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+                var claims = handler.ValidateToken(JWTToken, validations, out var tokenSecure);
+                var otherClaims = claims.Identities.ToList()[0].Claims.ToList();
+
+                return otherClaims;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
