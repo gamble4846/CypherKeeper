@@ -71,6 +71,11 @@ namespace CypherKeeper.API
 
             #region Dependency
             services.AddTransient<ITbGroupsManager, TbGroupsManager>();
+            services.AddTransient<IAdminManager, AdminManager>();
+            services.AddTransient<ITbIconsManager, TbIconsManager>();
+            services.AddTransient<ITbKeysManager, TbKeysManager>();
+            services.AddTransient<ITbStringKeyFieldsManager, TbStringKeyFieldsManager>();
+            services.AddTransient<ITbWebsitesManager, TbWebsitesManager>();
             #endregion
 
         }

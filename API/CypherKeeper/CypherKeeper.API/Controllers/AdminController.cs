@@ -26,28 +26,22 @@ namespace CypherKeeper.API.Controllers
     {
         public IConfiguration Configuration { get; }
         public CommonFunctions CommonFunctions { get; set; }
-        public ITbGroupsManager TbGroupsManager { get; set; }
+        public IAdminManager AdminManager { get; set; }
 
-        public AdminController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ITbGroupsManager tbGroupsManager)
+        public AdminController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IAdminManager adminManager)
         {
             Configuration = configuration;
             CommonFunctions = new CommonFunctions(Configuration, httpContextAccessor);
-            TbGroupsManager = tbGroupsManager;
+            AdminManager = adminManager;
         }
 
         [HttpGet]
-        [Route("/api/Admin/Login")]
-        public ActionResult Login(string UserName, string Password)
+        [Route("/api/Admin/Register")]
+        public ActionResult Register(RegisterModel model)
         {
             try
             {
-                var model = new tbAccessModel()
-                {
-                    UserName = "rohan",
-                    Password = "rohan",
-                    Email = "rohan"
-                };
-                return Ok(MongoLayer.InsertMongo(model, "CypherKeeper", "tbAccess"));
+                return Ok(AdminManager.Register(model));
             }
             catch (Exception ex)
             { 

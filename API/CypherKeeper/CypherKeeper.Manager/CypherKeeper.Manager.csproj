@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CypherKeeper.DataAccess.MongoDB\CypherKeeper.DataAccess.MongoDB.csproj" />
     <ProjectReference Include="..\CypherKeeper.DataAccess\CypherKeeper.DataAccess.SQL.csproj" />
     <ProjectReference Include="..\CypherKeeper.Model\CypherKeeper.Model.csproj" />
   </ItemGroup>

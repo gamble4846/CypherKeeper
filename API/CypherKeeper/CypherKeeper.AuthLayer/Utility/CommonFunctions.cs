@@ -77,5 +77,16 @@ namespace CypherKeeper.AuthLayer.Utility
                 return null;
             }
         }
+
+        public MongoDBValues GetMongoDBValues()
+        {
+            var mongoSection = Configuration.GetSection("MongoDB");
+
+            var model = new MongoDBValues();
+            model.ConnectionString = mongoSection.GetValue<string>("ConnectionString");
+            model.Database = mongoSection.GetValue<string>("Database");
+
+            return model;
+        }
     }
 }
