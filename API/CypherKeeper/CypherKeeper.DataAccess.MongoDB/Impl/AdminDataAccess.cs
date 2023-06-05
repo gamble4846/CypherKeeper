@@ -3,14 +3,9 @@ using CypherKeeper.AuthLayer.Utility;
 using CypherKeeper.DataAccess.MongoDB.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
+using Newtonsoft.Json;
+using MongoDB.Bson.IO;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CypherKeeper.DataAccess.MongoDB.Impl
 {
@@ -73,6 +68,16 @@ namespace CypherKeeper.DataAccess.MongoDB.Impl
             {
                 return documents[0];
             }
+        }
+
+        public long UpdateSettings(SettingsModel model, tbAccessModel CurrentUser)
+        {
+            var Collection = "tbAccess";
+            var collection = Database.GetCollection<tbAccessModel>(Collection);
+            var filter = Builders<tbAccessModel>.Filter.Eq("_id", CurrentUser._id);
+            var update = Builders<tbAccessModel>.Update.Set("Settings", model);
+            var updateResult = collection.UpdateOne(filter, update);
+            return updateResult.ModifiedCount;
         }
     }
 }

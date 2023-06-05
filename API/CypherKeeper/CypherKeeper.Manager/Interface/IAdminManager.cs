@@ -14,5 +14,7 @@ namespace CypherKeeper.Manager.Interface
     {
         APIResponse Register(RegisterModel model);
         APIResponse Login(string Username, string Password);
+        APIResponse GetSettings();
+        APIResponse UpdateSettings(SettingsModel model);
     }
 }

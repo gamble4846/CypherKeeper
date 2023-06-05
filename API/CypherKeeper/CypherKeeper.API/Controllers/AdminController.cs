@@ -18,6 +18,7 @@ using EasyCrudLibrary.Model;
 using System.Collections.Generic;
 using CypherKeeper.Manager.Interface;
 using CypherKeeper.Model;
+using CypherKeeper.AuthLayer.ActionFilters;
 
 namespace CypherKeeper.API.Controllers
 {
@@ -62,5 +63,36 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }
+
+        [HttpGet]
+        [Route("/api/Settings/Get")]
+        [FullAuthorization]
+        public ActionResult GetSettings()
+        {
+            try
+            {
+                return Ok(AdminManager.GetSettings());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
+        [HttpPost]
+        [Route("/api/Settings/Update")]
+        [FullAuthorization]
+        public ActionResult UpdateSettings(SettingsModel model)
+        {
+            try
+            {
+                return Ok(AdminManager.UpdateSettings(model));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
     }
 }

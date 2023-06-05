@@ -92,5 +92,47 @@ namespace CypherKeeper.Manager.Impl
                 return new APIResponse(ResponseCode.ERROR, "Username And Password did not match");
             }
         }
+
+        public APIResponse GetSettings()
+        {
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+
+            if(CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", CurrentUser.Settings);
+        }
+
+        public APIResponse UpdateSettings(SettingsModel model)
+        {
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+
+            if (CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            var result = DataAccess.UpdateSettings(model, CurrentUser);
+
+            if(result > 0)
+            {
+                var CurrentUserNew = CommonFunctions.GetCurrentUser();
+
+                if (CurrentUserNew == null)
+                {
+                    return new APIResponse(ResponseCode.ERROR, "User Not Found");
+                }
+
+                return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", CurrentUserNew.Settings);
+            }
+            else
+            {
+                return new APIResponse(ResponseCode.ERROR, "Update Failed", null);
+            }
+
+            
+        }
     }
 }
