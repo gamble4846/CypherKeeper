@@ -3,6 +3,8 @@
 /API/CypherKeeper/CypherKeeper.API/obj/
 /API/CypherKeeper/CypherKeeper.DataAccess/bin/
 /API/CypherKeeper/CypherKeeper.DataAccess/obj/
+/API/CypherKeeper/CypherKeeper.DataAccess.MongoDB/bin/
+/API/CypherKeeper/CypherKeeper.DataAccess.MongoDB/obj/
 /API/CypherKeeper/CypherKeeper.Manager/bin/
 /API/CypherKeeper/CypherKeeper.Manager/obj/
 /API/CypherKeeper/CypherKeeper.Model/bin/
