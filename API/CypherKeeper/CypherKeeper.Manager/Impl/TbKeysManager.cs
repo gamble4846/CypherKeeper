@@ -19,24 +19,24 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbKeysDataAccess SQLTbKeysDataAccess { get; set; }
-        public SettingsModel SettingsData { get; set; }
-        public string ConnectionString { get; set; }
-        public string ServerType { get; set; }
+        public SelectedServerModel CurrentServer { get; set; }
 
         public TbKeysManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
-            SettingsData = CommonFunctions.GetSettings();
-            ConnectionString = SettingsData.Servers.Find(x => x.IsSelected).ConnectionString;
-            ServerType = SettingsData.Servers.Find(x => x.IsSelected).DatabaseType;
+            CurrentServer = CommonFunctions.GetCurrentServer();
+            if (CurrentServer == null)
+            {
+                throw new Exception("Server Not Found");
+            }
         }
 
         public APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
         {
-            switch (ServerType)
+            switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, CommonFunctions);
+                    SQLTbKeysDataAccess = new TbKeysDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLTbKeysDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
                     if (result != null && result.Count > 0)
@@ -50,16 +50,16 @@ namespace CypherKeeper.Manager.Impl
                         return new APIResponse(ResponseCode.ERROR, "No Records Found");
                     }
                 default:
-                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", ServerType);
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
         }
 
         public APIResponse Add(tbKeysModel model)
         {
-            switch (ServerType)
+            switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, CommonFunctions);
+                    SQLTbKeysDataAccess = new TbKeysDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLTbKeysDataAccess.Add(model);
                     if (result != null)
@@ -71,16 +71,16 @@ namespace CypherKeeper.Manager.Impl
                         return new APIResponse(ResponseCode.ERROR, "Record Not Inserted");
                     }
                 default:
-                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", ServerType);
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
         }
 
         public APIResponse Update(Guid Id, tbKeysModel model)
         {
-            switch (ServerType)
+            switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, CommonFunctions);
+                    SQLTbKeysDataAccess = new TbKeysDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLTbKeysDataAccess.Update(Id,model);
                     if (result)
@@ -92,16 +92,16 @@ namespace CypherKeeper.Manager.Impl
                         return new APIResponse(ResponseCode.ERROR, "Record Not Updated");
                     }
                 default:
-                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", ServerType);
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
         }
 
         public APIResponse Delete(Guid Id)
         {
-            switch (ServerType)
+            switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, CommonFunctions);
+                    SQLTbKeysDataAccess = new TbKeysDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLTbKeysDataAccess.Delete(Id);
                     if (result)
@@ -113,16 +113,16 @@ namespace CypherKeeper.Manager.Impl
                         return new APIResponse(ResponseCode.ERROR, "Record Not Deleted");
                     }
                 default:
-                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", ServerType);
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
         }
 
         public APIResponse Restore(Guid Id)
         {
-            switch (ServerType)
+            switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, CommonFunctions);
+                    SQLTbKeysDataAccess = new TbKeysDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLTbKeysDataAccess.Restore(Id);
                     if (result)
@@ -134,7 +134,7 @@ namespace CypherKeeper.Manager.Impl
                         return new APIResponse(ResponseCode.ERROR, "Record Not Restored");
                     }
                 default:
-                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", ServerType);
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
         }
     }

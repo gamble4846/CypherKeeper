@@ -11,12 +11,12 @@ using NuGet.Configuration;
 
 namespace CypherKeeper.AuthLayer.ActionFilters
 {
-    public class FullAuthorization : IAuthorizationFilter
+    public class ServerRequired : IAuthorizationFilter
     {
         public IConfiguration Configuration;
         IHttpContextAccessor HttpContextAccessor;
 
-        public FullAuthorization(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public ServerRequired(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             Configuration = configuration;
             HttpContextAccessor = httpContextAccessor;
@@ -25,8 +25,8 @@ namespace CypherKeeper.AuthLayer.ActionFilters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
-            var CurrentUser = _CF.GetCurrentUser();
-            if (CurrentUser == null)
+            var CurrentServer = _CF.GetCurrentServer();
+            if (CurrentServer == null)
             {
                 context.Result = new ForbidResult();
                 return;
@@ -34,9 +34,9 @@ namespace CypherKeeper.AuthLayer.ActionFilters
         }
     }
 
-    public class FullAuthorizationAttribute : TypeFilterAttribute
+    public class ServerRequiredAttribute : TypeFilterAttribute
     {
-        public FullAuthorizationAttribute() : base(typeof(FullAuthorization))
+        public ServerRequiredAttribute() : base(typeof(ServerRequired))
         {
             Arguments = new object[] { };
         }

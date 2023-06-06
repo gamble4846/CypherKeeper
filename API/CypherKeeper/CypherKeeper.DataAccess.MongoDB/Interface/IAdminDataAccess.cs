@@ -12,6 +12,6 @@ namespace CypherKeeper.DataAccess.MongoDB.Interface
         tbAccessModel Register(tbAccessModel model);
         tbAccessModel GetByEmail(string email);
         tbAccessModel GetByUsername(string username);
-        long UpdateSettings(SettingsModel model, tbAccessModel CurrentUser);
+        long UpdateUserSettings(SettingsModel model, tbAccessModel CurrentUser);
     }
 }

@@ -70,7 +70,7 @@ namespace CypherKeeper.DataAccess.MongoDB.Impl
             }
         }
 
-        public long UpdateSettings(SettingsModel model, tbAccessModel CurrentUser)
+        public long UpdateUserSettings(SettingsModel model, tbAccessModel CurrentUser)
         {
             var Collection = "tbAccess";
             var collection = Database.GetCollection<tbAccessModel>(Collection);

@@ -64,14 +64,14 @@ namespace CypherKeeper.API.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("/api/Settings/Get")]
-        [FullAuthorization]
-        public ActionResult GetSettings()
+        [HttpPost]
+        [Route("/api/Server/Add")]
+        [LoginAuthorization]
+        public ActionResult AddServer(ServerViewModel model)
         {
             try
             {
-                return Ok(AdminManager.GetSettings());
+                return Ok(AdminManager.AddServer(model));
             }
             catch (Exception ex)
             {
@@ -80,19 +80,18 @@ namespace CypherKeeper.API.Controllers
         }
 
         [HttpPost]
-        [Route("/api/Settings/Update")]
-        [FullAuthorization]
-        public ActionResult UpdateSettings(SettingsModel model)
+        [Route("/api/Server/Select")]
+        [LoginAuthorization]
+        public ActionResult SelectServer(SelectServerModel model)
         {
             try
             {
-                return Ok(AdminManager.UpdateSettings(model));
+                return Ok(AdminManager.SelectServer(model));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }
-
     }
 }

@@ -21,7 +21,7 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    var x = "rohan";
+    var x = "PublicMSI";
     console.log(this.publicKey);
     var y = this.RsaEncrypt(x, this.publicKey);
     console.log(y);

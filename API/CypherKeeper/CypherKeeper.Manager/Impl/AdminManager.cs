@@ -10,9 +10,11 @@ using EasyCrudLibrary.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +32,12 @@ namespace CypherKeeper.Manager.Impl
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
             MongoValues = CommonFunctions.GetMongoDBValues();
             DataAccess = new AdminDataAccess(configuration, httpContextAccessor);
-            _Cryptography = new Cryptography(configuration);
+            _Cryptography = new Cryptography(configuration, httpContextAccessor);
         }
 
         public APIResponse Register(RegisterModel model)
         {
+            model.Password = _Cryptography.DecryptRSAEncryptedString(model.Password);
             var EmailCheck = DataAccess.GetByEmail(model.Email);
             if (EmailCheck != null)
             {
@@ -76,7 +79,7 @@ namespace CypherKeeper.Manager.Impl
             if (VerifyPassword)
             {
                 var claims = new List<ClaimModel>();
-                claims.Add(new ClaimModel () { ClaimName = "LoginData", Data = model });
+                claims.Add(new ClaimModel() { ClaimName = "LoginData", Data = model });
 
                 var token = CommonFunctions.CreateJWTToken(claims);
 
@@ -88,46 +91,97 @@ namespace CypherKeeper.Manager.Impl
             }
         }
 
-        public APIResponse GetSettings()
+        public APIResponse AddServer(ServerViewModel model)
         {
-            var CurrentUser = CommonFunctions.GetCurrentUser();
-
-            if(CurrentUser == null)
+            var ToAddModel = new Server()
             {
-                return new APIResponse(ResponseCode.ERROR, "User Not Found");
-            }
+                GUIDServer = Guid.NewGuid(),
+                ServerName = model.ServerName,
+                DatabaseType = model.DatabaseType,
+                ConnectionString = _Cryptography.Encrypt(_Cryptography.DecryptRSAEncryptedString(model.ConnectionString), _Cryptography.DecryptRSAEncryptedString(model.Key)),
+                KeyVerify = _Cryptography.Encrypt("Verify", _Cryptography.DecryptRSAEncryptedString(model.Key)),
+            };
 
-            return new APIResponse(ResponseCode.SUCCESS, "Records Found", CurrentUser.Settings);
-        }
-
-        public APIResponse UpdateSettings(SettingsModel model)
-        {
             var CurrentUser = CommonFunctions.GetCurrentUser();
-
             if (CurrentUser == null)
             {
                 return new APIResponse(ResponseCode.ERROR, "User Not Found");
             }
 
-            var result = DataAccess.UpdateSettings(model, CurrentUser);
-
-            if(result > 0)
+            var OldSettingsData = CommonFunctions.CreateDeepCopy(CurrentUser.Settings);
+            if (OldSettingsData == null)
             {
-                var CurrentUserNew = CommonFunctions.GetCurrentUser();
+                OldSettingsData = new SettingsModel();
+            }
+            if (OldSettingsData.Servers == null)
+            {
+                OldSettingsData.Servers = new List<Server>();
+            }
 
-                if (CurrentUserNew == null)
+            OldSettingsData.Servers.Add(ToAddModel);
+
+
+            var result = DataAccess.UpdateUserSettings(OldSettingsData, CurrentUser);
+
+            if (result > 0)
+            {
+                var toReturn = new ServerDisplayModel()
                 {
-                    return new APIResponse(ResponseCode.ERROR, "User Not Found");
-                }
-
-                return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", CurrentUserNew.Settings);
+                    GUIDServer = ToAddModel.GUIDServer,
+                    ServerName = ToAddModel.ServerName,
+                    DatabaseType = ToAddModel.DatabaseType,
+                };
+                return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", toReturn);
             }
             else
             {
                 return new APIResponse(ResponseCode.ERROR, "Update Failed", null);
             }
+        }
 
-            
+        public APIResponse SelectServer(SelectServerModel model)
+        {
+            model.Key = _Cryptography.DecryptRSAEncryptedString(model.Key);
+
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+            if (CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            var SettingsData = CommonFunctions.CreateDeepCopy(CurrentUser.Settings);
+            if (SettingsData == null || SettingsData.Servers == null || SettingsData.Servers.Count == 0)
+            {
+                return new APIResponse(ResponseCode.ERROR, "Server Not Found");
+            }
+
+            var CurrentServer = SettingsData.Servers.Find(x => x.GUIDServer == model.GUIDServer);
+            if (CurrentServer == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "Server Not Found");
+            }
+
+            var _KeyVerify = _Cryptography.Decrypt(CurrentServer.KeyVerify, model.Key);
+            if (_KeyVerify != "Verify")
+            {
+                return new APIResponse(ResponseCode.ERROR, "Incorrect Key");
+            }
+
+            var SelectedServer = new SelectedServerModel()
+            {
+                GUIDServer = CurrentServer.GUIDServer,
+                ServerName = CurrentServer.ServerName,
+                DatabaseType = CurrentServer.DatabaseType,
+                ConnectionString = _Cryptography.Decrypt(CurrentServer.ConnectionString, model.Key),
+                Key = model.Key
+            };
+
+            var OldClaims = CommonFunctions.GetClaimsFromToken(CommonFunctions.GetTokenFromHeader());
+            OldClaims.Add(new Claim("Server Data", JsonConvert.SerializeObject(SelectedServer)));
+
+            var NewToken = CommonFunctions.CreateJWTToken(OldClaims);
+
+            return new APIResponse(ResponseCode.SUCCESS, "Server Selected", NewToken);
         }
     }
 }

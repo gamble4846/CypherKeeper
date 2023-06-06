@@ -23,7 +23,8 @@ using CypherKeeper.AuthLayer.ActionFilters;
 namespace CypherKeeper.API.Controllers
 {
     [ApiController]
-    [FullAuthorization]
+    [LoginAuthorization]
+    [ServerRequired]
     public class TbGroupsController : ControllerBase
     {
         public IConfiguration Configuration { get; }

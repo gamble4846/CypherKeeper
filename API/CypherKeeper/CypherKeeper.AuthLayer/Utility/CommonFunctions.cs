@@ -27,11 +27,6 @@ namespace CypherKeeper.AuthLayer.Utility
             HttpContextAccessor = httpContextAccessor;
         }
 
-        public CommonFunctions()
-        {
-
-        }
-
         public SettingsModel GetSettings()
         {
             try
@@ -91,6 +86,21 @@ namespace CypherKeeper.AuthLayer.Utility
             return tokenString;
         }
 
+        public string CreateJWTToken(List<Claim> Claims)
+        {
+            var jwtSection = Configuration.GetSection("Jwt");
+            var Secret = jwtSection.GetValue<string>("Secret");
+            var ValidIssuer = jwtSection.GetValue<string>("ValidIssuer");
+            var ValidAudience = jwtSection.GetValue<string>("ValidAudience");
+
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(issuer: ValidIssuer, audience: ValidAudience, claims: Claims, expires: DateTime.Now.AddYears(1), signingCredentials: signinCredentials);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+            return tokenString;
+        }
+
         public List<Claim> GetClaimsFromToken(string JWTToken)
         {
             try
@@ -119,11 +129,37 @@ namespace CypherKeeper.AuthLayer.Utility
             }
         }
 
+        public SelectedServerModel GetCurrentServer()
+        {
+            try
+            {
+                var _cryptography = new Cryptography(Configuration, HttpContextAccessor);
+
+                var accessToken = GetTokenFromHeader();
+                if (string.IsNullOrEmpty(accessToken)) { return null; }
+
+                var claims = GetClaimsFromToken(accessToken);
+                if (claims == null) { return null; }
+
+                var ServerDataClaim = claims.Find(x => x.Type == "Server Data");
+                if (ServerDataClaim == null) { return null; }
+
+                var ServerData = JsonConvert.DeserializeObject<SelectedServerModel>(ServerDataClaim.Value);
+                if (ServerData == null) { return null; }
+
+                return ServerData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public tbAccessModel GetCurrentUser()
         {
             try
             {
-                var _cryptography = new Cryptography(Configuration);
+                var _cryptography = new Cryptography(Configuration, HttpContextAccessor);
 
                 var accessToken = GetTokenFromHeader();
                 if (string.IsNullOrEmpty(accessToken)) { return null; }
@@ -158,6 +194,13 @@ namespace CypherKeeper.AuthLayer.Utility
             {
                 return null;
             }
+        }
+
+        public static T CreateDeepCopy<T>(T obj)
+        {
+            var stringObj = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            var returnObect = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringObj);
+            return returnObect;
         }
     }
 }

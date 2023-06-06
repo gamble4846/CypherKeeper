@@ -18,11 +18,13 @@ using EasyCrudLibrary.Model;
 using System.Collections.Generic;
 using CypherKeeper.Manager.Interface;
 using CypherKeeper.Model;
+using CypherKeeper.AuthLayer.ActionFilters;
 
 namespace CypherKeeper.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [LoginAuthorization]
+    [ServerRequired]
     public class TbWebsitesController : ControllerBase
     {
         public IConfiguration Configuration { get; }

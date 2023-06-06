@@ -1,4 +1,5 @@
 ﻿using CypherKeeper.AuthLayer.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,33 @@ namespace CypherKeeper.AuthLayer.Utility
 {
     public class Cryptography
     {
-        public IConfiguration Configuration { get; }
-        public Cryptography(IConfiguration configuration)
+        public IConfiguration Configuration { get; set; }
+        public IHttpContextAccessor HttpContextAccessor { get; set; }
+        public string DecryptionKey { get; set; }
+        public Cryptography(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             Configuration = configuration;
+            HttpContextAccessor = httpContextAccessor;
+            DecryptionKey = GetCurrentDecryptedKey();
         }
+
+        #region Other Helper Funcations
+
+        public string GetCurrentDecryptedKey()
+        {
+            try
+            {
+                return DecryptRSAEncryptedString(HttpContextAccessor.HttpContext.Request.Headers["DecryptKey"]);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region RSA Encrypt Decrypt
 
         public string DecryptRSAEncryptedString(string cipherText)
         {
@@ -45,6 +68,8 @@ namespace CypherKeeper.AuthLayer.Utility
             var encryptedData = Convert.ToBase64String(encryptedBytes);
             return encryptedData;
         }
+
+        #endregion
 
         #region Basic Encrypt Decrypt
 
@@ -103,26 +128,23 @@ namespace CypherKeeper.AuthLayer.Utility
 
         #endregion
 
-
         #region SettingsModel
 
-        public SettingsModel EncryptData(SettingsModel model, string EncryptionKey)
+        public SettingsModel EncryptData(SettingsModel model)
         {
             foreach(var server in model.Servers)
             {
-                server.DatabaseType = Encrypt(server.DatabaseType, EncryptionKey);
-                server.ConnectionString = Encrypt(server.ConnectionString, EncryptionKey);
+                server.ConnectionString = Encrypt(server.ConnectionString, DecryptionKey);
             }
 
             return model;
         }
 
-        public SettingsModel DecryptData(SettingsModel model, string EncryptionKey)
+        public SettingsModel DecryptData(SettingsModel model)
         {
             foreach (var server in model.Servers)
             {
-                server.DatabaseType = Decrypt(server.DatabaseType, EncryptionKey);
-                server.ConnectionString = Decrypt(server.ConnectionString, EncryptionKey);
+                server.ConnectionString = Decrypt(server.ConnectionString, DecryptionKey);
             }
 
             return model;
