@@ -62,24 +62,19 @@ namespace CypherKeeper.Manager.Impl
             return new APIResponse(ResponseCode.SUCCESS, "Register Success", data);
         }
 
-        public APIResponse Login(string Username, string Password)
+        public APIResponse Login(LoginModel model)
         {
-            var UsernameCheck = DataAccess.GetByUsername(Username);
+            model.Password = _Cryptography.DecryptRSAEncryptedString(model.Password);
+            var UsernameCheck = DataAccess.GetByUsername(model.Username);
             if (UsernameCheck == null)
             {
                 return new APIResponse(ResponseCode.ERROR, "Username And Password did not match");
             }
 
-            var VerifyPassword = SecureHasher.Verify(Password, UsernameCheck.Password);
+            var VerifyPassword = SecureHasher.Verify(model.Password, UsernameCheck.Password);
 
             if (VerifyPassword)
             {
-                var model = new LoginModel()
-                {
-                    Username = Username,
-                    Password = _Cryptography.Encrypt(Password),
-                };
-
                 var claims = new List<ClaimModel>();
                 claims.Add(new ClaimModel () { ClaimName = "LoginData", Data = model });
 

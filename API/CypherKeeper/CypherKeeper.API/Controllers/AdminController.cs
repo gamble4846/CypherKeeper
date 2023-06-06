@@ -50,13 +50,13 @@ namespace CypherKeeper.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/api/Admin/Login")]
-        public ActionResult Login(string Username, string Password)
+        public ActionResult Login(LoginModel model)
         {
             try
             {
-                return Ok(AdminManager.Login(Username, Password));
+                return Ok(AdminManager.Login(model));
             }
             catch (Exception ex)
             {

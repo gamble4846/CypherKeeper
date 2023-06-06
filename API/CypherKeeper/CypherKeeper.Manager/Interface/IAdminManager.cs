@@ -13,7 +13,7 @@ namespace CypherKeeper.Manager.Interface
     public interface IAdminManager
     {
         APIResponse Register(RegisterModel model);
-        APIResponse Login(string Username, string Password);
+        APIResponse Login(LoginModel model);
         APIResponse GetSettings();
         APIResponse UpdateSettings(SettingsModel model);
     }

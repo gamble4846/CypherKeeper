@@ -136,7 +136,6 @@ namespace CypherKeeper.AuthLayer.Utility
 
                 var LoginData = JsonConvert.DeserializeObject<LoginModel>(LoginDataClaim.Value);
                 if (LoginData == null) { return null; }
-                LoginData.Password = _cryptography.Decrypt(LoginData.Password);
 
                 var MongoValues = GetMongoDBValues();
                 var Settings = MongoClientSettings.FromConnectionString(MongoValues.ConnectionString);
