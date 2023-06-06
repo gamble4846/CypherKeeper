@@ -127,29 +127,5 @@ namespace CypherKeeper.AuthLayer.Utility
         }
 
         #endregion
-
-        #region SettingsModel
-
-        public SettingsModel EncryptData(SettingsModel model)
-        {
-            foreach(var server in model.Servers)
-            {
-                server.ConnectionString = Encrypt(server.ConnectionString, DecryptionKey);
-            }
-
-            return model;
-        }
-
-        public SettingsModel DecryptData(SettingsModel model)
-        {
-            foreach (var server in model.Servers)
-            {
-                server.ConnectionString = Decrypt(server.ConnectionString, DecryptionKey);
-            }
-
-            return model;
-        }
-
-        #endregion
     }
 }
