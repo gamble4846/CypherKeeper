@@ -1,4 +1,5 @@
 ﻿using CypherKeeper.AuthLayer.Models;
+using CypherKeeper.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -17,11 +18,16 @@ namespace CypherKeeper.AuthLayer.Utility
         public IConfiguration Configuration { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; set; }
         public string DecryptionKey { get; set; }
+        public CommonFunctions CommonFunctions { get; set; }
+        public SelectedServerModel CurrentServer { get; set; }
+        
         public Cryptography(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             Configuration = configuration;
             HttpContextAccessor = httpContextAccessor;
             DecryptionKey = GetCurrentDecryptedKey();
+            CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
+            CurrentServer = CommonFunctions.GetCurrentServer();
         }
 
         #region Other Helper Funcations
@@ -124,6 +130,22 @@ namespace CypherKeeper.AuthLayer.Utility
                 }
             }
             return cipherText;
+        }
+
+        #endregion
+
+        #region tbGroupsModel
+
+        public tbGroupsModel EncryptModel(tbGroupsModel model)
+        {
+            model.Name = Encrypt(model.Name, CurrentServer.Key);
+            return model;
+        }
+
+        public tbGroupsModel DecryptModel(tbGroupsModel model)
+        {
+            model.Name = Encrypt(model.Name, CurrentServer.Key);
+            return model;
         }
 
         #endregion
