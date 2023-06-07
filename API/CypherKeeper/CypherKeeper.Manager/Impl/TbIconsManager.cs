@@ -6,6 +6,7 @@ using CypherKeeper.Manager.Interface;
 using CypherKeeper.Model;
 using EasyCrudLibrary.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -33,17 +34,18 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
         {
+            var GlobalResult = new List<tbIconsModel>();
+            var GlobalTotal = 0;
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
                     SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
                     var result = SQLTbIconsDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
                     if (result != null && result.Count > 0)
                     {
-                        var total = SQLTbIconsDataAccess.Total();
-                        var response = new { records = result, pageNumber = page, pageSize = itemsPerPage, totalRecords = total };
-                        return new APIResponse(ResponseCode.SUCCESS, "Records Found", response);
+                        GlobalResult = result;
+                        GlobalTotal = SQLTbIconsDataAccess.Total();
+                        break;
                     }
                     else
                     {
@@ -52,6 +54,9 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+
+            var response = new { records = GlobalResult, pageNumber = page, pageSize = itemsPerPage, totalRecords = GlobalTotal };
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", response);
         }
 
         public APIResponse Add(tbIconsModel model)

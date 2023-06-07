@@ -23,7 +23,6 @@ namespace CypherKeeper.Manager.Impl
     public class AdminManager : IAdminManager
     {
         public CommonFunctions CommonFunctions { get; set; }
-        public Cryptography _Cryptography { get; set; }
         public MongoDBValues MongoValues { get; set; }
         public IAdminDataAccess DataAccess { get; set; }
 
@@ -32,12 +31,11 @@ namespace CypherKeeper.Manager.Impl
             CommonFunctions = new CommonFunctions(configuration, httpContextAccessor);
             MongoValues = CommonFunctions.GetMongoDBValues();
             DataAccess = new AdminDataAccess(configuration, httpContextAccessor);
-            _Cryptography = new Cryptography(configuration, httpContextAccessor);
         }
 
         public APIResponse Register(RegisterModel model)
         {
-            model.Password = _Cryptography.DecryptRSAEncryptedString(model.Password);
+            model.Password = CommonFunctions.DecryptRSAEncryptedString(model.Password);
             var EmailCheck = DataAccess.GetByEmail(model.Email);
             if (EmailCheck != null)
             {
@@ -67,7 +65,7 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse Login(LoginModel model)
         {
-            model.Password = _Cryptography.DecryptRSAEncryptedString(model.Password);
+            model.Password = CommonFunctions.DecryptRSAEncryptedString(model.Password);
             var UsernameCheck = DataAccess.GetByUsername(model.Username);
             if (UsernameCheck == null)
             {
@@ -79,10 +77,10 @@ namespace CypherKeeper.Manager.Impl
             if (VerifyPassword)
             {
                 var claims = new List<ClaimModel>();
+                model.Password = CommonFunctions.Encrypt(model.Password);
                 claims.Add(new ClaimModel() { ClaimName = "LoginData", Data = model });
 
                 var token = CommonFunctions.CreateJWTToken(claims);
-
                 return new APIResponse(ResponseCode.SUCCESS, "Login Success", token);
             }
             else
@@ -98,8 +96,8 @@ namespace CypherKeeper.Manager.Impl
                 GUIDServer = Guid.NewGuid(),
                 ServerName = model.ServerName,
                 DatabaseType = model.DatabaseType,
-                ConnectionString = _Cryptography.Encrypt(_Cryptography.DecryptRSAEncryptedString(model.ConnectionString), _Cryptography.DecryptRSAEncryptedString(model.Key)),
-                KeyVerify = _Cryptography.Encrypt("Verify", _Cryptography.DecryptRSAEncryptedString(model.Key)),
+                ConnectionString = CommonFunctions.Encrypt(CommonFunctions.DecryptRSAEncryptedString(model.ConnectionString), CommonFunctions.DecryptRSAEncryptedString(model.Key)),
+                KeyVerify = CommonFunctions.Encrypt("Verify", CommonFunctions.DecryptRSAEncryptedString(model.Key)),
             };
 
             var CurrentUser = CommonFunctions.GetCurrentUser();
@@ -141,7 +139,7 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse SelectServer(SelectServerModel model)
         {
-            model.Key = _Cryptography.DecryptRSAEncryptedString(model.Key);
+            model.Key = CommonFunctions.DecryptRSAEncryptedString(model.Key);
 
             var CurrentUser = CommonFunctions.GetCurrentUser();
             if (CurrentUser == null)
@@ -161,7 +159,7 @@ namespace CypherKeeper.Manager.Impl
                 return new APIResponse(ResponseCode.ERROR, "Server Not Found");
             }
 
-            var _KeyVerify = _Cryptography.Decrypt(CurrentServer.KeyVerify, model.Key);
+            var _KeyVerify = CommonFunctions.Decrypt(CurrentServer.KeyVerify, model.Key);
             if (_KeyVerify != "Verify")
             {
                 return new APIResponse(ResponseCode.ERROR, "Incorrect Key");
@@ -172,12 +170,12 @@ namespace CypherKeeper.Manager.Impl
                 GUIDServer = CurrentServer.GUIDServer,
                 ServerName = CurrentServer.ServerName,
                 DatabaseType = CurrentServer.DatabaseType,
-                ConnectionString = _Cryptography.Decrypt(CurrentServer.ConnectionString, model.Key),
+                ConnectionString = CommonFunctions.Decrypt(CurrentServer.ConnectionString, model.Key),
                 Key = model.Key
             };
 
             var OldClaims = CommonFunctions.GetClaimsFromToken(CommonFunctions.GetTokenFromHeader());
-            OldClaims.Add(new Claim("Server Data", JsonConvert.SerializeObject(SelectedServer)));
+            OldClaims.Add(new Claim("Server Data", CommonFunctions.Encrypt(JsonConvert.SerializeObject(SelectedServer))));
 
             var NewToken = CommonFunctions.CreateJWTToken(OldClaims);
 

@@ -25,8 +25,8 @@ namespace CypherKeeper.AuthLayer.ActionFilters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
-            var CurrentUser = _CF.GetCurrentUser();
-            if (CurrentUser == null)
+            var IsTokenValid = _CF.ValidateCurrentToken();
+            if (!IsTokenValid)
             {
                 context.Result = new ForbidResult();
                 return;

@@ -12,6 +12,8 @@ using CypherKeeper.AuthLayer.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using System.Security.Principal;
+using CypherKeeper.Model;
 
 namespace CypherKeeper.AuthLayer.Utility
 {
@@ -133,8 +135,6 @@ namespace CypherKeeper.AuthLayer.Utility
         {
             try
             {
-                var _cryptography = new Cryptography(Configuration, HttpContextAccessor);
-
                 var accessToken = GetTokenFromHeader();
                 if (string.IsNullOrEmpty(accessToken)) { return null; }
 
@@ -143,8 +143,9 @@ namespace CypherKeeper.AuthLayer.Utility
 
                 var ServerDataClaim = claims.Find(x => x.Type == "Server Data");
                 if (ServerDataClaim == null) { return null; }
+                var unEncrypedServerDataValue = Decrypt(ServerDataClaim.Value);
 
-                var ServerData = JsonConvert.DeserializeObject<SelectedServerModel>(ServerDataClaim.Value);
+                var ServerData = JsonConvert.DeserializeObject<SelectedServerModel>(unEncrypedServerDataValue);
                 if (ServerData == null) { return null; }
 
                 return ServerData;
@@ -159,7 +160,6 @@ namespace CypherKeeper.AuthLayer.Utility
         {
             try
             {
-                var _cryptography = new Cryptography(Configuration, HttpContextAccessor);
 
                 var accessToken = GetTokenFromHeader();
                 if (string.IsNullOrEmpty(accessToken)) { return null; }
@@ -172,6 +172,7 @@ namespace CypherKeeper.AuthLayer.Utility
 
                 var LoginData = JsonConvert.DeserializeObject<LoginModel>(LoginDataClaim.Value);
                 if (LoginData == null) { return null; }
+                LoginData.Password = Decrypt(LoginData.Password);
 
                 var MongoValues = GetMongoDBValues();
                 var Settings = MongoClientSettings.FromConnectionString(MongoValues.ConnectionString);
@@ -201,6 +202,185 @@ namespace CypherKeeper.AuthLayer.Utility
             var stringObj = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             var returnObect = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringObj);
             return returnObect;
+        }
+
+        public bool ValidateCurrentToken()
+        {
+            var jwtSection = Configuration.GetSection("Jwt");
+            var Secret = jwtSection.GetValue<string>("Secret");
+            var ValidIssuer = jwtSection.GetValue<string>("ValidIssuer");
+            var ValidAudience = jwtSection.GetValue<string>("ValidAudience");
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = ValidIssuer,
+                ValidAudience = ValidAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret)) // The same key as the one that generate the token
+            };
+
+            SecurityToken validatedToken;
+            var oldToken = GetTokenFromHeader();
+            oldToken = oldToken.Replace("Bearer ", "");
+            IPrincipal principal = tokenHandler.ValidateToken(oldToken, validationParameters, out validatedToken);
+            return true;
+        }
+
+        public string GetCurrentDecryptedKey()
+        {
+            try
+            {
+                return DecryptRSAEncryptedString(HttpContextAccessor.HttpContext.Request.Headers["DecryptKey"]);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
+        public string DecryptRSAEncryptedString(string cipherText)
+        {
+            var RSACryptographySection = Configuration.GetSection("RSACryptography");
+
+            string privateKey = RSACryptographySection.GetValue<String>("PrivateKey");
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(privateKey);
+            var encryptedBytes = Convert.FromBase64String(cipherText);
+            var decryptedBytes = rsa.Decrypt(encryptedBytes, false);
+            var decryptedData = Encoding.UTF8.GetString(decryptedBytes);
+
+            return decryptedData;
+        }
+
+        public string EncryptRSAString(string data)
+        {
+            var RSACryptographySection = Configuration.GetSection("RSACryptography");
+
+            string PublicKey = RSACryptographySection.GetValue<String>("PublicKey");
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(PublicKey);
+            var dataBytes = Encoding.UTF8.GetBytes(data);
+            var encryptedBytes = rsa.Encrypt(dataBytes, false);
+            var encryptedData = Convert.ToBase64String(encryptedBytes);
+            return encryptedData;
+        }
+
+
+        public string Encrypt(string clearText, string EncryptionKey = null)
+        {
+            var jwtSection = Configuration.GetSection("Jwt");
+
+            if (String.IsNullOrEmpty(EncryptionKey))
+                EncryptionKey = jwtSection.GetValue<String>("Secret");
+
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
+        }
+
+        public string Decrypt(string cipherText, string EncryptionKey = null)
+        {
+            var jwtSection = Configuration.GetSection("Jwt");
+
+            if (String.IsNullOrEmpty(EncryptionKey))
+                EncryptionKey = jwtSection.GetValue<String>("Secret");
+
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+            return cipherText;
+        }
+
+
+        public tbGroupsModel EncryptModel(tbGroupsModel model)
+        {
+            model.Name = Encrypt(model.Name, GetCurrentServer().Key);
+            return model;
+        }
+
+        public tbGroupsModel DecryptModel(tbGroupsModel model)
+        {
+            model.Name = Decrypt(model.Name, GetCurrentServer().Key);
+            return model;
+        }
+
+
+        public tbKeysHistoryModel EncryptModel(tbKeysHistoryModel model)
+        {
+            model.KeysJSON = Encrypt(model.KeysJSON, GetCurrentServer().Key);
+            return model;
+        }
+
+        public tbKeysHistoryModel DecryptModel(tbKeysHistoryModel model)
+        {
+            model.KeysJSON = Decrypt(model.KeysJSON, GetCurrentServer().Key);
+            return model;
+        }
+
+
+        public tbKeysModel EncryptModel(tbKeysModel model)
+        {
+            model.Name = Encrypt(model.Name, GetCurrentServer().Key);
+            model.UserName = Encrypt(model.UserName, GetCurrentServer().Key);
+            model.Password = Encrypt(model.Password, GetCurrentServer().Key);
+            model.Notes = Encrypt(model.Notes, GetCurrentServer().Key);
+            return model;
+        }
+
+        public tbKeysModel DecryptModel(tbKeysModel model)
+        {
+            model.Name = Decrypt(model.Name, GetCurrentServer().Key);
+            model.UserName = Decrypt(model.UserName, GetCurrentServer().Key);
+            model.Password = Decrypt(model.Password, GetCurrentServer().Key);
+            model.Notes = Decrypt(model.Notes, GetCurrentServer().Key);
+            return model;
+        }
+
+
+        public tbStringKeyFieldsModel EncryptModel(tbStringKeyFieldsModel model)
+        {
+            model.Name = Encrypt(model.Name, GetCurrentServer().Key);
+            model.Value = Encrypt(model.Value, GetCurrentServer().Key);
+            return model;
+        }
+
+        public tbStringKeyFieldsModel DecryptModel(tbStringKeyFieldsModel model)
+        {
+            model.Name = Decrypt(model.Name, GetCurrentServer().Key);
+            model.Value = Decrypt(model.Value, GetCurrentServer().Key);
+            return model;
         }
     }
 }
