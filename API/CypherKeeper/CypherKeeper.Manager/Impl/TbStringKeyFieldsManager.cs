@@ -62,12 +62,15 @@ namespace CypherKeeper.Manager.Impl
             }
 
             var response = new { records = GlobalResult, pageNumber = page, pageSize = itemsPerPage, totalRecords = GlobalTotal };
-            return new APIResponse(ResponseCode.SUCCESS, "Records Found", response);
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
 
         public APIResponse Add(tbStringKeyFieldsModel model)
         {
             model = CommonFunctions.EncryptModel(model);
+            tbStringKeyFieldsModel FinalResult = new tbStringKeyFieldsModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
@@ -76,7 +79,8 @@ namespace CypherKeeper.Manager.Impl
                     var result = SQLTbStringKeyFieldsDataAccess.Add(model);
                     if (result != null)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", result);
+                        FinalResult = result;
+                        break;
                     }
                     else
                     {
@@ -85,6 +89,11 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+
+            FinalResult = CommonFunctions.DecryptModel(FinalResult);
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(FinalResult);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+            return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", EncryptedStringsResponse, true);
         }
 
         public APIResponse Update(Guid Id, tbStringKeyFieldsModel model)

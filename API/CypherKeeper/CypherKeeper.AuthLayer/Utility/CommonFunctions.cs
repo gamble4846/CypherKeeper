@@ -160,7 +160,6 @@ namespace CypherKeeper.AuthLayer.Utility
         {
             try
             {
-
                 var accessToken = GetTokenFromHeader();
                 if (string.IsNullOrEmpty(accessToken)) { return null; }
 
@@ -190,6 +189,30 @@ namespace CypherKeeper.AuthLayer.Utility
                 if (!VerifyPassword) { return null; }
 
                 return CurrentUserData;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public string GetCurrentPublicEncryptionKey()
+        {
+            try
+            {
+                var accessToken = GetTokenFromHeader();
+                if (string.IsNullOrEmpty(accessToken)) { return null; }
+
+                var claims = GetClaimsFromToken(accessToken);
+                if (claims == null) { return null; }
+
+                var LoginDataClaim = claims.Find(x => x.Type == "LoginData");
+                if (LoginDataClaim == null) { return null; }
+
+                var LoginData = JsonConvert.DeserializeObject<LoginModel>(LoginDataClaim.Value);
+                if (LoginData == null) { return null; }
+
+                return LoginData.NewPublicKey;
             }
             catch (Exception)
             {
@@ -242,11 +265,14 @@ namespace CypherKeeper.AuthLayer.Utility
         }
 
 
-        public string DecryptRSAEncryptedString(string cipherText)
+        public string DecryptRSAEncryptedString(string cipherText, string privateKey = null)
         {
             var RSACryptographySection = Configuration.GetSection("RSACryptography");
 
-            string privateKey = RSACryptographySection.GetValue<String>("PrivateKey");
+            if (String.IsNullOrEmpty(privateKey))
+            {
+                privateKey = RSACryptographySection.GetValue<String>("PrivateKey");
+            }
             var rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(privateKey);
             var encryptedBytes = Convert.FromBase64String(cipherText);
@@ -256,13 +282,17 @@ namespace CypherKeeper.AuthLayer.Utility
             return decryptedData;
         }
 
-        public string EncryptRSAString(string data)
+        public string EncryptRSAString(string data, string publicKey = null)
         {
             var RSACryptographySection = Configuration.GetSection("RSACryptography");
 
-            string PublicKey = RSACryptographySection.GetValue<String>("PublicKey");
+            if (String.IsNullOrEmpty(publicKey))
+            {
+                publicKey = RSACryptographySection.GetValue<String>("PublicKey");
+            }
+
             var rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(PublicKey);
+            rsa.FromXmlString(publicKey);
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var encryptedBytes = rsa.Encrypt(dataBytes, false);
             var encryptedData = Convert.ToBase64String(encryptedBytes);
@@ -381,6 +411,51 @@ namespace CypherKeeper.AuthLayer.Utility
             model.Name = Decrypt(model.Name, GetCurrentServer().Key);
             model.Value = Decrypt(model.Value, GetCurrentServer().Key);
             return model;
+        }
+
+        public IEnumerable<string> SplitByLength(string str, int maxLength)
+        {
+            for (int index = 0; index < str.Length; index += maxLength)
+            {
+                yield return str.Substring(index, Math.Min(maxLength, str.Length - index));
+            }
+        }
+
+        public List<string> EncryptFinalResponseString(string dataString)
+        {
+            var SplitedString = SplitByLength(dataString, 100);
+
+            var publicKey = GetCurrentPublicEncryptionKey();
+
+            if(String.IsNullOrEmpty(publicKey))
+            {
+                throw new Exception("Public Key Not Found");
+            }
+
+            try
+            {
+                byte[] data = Convert.FromBase64String(publicKey);
+                publicKey = Encoding.UTF8.GetString(data);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message,ex);
+            }
+
+            var EncryptedResponseStrings = new List<string>();
+
+            foreach(var str in SplitedString)
+            {
+                var rsa = new RSACryptoServiceProvider();
+                rsa.ImportFromPem(publicKey.ToCharArray());
+                var dataBytes = Encoding.UTF8.GetBytes(str);
+                var encryptedBytes = rsa.Encrypt(dataBytes, false);
+                var encryptedData = Convert.ToBase64String(encryptedBytes);
+
+                EncryptedResponseStrings.Add(encryptedData);
+            }
+
+            return EncryptedResponseStrings;
         }
     }
 }

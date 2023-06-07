@@ -63,6 +63,7 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse Add(tbWebsitesModel model)
         {
+            tbWebsitesModel FinalResult = new tbWebsitesModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
@@ -71,7 +72,8 @@ namespace CypherKeeper.Manager.Impl
                     var result = SQLTbWebsitesDataAccess.Add(model);
                     if (result != null)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", result);
+                        FinalResult = result;
+                        break;
                     }
                     else
                     {
@@ -80,6 +82,7 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+            return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", FinalResult);
         }
 
         public APIResponse Update(Guid Id, tbWebsitesModel model)

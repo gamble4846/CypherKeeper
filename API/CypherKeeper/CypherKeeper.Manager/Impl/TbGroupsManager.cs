@@ -1,4 +1,5 @@
-﻿using CypherKeeper.AuthLayer.Models;
+﻿using Azure;
+using CypherKeeper.AuthLayer.Models;
 using CypherKeeper.AuthLayer.Utility;
 using CypherKeeper.DataAccess.SQL.Impl;
 using CypherKeeper.DataAccess.SQL.Interface;
@@ -8,6 +9,7 @@ using EasyCrudLibrary.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,12 +63,16 @@ namespace CypherKeeper.Manager.Impl
             }
 
             var response = new { records = GlobalResult, pageNumber = page, pageSize = itemsPerPage, totalRecords = GlobalTotal };
-            return new APIResponse(ResponseCode.SUCCESS, "Records Found", response);
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
 
         public APIResponse Add(tbGroupsModel model)
         {
             model = CommonFunctions.EncryptModel(model);
+            tbGroupsModel FinalResult = new tbGroupsModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
@@ -75,7 +81,8 @@ namespace CypherKeeper.Manager.Impl
                     var result = SQLTbGroupsDataAccess.Add(model);
                     if (result != null)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", result);
+                        FinalResult = result;
+                        break;
                     }
                     else
                     {
@@ -84,6 +91,11 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+
+            FinalResult = CommonFunctions.DecryptModel(FinalResult);
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(FinalResult);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+            return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", EncryptedStringsResponse, true);
         }
 
         public APIResponse Update(Guid Id, tbGroupsModel model)

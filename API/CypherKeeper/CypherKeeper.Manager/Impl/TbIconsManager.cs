@@ -61,6 +61,7 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse Add(tbIconsModel model)
         {
+            tbIconsModel FinalResult = new tbIconsModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
@@ -69,7 +70,8 @@ namespace CypherKeeper.Manager.Impl
                     var result = SQLTbIconsDataAccess.Add(model);
                     if (result != null)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", result);
+                        FinalResult = result;
+                        break;
                     }
                     else
                     {
@@ -78,6 +80,9 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+
+
+            return new APIResponse(ResponseCode.SUCCESS, "Record Inserted", FinalResult);
         }
 
         public APIResponse Update(Guid Id, tbIconsModel model)
