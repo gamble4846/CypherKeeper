@@ -141,7 +141,7 @@ namespace CypherKeeper.AuthLayer.Utility
                 var claims = GetClaimsFromToken(accessToken);
                 if (claims == null) { return null; }
 
-                var ServerDataClaim = claims.Find(x => x.Type == "Server Data");
+                var ServerDataClaim = claims.Find(x => x.Type == "ServerData");
                 if (ServerDataClaim == null) { return null; }
                 var unEncrypedServerDataValue = Decrypt(ServerDataClaim.Value);
 

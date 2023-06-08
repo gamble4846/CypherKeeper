@@ -175,7 +175,7 @@ namespace CypherKeeper.Manager.Impl
             };
 
             var OldClaims = CommonFunctions.GetClaimsFromToken(CommonFunctions.GetTokenFromHeader());
-            OldClaims.Add(new Claim("Server Data", CommonFunctions.Encrypt(JsonConvert.SerializeObject(SelectedServer))));
+            OldClaims.Add(new Claim("ServerData", CommonFunctions.Encrypt(JsonConvert.SerializeObject(SelectedServer))));
 
             var NewToken = CommonFunctions.CreateJWTToken(OldClaims);
 

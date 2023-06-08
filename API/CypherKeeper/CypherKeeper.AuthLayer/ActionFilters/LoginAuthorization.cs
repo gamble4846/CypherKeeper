@@ -24,11 +24,19 @@ namespace CypherKeeper.AuthLayer.ActionFilters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
-            var IsTokenValid = _CF.ValidateCurrentToken();
-            if (!IsTokenValid)
+            try
             {
-                context.Result = new ForbidResult();
+                var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
+                var IsTokenValid = _CF.ValidateCurrentToken();
+                if (!IsTokenValid)
+                {
+                    context.Result = new ForbidResult("Invalid Token");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                context.Result = new ForbidResult(ex.Message + " Invalid Token");
                 return;
             }
         }

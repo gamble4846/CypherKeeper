@@ -24,11 +24,19 @@ namespace CypherKeeper.AuthLayer.ActionFilters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
-            var CurrentServer = _CF.GetCurrentServer();
-            if (CurrentServer == null)
+            try
             {
-                context.Result = new ForbidResult();
+                var _CF = new CommonFunctions(Configuration, HttpContextAccessor);
+                var CurrentServer = _CF.GetCurrentServer();
+                if (CurrentServer == null)
+                {
+                    context.Result = new ForbidResult("Server Not Selected");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                context.Result = new ForbidResult(ex.Message + " Server Not Selected");
                 return;
             }
         }

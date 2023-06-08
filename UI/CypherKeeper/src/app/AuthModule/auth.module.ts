@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginSignUpComponent } from './LoginSignUp/login-sign-up.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 
 @NgModule({
@@ -11,7 +14,11 @@ import { LoginSignUpComponent } from './LoginSignUp/login-sign-up.component';
   ],
   imports: [
     CommonModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzFormModule,
+    NzButtonModule
   ]
 })
 export class AuthModule { }
