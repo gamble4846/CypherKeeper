@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
+import * as JsEncryptModule from 'jsencrypt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
 
-  constructor() { }
+  encryptMod: any;
+
+  constructor(
+
+  ){
+    this.encryptMod = new JsEncryptModule.JSEncrypt();
+  }
 
   showMessage(type: string, message:string): void {
     console.log(type,message);
@@ -19,5 +26,17 @@ export class CommonService {
     }).join(''));
 
     return JSON.parse(jsonPayload);
+  }
+
+  RsaEncrypt(data: string, key: string) {
+    this.encryptMod.setPublicKey(key);
+    var cypherText = this.encryptMod.encrypt(data);
+    return cypherText;
+  }
+
+  RsaDecrypt(data: string, key: string) {
+    this.encryptMod.setPrivateKey(key);
+    var decypherText = this.encryptMod.decrypt(data);
+    return decypherText;
   }
 }
