@@ -13,6 +13,10 @@ export class AuthService {
     localStorage.setItem("UserToken", token);
   }
 
+  AddJWTSelectedServerToken(token:string){
+    sessionStorage.setItem("SelectedServerToken", token);
+  }
+
   SetRSAPrivateKeyForAPI(PrivateKey:string){
     var Base64String = this._CS.EncodeBase64(PrivateKey);
     localStorage.setItem("RSAPrivateKeyForAPI", Base64String);
@@ -45,9 +49,5 @@ export class AuthService {
       return TokenData;
     }
     return null;
-  }
-
-  AddJWTSelectedServerToken(token:string){
-    sessionStorage.setItem("SelectedServerToken", token);
   }
 }

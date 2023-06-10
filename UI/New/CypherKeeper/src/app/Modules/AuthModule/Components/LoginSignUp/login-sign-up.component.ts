@@ -6,6 +6,7 @@ import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
 import { AdminControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/admin-controller.service';
 import { LoginModel } from 'src/app/Models/LoginModel';
 import { AuthService } from 'src/app/Modules/SharedModule/Services/OtherServices/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-sign-up',
@@ -18,6 +19,7 @@ export class LoginSignUpComponent {
     public _CommonService:CommonService,
     public _AuthService:AuthService,
     public _AdminControllerService:AdminControllerService,
+    public _Router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,10 @@ export class LoginSignUpComponent {
         if(response.code == 1){
           this._AuthService.AddJWTUserTokenToLocal(response.document);
           this._AuthService.SetRSAPrivateKeyForAPI(RSAKeyPair.PrivateKey);
+          this._Router.navigateByUrl("/Server");
+        }
+        else{
+          console.log("Invalid Login");
         }
       })
       console.log("LoginData", LoginData);

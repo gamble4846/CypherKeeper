@@ -79,6 +79,21 @@ namespace CypherKeeper.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/api/Servers/Get")]
+        [LoginAuthorization]
+        public ActionResult GetServers()
+        {
+            try
+            {
+                return Ok(AdminManager.GetServers());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
         [HttpPost]
         [Route("/api/Server/Select")]
         [LoginAuthorization]

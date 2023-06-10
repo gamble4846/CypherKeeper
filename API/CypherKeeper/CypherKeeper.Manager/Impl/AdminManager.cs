@@ -137,6 +137,27 @@ namespace CypherKeeper.Manager.Impl
             }
         }
 
+        public APIResponse GetServers()
+        {
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+            if (CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            var SettingsData = CommonFunctions.CreateDeepCopy(CurrentUser.Settings);
+            if (SettingsData == null)
+            {
+                SettingsData = new SettingsModel();
+            }
+            if (SettingsData.Servers == null)
+            {
+                SettingsData.Servers = new List<Server>();
+            }
+
+            return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", SettingsData.Servers);
+        }
+
         public APIResponse SelectServer(SelectServerModel model)
         {
             model.Key = CommonFunctions.DecryptRSAEncryptedString(model.Key);
