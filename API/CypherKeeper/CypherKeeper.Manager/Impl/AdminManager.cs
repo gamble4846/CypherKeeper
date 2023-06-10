@@ -99,6 +99,7 @@ namespace CypherKeeper.Manager.Impl
                 DatabaseType = model.DatabaseType,
                 ConnectionString = CommonFunctions.Encrypt(CommonFunctions.DecryptRSAEncryptedString(model.ConnectionString), CommonFunctions.DecryptRSAEncryptedString(model.Key)),
                 KeyVerify = CommonFunctions.Encrypt("Verify", CommonFunctions.DecryptRSAEncryptedString(model.Key)),
+                ImageLink = model.ImageLink,
             };
 
             var CurrentUser = CommonFunctions.GetCurrentUser();
@@ -129,6 +130,7 @@ namespace CypherKeeper.Manager.Impl
                     GUIDServer = ToAddModel.GUIDServer,
                     ServerName = ToAddModel.ServerName,
                     DatabaseType = ToAddModel.DatabaseType,
+                    ImageLink = ToAddModel.ImageLink,
                 };
                 return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", toReturn);
             }
@@ -193,7 +195,8 @@ namespace CypherKeeper.Manager.Impl
                 ServerName = CurrentServer.ServerName,
                 DatabaseType = CurrentServer.DatabaseType,
                 ConnectionString = CommonFunctions.Decrypt(CurrentServer.ConnectionString, model.Key),
-                Key = model.Key
+                Key = model.Key,
+                ImageLink = CurrentServer.ImageLink,
             };
 
             var OldClaims = CommonFunctions.GetClaimsFromToken(CommonFunctions.GetTokenFromHeader());

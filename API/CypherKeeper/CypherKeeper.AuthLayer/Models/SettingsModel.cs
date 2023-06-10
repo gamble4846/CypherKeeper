@@ -18,6 +18,7 @@ namespace CypherKeeper.AuthLayer.Models
         public string DatabaseType { get; set; }
         public string ConnectionString { get; set; }
         public string KeyVerify { get; set; }
+        public string ImageLink { get; set; }
     }
 
     public class ServerViewModel
@@ -26,6 +27,7 @@ namespace CypherKeeper.AuthLayer.Models
         public string DatabaseType { get; set; }
         public string ConnectionString { get; set; }
         public string Key { get; set; }
+        public string ImageLink { get; set; }
     }
 
     public class ServerDisplayModel
@@ -33,6 +35,7 @@ namespace CypherKeeper.AuthLayer.Models
         public Guid GUIDServer { get; set; }
         public string ServerName { get; set; }
         public string DatabaseType { get; set; }
+        public string ImageLink { get; set; }
     }
 
     public class SelectedServerModel
@@ -42,6 +45,7 @@ namespace CypherKeeper.AuthLayer.Models
         public string DatabaseType { get; set; }
         public string ConnectionString { get; set; }
         public string Key { get; set; }
+        public string ImageLink { get; set; }
     }
 
     public class SelectServerModel
