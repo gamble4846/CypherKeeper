@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ServerRoutingModule } from './server-routing.module';
 import { OpenerComponent } from './Components/OpenerComponent/opener.component';
+import { SharedModule } from "../SharedModule/shared.module";
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { OpenerComponent } from './Components/OpenerComponent/opener.component';
   ],
   imports: [
     CommonModule,
-    ServerRoutingModule
+    ServerRoutingModule,
+    SharedModule
   ]
 })
 export class ServerModule { }

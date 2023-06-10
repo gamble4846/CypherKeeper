@@ -32,7 +32,8 @@ export class AdminControllerService {
     return this.http.get(apiLink);
   }
 
-  SelectServer(){
-    
+  GetImages(){
+    let apiLink = `${CONSTANTS.APIUrl}/api/Images/Get`;
+    return this.http.get(apiLink);
   }
 }

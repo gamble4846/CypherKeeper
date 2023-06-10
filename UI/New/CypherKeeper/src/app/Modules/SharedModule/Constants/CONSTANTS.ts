@@ -9,5 +9,5 @@ LozZJt27tZMkmFeXqdxHcfKPBamD++pSVi9WpBL/hyuWpxNpPWFbRB6uexCQfQfp
 KkzsaePTT5K+inuJvQIDAQAB
 -----END PUBLIC KEY-----`;
 
-// export const APIUrl = `http://192.168.0.105/CypherKeeperAPI`;
-export const APIUrl = `https://localhost:44376`;
+export const APIUrl = `http://192.168.0.105/CypherKeeperAPI`;
+// export const APIUrl = `https://localhost:44376`;
