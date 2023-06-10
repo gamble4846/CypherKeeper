@@ -9,4 +9,4 @@ LozZJt27tZMkmFeXqdxHcfKPBamD++pSVi9WpBL/hyuWpxNpPWFbRB6uexCQfQfp
 KkzsaePTT5K+inuJvQIDAQAB
 -----END PUBLIC KEY-----`;
 
-export const APIUrl = `https://localhost:44376`;
+export const APIUrl = `http://offers-assess.at.ply.gg:60431/CypherKeeperAPI`;

@@ -4,6 +4,8 @@ import { CommonService } from 'src/app/Modules/SharedModule/Services/OtherServic
 import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherServices/forms.service';
 import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
 import { AdminControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/admin-controller.service';
+import { LoginModel } from 'src/app/Models/LoginModel';
+import { AuthService } from 'src/app/Modules/SharedModule/Services/OtherServices/auth.service';
 
 @Component({
   selector: 'app-login-sign-up',
@@ -14,6 +16,7 @@ export class LoginSignUpComponent {
   constructor(
     public _FormsService:FormsService,
     public _CommonService:CommonService,
+    public _AuthService:AuthService,
     public _AdminControllerService:AdminControllerService,
   ) {}
 
@@ -38,6 +41,28 @@ export class LoginSignUpComponent {
         console.log(response);
       })
       console.log("RegisterData", RegisterData);
+    }
+  }
+
+  LoginSubmit(){
+    this._FormsService.LoginForm.markAllAsTouched();
+    console.log(this._FormsService.LoginForm);
+    var RSAKeyPair = this._CommonService.GenerateRSAPairKeys();
+    if(this._FormsService.LoginForm.status == "VALID"){
+      var LoginData:LoginModel = {
+        username: this._FormsService.LoginForm.value['Username'],
+        password: this._CommonService.RsaEncrypt(this._FormsService.LoginForm.value['Password'], CONSTANTS.PublicKeyForRSA),
+        newPublicKey: this._CommonService.EncodeBase64(RSAKeyPair.PublicKey),
+      };
+
+      this._AdminControllerService.Login(LoginData).subscribe((response:any) => {
+        console.log(response);
+        if(response.code == 1){
+          this._AuthService.AddJWTUserTokenToLocal(response.document);
+          this._AuthService.SetRSAPrivateKeyForAPI(RSAKeyPair.PrivateKey);
+        }
+      })
+      console.log("LoginData", LoginData);
     }
   }
 }

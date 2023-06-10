@@ -86,4 +86,12 @@ export class AppComponent {
     return JSON.parse(jsonPayload);
   }
 
+  EncodeBase64(data:string){
+    return btoa(data).toString();
+  }
+
+  DecodeBase64(data:string){
+    return atob(data).toString();
+  }
+
 }

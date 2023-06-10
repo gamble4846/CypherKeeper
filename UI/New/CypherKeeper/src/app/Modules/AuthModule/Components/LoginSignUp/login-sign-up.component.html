@@ -40,3 +40,25 @@
     <button type="Submit">Submit</button>
   </form>
 </div>
+
+
+<div class="RegistrationContainer">
+  <div style="font-size: 20px; font-weight: bold;">Login</div>
+  <form nz-form [formGroup]="_FormsService.LoginForm" (ngSubmit)="LoginSubmit()">
+    <div style="margin: 10px 0px;">
+      Username<br>
+      <input nz-input formControlName="Username" id="Username" />
+      <div>
+        <ng-container *ngIf="_FormsService.LoginForm.controls['Username'].hasError('required') && _FormsService.LoginForm.controls['Username'].touched">Please Enter your Username</ng-container>
+      </div>
+    </div>
+    <div style="margin: 10px 0px;">
+      Password<br>
+      <input nz-input formControlName="Password" id="Password" />
+      <div>
+        <ng-container *ngIf="_FormsService.LoginForm.controls['Password'].hasError('required') && _FormsService.LoginForm.controls['Password'].touched">Please Enter your Password</ng-container>
+      </div>
+    </div>
+    <button type="Submit">Submit</button>
+  </form>
+</div>

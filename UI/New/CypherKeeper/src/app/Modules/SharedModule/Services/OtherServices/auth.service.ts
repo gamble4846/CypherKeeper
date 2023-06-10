@@ -13,6 +13,16 @@ export class AuthService {
     localStorage.setItem("UserToken", token);
   }
 
+  SetRSAPrivateKeyForAPI(PrivateKey:string){
+    var Base64String = this._CS.EncodeBase64(PrivateKey);
+    localStorage.setItem("RSAPrivateKeyForAPI", Base64String);
+  }
+
+  GetRSAPrivateKeyForAPI(){
+    var Base64String = localStorage.getItem("RSAPrivateKeyForAPI") || "";
+    return this._CS.DecodeBase64(Base64String);
+  }
+
   GetJWTToken(){
     if(sessionStorage.getItem("SelectedServerToken")){
       return sessionStorage.getItem("SelectedServerToken");

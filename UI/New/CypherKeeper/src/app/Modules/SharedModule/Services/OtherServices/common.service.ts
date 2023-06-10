@@ -39,4 +39,22 @@ export class CommonService {
     var decypherText = this.encryptMod.decrypt(data);
     return decypherText;
   }
+
+  GenerateRSAPairKeys(){
+    var encryptMod = new JsEncryptModule.JSEncrypt();
+    var PrivateKey = encryptMod.getPrivateKey(); 
+    var PublicKey = encryptMod.getPublicKey();
+    return {
+      "PrivateKey":PrivateKey,
+      "PublicKey":PublicKey
+    }
+  }
+
+  EncodeBase64(data:string){
+    return btoa(data).toString();
+  }
+
+  DecodeBase64(data:string){
+    return atob(data).toString();
+  }
 }
