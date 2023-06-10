@@ -17,5 +17,7 @@ namespace CypherKeeper.Manager.Interface
         APIResponse AddServer(ServerViewModel model);
         APIResponse GetServers();
         APIResponse SelectServer(SelectServerModel model);
+        APIResponse AddImage(string ImageLink);
+        APIResponse GetImages();
     }
 }

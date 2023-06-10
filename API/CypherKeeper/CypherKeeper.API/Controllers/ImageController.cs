@@ -31,12 +31,14 @@ namespace CypherKeeper.API.Controllers
         public IConfiguration Configuration { get; }
         public CommonFunctions CommonFunctions { get; set; }
         public IImageManager ImageManager { get; set; }
+        public IAdminManager AdminManager { get; set; }
 
-        public ImageController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IImageManager imageManager)
+        public ImageController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IImageManager imageManager, IAdminManager adminManager)
         {
             Configuration = configuration;
             CommonFunctions = new CommonFunctions(Configuration, httpContextAccessor);
             ImageManager = imageManager;
+            AdminManager = adminManager;
         }
 
         [HttpPost]
@@ -52,13 +54,19 @@ namespace CypherKeeper.API.Controllers
                 {
                     await file.CopyToAsync(memoryStream);
                     byte[] bytes = memoryStream.ToArray();
-                    var returnData = await ImageManager.UploadImageToImgur(bytes);
-                    return Ok(returnData);
+                    var ImagurResponse = await ImageManager.UploadImageToImgur(bytes);
+                    if(ImagurResponse == null)
+                    {
+                        return StatusCode(500, new APIResponse(ResponseCode.ERROR, "Image Not Uplaoded", null));
+                    }
+
+                    var ImageLink = ImagurResponse.data.link;
+                    return Ok(AdminManager.AddImage(ImageLink));
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex}");
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }
 

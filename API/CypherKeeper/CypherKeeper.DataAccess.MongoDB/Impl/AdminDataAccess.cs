@@ -79,5 +79,15 @@ namespace CypherKeeper.DataAccess.MongoDB.Impl
             var updateResult = collection.UpdateOne(filter, update);
             return updateResult.ModifiedCount;
         }
+
+        public long UpdateUserImages(List<ImagesModel> model, tbAccessModel CurrentUser)
+        {
+            var Collection = "tbAccess";
+            var collection = Database.GetCollection<tbAccessModel>(Collection);
+            var filter = Builders<tbAccessModel>.Filter.Eq("_id", CurrentUser._id);
+            var update = Builders<tbAccessModel>.Update.Set("Images", model);
+            var updateResult = collection.UpdateOne(filter, update);
+            return updateResult.ModifiedCount;
+        }
     }
 }

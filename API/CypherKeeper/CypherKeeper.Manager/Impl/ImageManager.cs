@@ -40,7 +40,7 @@ namespace CypherKeeper.Manager.Impl
             DataAccess = new AdminDataAccess(configuration, httpContextAccessor);
         }
 
-        public async Task<APIResponse> UploadImageToImgur(byte[] bytes)
+        public async Task<ImgurResponseModel> UploadImageToImgur(byte[] bytes)
         {
             var httpclient = new HttpClient();
             httpclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", "263bbc738ab2de2");
@@ -52,11 +52,11 @@ namespace CypherKeeper.Manager.Impl
 
             if (ImgurResponseModel.success)
             {
-                return new APIResponse(ResponseCode.SUCCESS, "Image Uploaded", ImgurResponseModel);
+                return ImgurResponseModel;
             }
             else
             {
-                return new APIResponse(ResponseCode.SUCCESS, "Image Not Uploaded", ImgurResponseModel);
+                return null;
             }
         }
     }

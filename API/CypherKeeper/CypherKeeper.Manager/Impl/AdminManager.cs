@@ -57,6 +57,7 @@ namespace CypherKeeper.Manager.Impl
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Settings = new SettingsModel(),
+                Images = new List<ImagesModel>(),
             };
 
             var data = DataAccess.Register(ToInsertModel);
@@ -201,6 +202,51 @@ namespace CypherKeeper.Manager.Impl
             var NewToken = CommonFunctions.CreateJWTToken(OldClaims);
 
             return new APIResponse(ResponseCode.SUCCESS, "Server Selected", NewToken);
+        }
+
+        public APIResponse AddImage(string ImageLink)
+        {
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+            if (CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            var OldImages = CommonFunctions.CreateDeepCopy(CurrentUser.Images);
+            if (OldImages == null)
+            {
+                OldImages = new List<ImagesModel>();
+            }
+
+            OldImages.Add(new ImagesModel() { ImageLink = ImageLink });
+
+            var result = DataAccess.UpdateUserImages(OldImages, CurrentUser);
+
+            if (result > 0)
+            {
+                return new APIResponse(ResponseCode.SUCCESS, "Image Added", OldImages);
+            }
+            else
+            {
+                return new APIResponse(ResponseCode.ERROR, "Image Not Added to Mongo", null);
+            }
+        }
+
+        public APIResponse GetImages()
+        {
+            var CurrentUser = CommonFunctions.GetCurrentUser();
+            if (CurrentUser == null)
+            {
+                return new APIResponse(ResponseCode.ERROR, "User Not Found");
+            }
+
+            var ImageData = CommonFunctions.CreateDeepCopy(CurrentUser.Images);
+            if (ImageData == null)
+            {
+                ImageData = new List<ImagesModel>();
+            }
+
+            return new APIResponse(ResponseCode.SUCCESS, "UpdateSuccess", ImageData);
         }
     }
 }

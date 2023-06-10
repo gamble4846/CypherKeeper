@@ -108,5 +108,21 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }
+
+        [HttpGet]
+        [Route("/api/Images/Get")]
+        [LoginAuthorization]
+        public ActionResult GetImages()
+        {
+            try
+            {
+                return Ok(AdminManager.GetImages());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
     }
 }
+ 

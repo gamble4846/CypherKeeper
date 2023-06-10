@@ -13,6 +13,6 @@ namespace CypherKeeper.Manager.Interface
 {
     public interface IImageManager
     {
-        Task<APIResponse> UploadImageToImgur(byte[] bytes);
+        Task<ImgurResponseModel> UploadImageToImgur(byte[] bytes);
     }
 }
