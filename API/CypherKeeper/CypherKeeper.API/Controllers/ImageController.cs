@@ -53,9 +53,8 @@ namespace CypherKeeper.API.Controllers
                     await file.CopyToAsync(memoryStream);
                     byte[] bytes = memoryStream.ToArray();
                     var returnData = await ImageManager.UploadImageToImgur(bytes);
+                    return Ok(returnData);
                 }
-
-                return Ok("Image uploaded successfully!");
             }
             catch (System.Exception ex)
             {
