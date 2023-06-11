@@ -60,4 +60,5 @@ export class ImageSelectorComponent {
   ImageSelected(link:string){
     this.OnImageSelect.emit(link);
   }
+  
 }

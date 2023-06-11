@@ -12,6 +12,9 @@ import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherService
   styleUrls: ['./opener.component.css']
 })
 export class OpenerComponent {
+
+  ShowImageSelector:boolean = false;
+
   constructor(
     public _FormsService:FormsService,
     public _CommonService:CommonService,
@@ -25,17 +28,11 @@ export class OpenerComponent {
     
   }
 
-  FileChanged(event: any) {
-    const file = event.target.files[0];
-    this._ImageControllerService.UploadImage(file).subscribe(
-      (response: any) => {
-        console.log(response);
-        // Handle success response
-      },
-      (error: any) => {
-        console.error(error);
-        // Handle error response
-      }
-    );
+  OnHideImageSelector(event:any){
+    this.ShowImageSelector = false;
+  }
+
+  OpenImageSelector(){
+    this.ShowImageSelector = true;
   }
 }
