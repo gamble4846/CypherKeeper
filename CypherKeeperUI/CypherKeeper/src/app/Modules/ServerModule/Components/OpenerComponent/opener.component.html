@@ -1,11 +1,58 @@
-<button (click)="OpenImageSelector()">Select Image</button>
+<div class="FormContainer">
+  <div style="font-size: 20px; font-weight: bold;">Add Server</div>
+  <form nz-form [formGroup]="_FormsService.AddServerForm" (ngSubmit)="ServerAddSubmit()">
+    <div style="margin: 10px 0px;">
+      Server Name<br>
+      <input formControlName="ServerName" id="ServerName" />
+      <div>
+        <ng-container *ngIf="_FormsService.AddServerForm.controls['ServerName'].hasError('required') && _FormsService.AddServerForm.controls['ServerName'].touched">Please Enter Server Name</ng-container>
+      </div>
+    </div>
+    <div style="margin: 10px 0px;">
+      Database Type<br>
+      <select formControlName="DatabaseType" id="DatabaseType" style="width: 100%;">
+        <option *ngFor="let DatabaseType of AllowedDatabaseTypes" [value]="DatabaseType">{{DatabaseType}}</option>
+      </select>
+      <div>
+        <ng-container *ngIf="_FormsService.AddServerForm.controls['DatabaseType'].hasError('required') && _FormsService.AddServerForm.controls['DatabaseType'].touched">Please Select Database Type</ng-container>
+      </div>
+    </div>
+    <div style="margin: 10px 0px;">
+      Connection String<br>
+      <input formControlName="ConnectionString" id="ConnectionString" />
+      <div>
+        <ng-container *ngIf="_FormsService.AddServerForm.controls['ConnectionString'].hasError('required') && _FormsService.AddServerForm.controls['ConnectionString'].touched">Please Enter Connection String</ng-container>
+      </div>
+    </div>
+    <div style="margin: 10px 0px;">
+      Key<br>
+      <input formControlName="Key" id="Key" />
+      <div>
+        <ng-container *ngIf="_FormsService.AddServerForm.controls['Key'].hasError('required') && _FormsService.AddServerForm.controls['Key'].touched">Please Enter Connection String</ng-container>
+      </div>
+    </div>
+    <div style="margin: 10px 0px;">
+      Select Image<br>
+      <div>
+        <div *ngIf="SelectedImageLink">
+          <img [src]="SelectedImageLink" width="100px">
+        </div>
+      </div>
+      <button type="button" (click)="OpenImageSelector()">Select Image</button>
+    </div>
+    <button type="Submit">Submit</button>
+  </form>
+</div>
+
+
+
 
 <ab-modal [ShowModal]="ShowImageSelector" (OnModalClosed)="OnHideImageSelector($event)" ModalWidth="1200px"
   ModalHeight="600px" ModalBackgroundColor="#00000066" [ShowFooter]="false">
   <div header style="font-size: 25px; font-weight: bold;">Select Image</div>
   <div content>
     <div class="ImageSelectorContainer">
-        <image-selector></image-selector>
+        <image-selector (OnImageSelect)="ImageChanged($event)"></image-selector>
     </div>
   </div>
 </ab-modal>

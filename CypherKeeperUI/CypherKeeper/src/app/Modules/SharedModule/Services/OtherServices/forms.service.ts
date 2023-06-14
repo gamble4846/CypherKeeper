@@ -7,6 +7,7 @@ import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@ang
 export class FormsService {
   RegisterForm!: FormGroup;
   LoginForm!: FormGroup;
+  AddServerForm!:FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
@@ -24,6 +25,15 @@ export class FormsService {
     this.LoginForm = this.fb.group({
       Username: [null, [Validators.required]],
       Password: [null, [Validators.required]]
+    });
+  }
+
+  SetupAddServerForm(){
+    this.AddServerForm = this.fb.group({
+      ServerName: [null, [Validators.required]],
+      DatabaseType: [null, [Validators.required]],
+      ConnectionString: [null, [Validators.required]],
+      Key: [null, [Validators.required]]
     });
   }
 }

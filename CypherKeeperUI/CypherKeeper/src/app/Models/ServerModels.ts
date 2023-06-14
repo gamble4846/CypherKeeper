@@ -4,6 +4,7 @@ export interface Server {
     databaseType: string;
     connectionString: string;
     keyVerify: string;
+    imageLink: string;
 }
 
 export interface ServerViewModel {
@@ -11,12 +12,14 @@ export interface ServerViewModel {
     databaseType: string;
     connectionString: string;
     key: string;
+    imageLink: string;
 }
 
 export interface ServerDisplayModel {
     gUIDServer: string;
     serverName: string;
     databaseType: string;
+    imageLink: string;
 }
 
 export interface SelectedServerModel {
@@ -25,6 +28,7 @@ export interface SelectedServerModel {
     databaseType: string;
     connectionString: string;
     key: string;
+    imageLink: string;
 }
 
 export interface SelectServerModel {
