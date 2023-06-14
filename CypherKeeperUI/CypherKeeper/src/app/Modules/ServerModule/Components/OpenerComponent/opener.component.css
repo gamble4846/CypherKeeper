@@ -8,3 +8,31 @@
     padding: 20px;
     margin-top: 20px;
 }
+
+.ServerContainer{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid grey;
+    padding: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.ServerImageContainer{
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.ServerImage{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ServerTextContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+}

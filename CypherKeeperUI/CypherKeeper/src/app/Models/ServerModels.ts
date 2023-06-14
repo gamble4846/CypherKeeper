@@ -1,5 +1,5 @@
 export interface Server {
-    gUIDServer: string;
+    guidServer: string;
     serverName: string;
     databaseType: string;
     connectionString: string;
@@ -16,14 +16,14 @@ export interface ServerViewModel {
 }
 
 export interface ServerDisplayModel {
-    gUIDServer: string;
+    guidServer: string;
     serverName: string;
     databaseType: string;
     imageLink: string;
 }
 
 export interface SelectedServerModel {
-    gUIDServer: string;
+    guidServer: string;
     serverName: string;
     databaseType: string;
     connectionString: string;
@@ -32,6 +32,6 @@ export interface SelectedServerModel {
 }
 
 export interface SelectServerModel {
-    gUIDServer: string;
+    guidServer: string;
     key: string;
 }

@@ -27,6 +27,7 @@ export class ServerGuard implements CanActivate {
         return true;
       }
       else{
+        this._Router.navigateByUrl("/Server");
         return false;
       }
     }

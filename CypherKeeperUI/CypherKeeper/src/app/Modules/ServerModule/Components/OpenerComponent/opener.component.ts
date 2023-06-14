@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Server, ServerViewModel } from 'src/app/Models/ServerModels';
+import { SelectServerModel, Server, ServerViewModel } from 'src/app/Models/ServerModels';
 import { AdminControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/admin-controller.service';
 import { ImageControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/image-controller.service';
 import { AuthService } from 'src/app/Modules/SharedModule/Services/OtherServices/auth.service';
@@ -19,6 +19,9 @@ export class OpenerComponent {
   SelectedImageLink:string = "";
   AllowedDatabaseTypes:Array<string> = [];
   AllServers:Array<Server> = [];
+  CurrentModalKey:string = "";
+  ShowServerKeyModal:boolean = false;
+  CurrentServer:Server | undefined;
 
   constructor(
     public _FormsService:FormsService,
@@ -33,6 +36,15 @@ export class OpenerComponent {
     this._FormsService.SetupAddServerForm();
     this.AllowedDatabaseTypes = CONSTANTS.AllowedDatabaseTypes;
     this.UpdateAllServers();
+  }
+
+  GetServerImage(Server:Server){
+    if(Server.imageLink){
+      return Server.imageLink;
+    }
+    else{
+      return "https://i.imgur.com/hvWGBUt.png";
+    }
   }
 
   UpdateAllServers(){
@@ -51,6 +63,37 @@ export class OpenerComponent {
 
   OpenImageSelector(){
     this.ShowImageSelector = true;
+  }
+
+  OnHideServerKeyModal(event:any){
+    this.ShowServerKeyModal = false;
+  }
+
+  CancelServerKeyModal(){
+    this.CurrentServer = undefined;
+    this.CurrentModalKey = "";
+    this.ShowServerKeyModal = false;
+  }
+
+  OkServerKeyModal(){
+    if(this.CurrentServer){
+      let model:SelectServerModel = {
+        guidServer: this.CurrentServer.guidServer,
+        key: this._CommonService.RsaEncrypt(this.CurrentModalKey, CONSTANTS.PublicKeyForRSA),
+      };
+      console.log(model);
+      this._AdminControllerService.SelectServer(model).subscribe((response:any) => {
+        if(response.code == 1){
+          this._AuthService.AddJWTSelectedServerToken(response.document);
+          this._Router.navigateByUrl("/Home");
+        }
+      })
+    }
+  }
+
+  OpenServerKeyModal(ServerData:Server){
+    this.CurrentServer = ServerData;
+    this.ShowServerKeyModal = true;
   }
 
   ImageChanged(NewImageLink:any){

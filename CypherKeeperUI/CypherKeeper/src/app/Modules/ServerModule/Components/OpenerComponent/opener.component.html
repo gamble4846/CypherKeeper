@@ -45,7 +45,35 @@
 </div>
 
 
+<div class="FormContainer">
+  <div style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Select Server</div>
+  <div class="ServerContainer" *ngFor="let Server of AllServers" (click)="OpenServerKeyModal(Server)">
+    <div class="ServerImageContainer">
+      <img [src]="GetServerImage(Server)" class="ServerImage">
+    </div>
+    <div class="ServerTextContainer">
+      <div>
+        {{Server.serverName}}<br>
+        {{Server.databaseType}}
+      </div>
+    </div>
+  </div>
 
+</div>
+
+<ab-modal [ShowModal]="ShowServerKeyModal" (OnModalClosed)="OnHideServerKeyModal($event)" ModalWidth="600px"
+  ModalHeight="300px" ModalBackgroundColor="#00000066">
+  <div header style="font-size: 25px; font-weight: bold;">Enter Key</div>
+  <div content>
+    <div style="padding: 10px;">
+      <input type="text" [(ngModel)]="CurrentModalKey">
+    </div>
+  </div>
+  <div footer>
+    <button (click)="OkServerKeyModal()">Ok</button>
+    <button (click)="CancelServerKeyModal()">Cancel</button>
+  </div>
+</ab-modal>
 
 <ab-modal [ShowModal]="ShowImageSelector" (OnModalClosed)="OnHideImageSelector($event)" ModalWidth="1200px"
   ModalHeight="600px" ModalBackgroundColor="#00000066" [ShowFooter]="false">

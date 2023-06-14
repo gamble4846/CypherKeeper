@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginModel } from 'src/app/Models/LoginModel';
 import { RegisterModel } from 'src/app/Models/RegisterModel';
-import { ServerViewModel } from 'src/app/Models/ServerModels';
+import { SelectServerModel, ServerViewModel } from 'src/app/Models/ServerModels';
 import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
 
 @Injectable({
@@ -24,6 +24,11 @@ export class AdminControllerService {
 
   AddServer(model:ServerViewModel){
     let apiLink = `${CONSTANTS.APIUrl}/api/Server/Add`;
+    return this.http.post(apiLink,model);
+  }
+
+  SelectServer(model:SelectServerModel){
+    let apiLink = `${CONSTANTS.APIUrl}/api/Server/Select`;
     return this.http.post(apiLink,model);
   }
 
