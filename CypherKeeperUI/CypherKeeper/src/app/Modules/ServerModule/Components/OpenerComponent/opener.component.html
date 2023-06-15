@@ -1,86 +1,90 @@
 <div class="FormContainer">
   <div style="font-size: 20px; font-weight: bold;">Add Server</div>
   <form nz-form [formGroup]="_FormsService.AddServerForm" (ngSubmit)="ServerAddSubmit()">
-    <div style="margin: 10px 0px;">
-      Server Name<br>
-      <input formControlName="ServerName" id="ServerName" />
-      <div>
-        <ng-container *ngIf="_FormsService.AddServerForm.controls['ServerName'].hasError('required') && _FormsService.AddServerForm.controls['ServerName'].touched">Please Enter Server Name</ng-container>
-      </div>
-    </div>
-    <div style="margin: 10px 0px;">
-      Database Type<br>
-      <select formControlName="DatabaseType" id="DatabaseType" style="width: 100%;">
-        <option *ngFor="let DatabaseType of AllowedDatabaseTypes" [value]="DatabaseType">{{DatabaseType}}</option>
-      </select>
-      <div>
-        <ng-container *ngIf="_FormsService.AddServerForm.controls['DatabaseType'].hasError('required') && _FormsService.AddServerForm.controls['DatabaseType'].touched">Please Select Database Type</ng-container>
-      </div>
-    </div>
-    <div style="margin: 10px 0px;">
-      Connection String<br>
-      <input formControlName="ConnectionString" id="ConnectionString" />
-      <div>
-        <ng-container *ngIf="_FormsService.AddServerForm.controls['ConnectionString'].hasError('required') && _FormsService.AddServerForm.controls['ConnectionString'].touched">Please Enter Connection String</ng-container>
-      </div>
-    </div>
-    <div style="margin: 10px 0px;">
-      Key<br>
-      <input formControlName="Key" id="Key" />
-      <div>
-        <ng-container *ngIf="_FormsService.AddServerForm.controls['Key'].hasError('required') && _FormsService.AddServerForm.controls['Key'].touched">Please Enter Connection String</ng-container>
-      </div>
-    </div>
-    <div style="margin: 10px 0px;">
-      Select Image<br>
-      <div>
-        <div *ngIf="SelectedImageLink">
-          <img [src]="SelectedImageLink" width="100px">
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="ServerName" nzRequired>ServerName</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorServerNameTpl">
+        <input nz-input type="text" formControlName="ServerName" id="ServerName" />
+        <ng-template #errorServerNameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter ServerName!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="DatabaseType" nzRequired>DatabaseType</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorDatabaseTypeTpl">
+        <nz-select formControlName="DatabaseType" id="DatabaseType">
+          <nz-option *ngFor="let DatabaseType of AllowedDatabaseTypes" [nzValue]="DatabaseType"
+            [nzLabel]="DatabaseType"></nz-option>
+        </nz-select>
+        <ng-template #errorDatabaseTypeTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please select DatabaseType!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="ConnectionString" nzRequired>ConnectionString</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorConnectionStringTpl">
+        <input nz-input type="text" formControlName="ConnectionString" id="ConnectionString" />
+        <ng-template #errorConnectionStringTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter ConnectionString!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Key" nzRequired>Key</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorKeyTpl">
+        <input nz-input type="text" formControlName="Key" id="Key" />
+        <ng-template #errorKeyTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Key!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Key" nzRequired>Select Image</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorKeyTpl">
+        <div>
+          <div *ngIf="SelectedImageLink">
+            <img [src]="SelectedImageLink" width="60px">
+          </div>
         </div>
-      </div>
-      <button type="button" (click)="OpenImageSelector()">Select Image</button>
-    </div>
-    <button type="Submit">Submit</button>
+        <button nz-button nzType="primary" type="button" (click)="OpenImageSelector()">Select Image</button>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <button nz-button nzType="primary" type="Submit">Submit</button>
+    </nz-form-item>
   </form>
 </div>
 
-
 <div class="FormContainer">
   <div style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Select Server</div>
-  <div class="ServerContainer" *ngFor="let Server of AllServers" (click)="OpenServerKeyModal(Server)">
-    <div class="ServerImageContainer">
-      <img [src]="GetServerImage(Server)" class="ServerImage">
-    </div>
-    <div class="ServerTextContainer">
-      <div>
-        {{Server.serverName}}<br>
-        {{Server.databaseType}}
-      </div>
+  <div class="ServerContainer">
+    <div *ngFor="let Server of AllServers" (click)="OpenServerKeyModal(Server)" style="padding: 10px;">
+      <nz-card nzHoverable style="width:240px" [nzCover]="coverTemplate">
+        <nz-card-meta [nzTitle]="Server.serverName" [nzDescription]="Server.databaseType"></nz-card-meta>
+      </nz-card>
+      <ng-template #coverTemplate>
+        <div style="background-color: rgb(233, 233, 233); display: flex; justify-content: center; padding: 10px 0px;">
+          <img alt="example" [src]="GetServerImage(Server)"
+            style="height: 100px; aspect-ratio: 1/1; object-fit: contain;" />
+        </div>
+      </ng-template>
     </div>
   </div>
-
 </div>
 
-<ab-modal [ShowModal]="ShowServerKeyModal" (OnModalClosed)="OnHideServerKeyModal($event)" ModalWidth="600px"
-  ModalHeight="300px" ModalBackgroundColor="#00000066">
-  <div header style="font-size: 25px; font-weight: bold;">Enter Key</div>
-  <div content>
-    <div style="padding: 10px;">
-      <input type="text" [(ngModel)]="CurrentModalKey">
-    </div>
-  </div>
-  <div footer>
-    <button (click)="OkServerKeyModal()">Ok</button>
-    <button (click)="CancelServerKeyModal()">Cancel</button>
-  </div>
-</ab-modal>
+<nz-modal [(nzVisible)]="ShowServerKeyModal" nzTitle="Enter Key" (nzOnCancel)="CancelServerKeyModal()"
+  (nzOnOk)="OkServerKeyModal()">
+  <ng-container *nzModalContent>
+    <input nz-input type="text" [(ngModel)]="CurrentModalKey" />
+  </ng-container>
+</nz-modal>
 
-<ab-modal [ShowModal]="ShowImageSelector" (OnModalClosed)="OnHideImageSelector($event)" ModalWidth="1200px"
-  ModalHeight="600px" ModalBackgroundColor="#00000066" [ShowFooter]="false">
-  <div header style="font-size: 25px; font-weight: bold;">Select Image</div>
-  <div content>
+<nz-modal nzCentered [(nzVisible)]="ShowImageSelector" nzTitle="Select Image" (nzOnCancel)="HideImageSelector()" [nzFooter]="null" nzWidth="90vw">
+  <ng-container *nzModalContent>
     <div class="ImageSelectorContainer">
-        <image-selector (OnImageSelect)="ImageChanged($event)"></image-selector>
+      <image-selector (OnImageSelect)="ImageChanged($event)"></image-selector>
     </div>
-  </div>
-</ab-modal>
+  </ng-container>
+</nz-modal>

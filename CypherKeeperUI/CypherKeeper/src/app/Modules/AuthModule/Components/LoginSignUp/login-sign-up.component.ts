@@ -28,9 +28,7 @@ export class LoginSignUpComponent {
   }
 
   RegisterSubmit(){
-    this._FormsService.RegisterForm.markAllAsTouched();
-    console.log(this._FormsService.RegisterForm);
-    if(this._FormsService.RegisterForm.status == "VALID"){
+    if (this._FormsService.RegisterForm.valid) {
       var RegisterData:RegisterModel = {
         username: this._FormsService.RegisterForm.value['Username'],
         password: this._CommonService.RsaEncrypt(this._FormsService.RegisterForm.value['Password'], CONSTANTS.PublicKeyForRSA),
@@ -43,6 +41,13 @@ export class LoginSignUpComponent {
         console.log(response);
       })
       console.log("RegisterData", RegisterData);
+    } else {
+      Object.values(this._FormsService.RegisterForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
     }
   }
 

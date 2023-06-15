@@ -57,7 +57,7 @@ export class OpenerComponent {
     });
   }
 
-  OnHideImageSelector(event:any){
+  HideImageSelector(){
     this.ShowImageSelector = false;
   }
 
@@ -102,9 +102,7 @@ export class OpenerComponent {
   }
 
   ServerAddSubmit(){
-    this._FormsService.AddServerForm.markAllAsTouched();
-    console.log(this._FormsService.AddServerForm);
-    if(this._FormsService.AddServerForm.status == "VALID"){
+    if (this._FormsService.AddServerForm.valid) {
       var ServerData:ServerViewModel = {
         serverName: this._FormsService.AddServerForm.value['ServerName'],
         databaseType: this._FormsService.AddServerForm.value['DatabaseType'],
@@ -118,6 +116,13 @@ export class OpenerComponent {
       this._AdminControllerService.AddServer(ServerData).subscribe((response:any) => {
         console.log(response);
       })
+    } else {
+      Object.values(this._FormsService.AddServerForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
     }
   }
 }

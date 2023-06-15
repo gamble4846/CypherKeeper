@@ -21,6 +21,7 @@
     "ab-modals": "^0.0.4",
     "infinite-menu": "^0.0.13",
     "jsencrypt": "^3.3.2",
+    "ng-zorro-antd": "^15.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

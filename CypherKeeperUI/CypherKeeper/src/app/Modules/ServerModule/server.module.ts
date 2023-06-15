@@ -6,6 +6,12 @@ import { OpenerComponent } from './Components/OpenerComponent/opener.component';
 import { SharedModule } from "../SharedModule/shared.module";
 import { AbModalModule } from "node_modules/ab-modals";
 
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [
@@ -17,7 +23,13 @@ import { AbModalModule } from "node_modules/ab-modals";
     SharedModule,
     AbModalModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzCardModule,
+    NzModalModule
   ]
 })
 export class ServerModule { }

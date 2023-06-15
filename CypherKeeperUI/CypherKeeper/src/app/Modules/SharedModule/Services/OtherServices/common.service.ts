@@ -63,4 +63,8 @@ export class CommonService {
   DecodeBase64(data:string){
     return atob(data).toString();
   }
+
+  LogSomething(data:any){
+    console.log(data);
+  }
 }
