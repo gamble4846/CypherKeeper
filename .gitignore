@@ -15,5 +15,6 @@
 /CypherKeeperAPI/CypherKeeper/CypherKeeper.Utility/obj/
 *.dll
 
+/CypherKeeperAPI/CypherKeeper/
 /CypherKeeperUI/CypherKeeper/node_modules/
 /CypherKeeperUI/CypherKeeper/.vscode/
