@@ -1,1 +1,8 @@
-<p>opener works!</p>
+<div style="display: flex; justify-content: flex-start;">
+  <div style="width: 300px;">
+    <InfiniteMenu #InfiniteMenu [(MenuModel)]="AllGroups_IM_Data" [ShadeMultiplier]="2" [ShowOpenForAll]="false"
+      [IconHeight]="'25px'" [IconWidth]="'25px'" [MenuStyles]="MenuStylesConstant" [Loading]="false"
+      [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event)">
+    </InfiniteMenu>
+  </div>
+</div>
