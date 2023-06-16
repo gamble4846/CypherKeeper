@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/Modules/SharedModule/Services/OtherServices
 import { CommonService } from 'src/app/Modules/SharedModule/Services/OtherServices/common.service';
 import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherServices/forms.service';
 import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 @Component({
   selector: 'app-opener',
@@ -19,6 +20,7 @@ export class OpenerComponent {
   AllGroups:Array<tbGroupsModel> = [];
   AllGroups_IM_Data:Array<MenuData> = [];
   MenuStylesConstant:Array<MenuStyles>  = [];
+  CurrentContextGroupMenu:MenuData | undefined;
 
   constructor(
     public _FormsService:FormsService,
@@ -28,6 +30,7 @@ export class OpenerComponent {
     public _Router: Router,
     public _ImageControllerService:ImageControllerService,
     public _TbGroupsService:TbGroupsService,
+    private nzContextMenuService: NzContextMenuService,
   ) { }
 
   ngOnInit(): void {
@@ -63,20 +66,28 @@ export class OpenerComponent {
     this.AllGroups_IM_Data = MenuGroupWithoutChildren.filter((x:MenuData) => x.CustomData.ParentGroupId == null);
     MenuGroupWithoutChildren = MenuGroupWithoutChildren.filter((x:MenuData) => x.CustomData.ParentGroupId != null);
 
+    this.AllGroups_IM_Data.sort((a,b) => (a.CustomData.ArrangePosition > b.CustomData.ArrangePosition) ? 1 : ((b.CustomData.ArrangePosition > a.CustomData.ArrangePosition) ? -1 : 0))
+
     this.AllGroups_IM_Data.forEach((GroupIM:MenuData) => {
       GroupIM.Children = this.GetChildrenForMenu(GroupIM,MenuGroupWithoutChildren);
+      GroupIM.Children.sort((a,b) => (a.CustomData.ArrangePosition > b.CustomData.ArrangePosition) ? 1 : ((b.CustomData.ArrangePosition > a.CustomData.ArrangePosition) ? -1 : 0))
     });
+
+    console.log(this.AllGroups_IM_Data);
   }
   
   GetChildrenForMenu(GroupIM:MenuData,MenuGroupWithoutChildren:Array<MenuData>){
     var CurrentChildren = MenuGroupWithoutChildren.filter((x:MenuData) => x.CustomData.ParentGroupId == GroupIM.Id);
     CurrentChildren.forEach((Child:MenuData) => {
       Child.Children = this.GetChildrenForMenu(Child, MenuGroupWithoutChildren);
+      Child.Children.sort((a,b) => (a.CustomData.ArrangePosition > b.CustomData.ArrangePosition) ? 1 : ((b.CustomData.ArrangePosition > a.CustomData.ArrangePosition) ? -1 : 0))
     });
     return CurrentChildren;
   }
 
-  _MenuItemOnContextMenu(event:any){
-    console.log(event);
+  _MenuItemOnContextMenu(event:any, ContectMenuGroup:NzDropdownMenuComponent){
+    this.CurrentContextGroupMenu = event.MenuModel;
+    let _MouseEvents: MouseEvent = event.EventData;
+    this.nzContextMenuService.create(_MouseEvents, ContectMenuGroup);
   }
 }

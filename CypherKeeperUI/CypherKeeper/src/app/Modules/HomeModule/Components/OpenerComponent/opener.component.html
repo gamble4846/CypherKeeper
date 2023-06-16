@@ -2,7 +2,24 @@
   <div style="width: 300px;">
     <InfiniteMenu #InfiniteMenu [(MenuModel)]="AllGroups_IM_Data" [ShadeMultiplier]="2" [ShowOpenForAll]="false"
       [IconHeight]="'25px'" [IconWidth]="'25px'" [MenuStyles]="MenuStylesConstant" [Loading]="false"
-      [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event)">
+      [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event, ContectMenuGroup)">
     </InfiniteMenu>
   </div>
 </div>
+
+
+
+
+<nz-dropdown-menu #ContectMenuGroup="nzDropdownMenu">
+  <div *ngIf="this.CurrentContextGroupMenu" class="ContectMenuGroupContainer">
+    <div style="text-align: center; font-weight: bold; font-size: 15px; padding: 5px;">
+      {{this.CurrentContextGroupMenu.Title}}
+    </div>
+    <div>
+      <ul nz-menu>
+        <li nz-menu-item>Create New Group</li>
+        <li nz-menu-item>Delete Group</li>
+      </ul>
+    </div>
+  </div>
+</nz-dropdown-menu>
