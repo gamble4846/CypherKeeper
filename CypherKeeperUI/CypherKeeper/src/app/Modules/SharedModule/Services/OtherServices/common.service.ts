@@ -67,4 +67,12 @@ export class CommonService {
   LogSomething(data:any){
     console.log(data);
   }
+
+  GetDecryptedStringFromEncryptedArrayRSA(EncryptedArray: Array<string>, PrivateKey: string) {
+    var DecryptedString: string = "";
+    EncryptedArray.forEach(EncryptedString => {
+      DecryptedString += this.RsaDecrypt(EncryptedString, PrivateKey);
+    });
+    return DecryptedString;
+  }
 }

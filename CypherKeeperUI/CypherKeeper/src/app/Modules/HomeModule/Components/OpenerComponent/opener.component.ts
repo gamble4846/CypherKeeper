@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuData } from 'infinite-menu';
+import { tbGroupsModel } from 'src/app/Models/tbGroupsModel';
 import { AdminControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/admin-controller.service';
 import { ImageControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/image-controller.service';
 import { TbGroupsService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-groups.service';
@@ -13,6 +15,9 @@ import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherService
   styleUrls: ['./opener.component.css']
 })
 export class OpenerComponent {
+  AllGroups:Array<tbGroupsModel> = [];
+  AllGroups_IM_Data:Array<MenuData> =[];
+
   constructor(
     public _FormsService:FormsService,
     public _CommonService:CommonService,
@@ -29,7 +34,15 @@ export class OpenerComponent {
 
   UpdateGroups(){
     this._TbGroupsService.Get().subscribe((response:any) => {
-      console.log(response);
+      if(response.code == 1){
+        this.AllGroups = response.document.records;
+        this.SetupGroupsMenuData();
+      }
+      console.log(this.AllGroups);
     })
+  }
+
+  SetupGroupsMenuData(){
+    let AllGroupLoc = structuredClone(this.AllGroups);
   }
 }
