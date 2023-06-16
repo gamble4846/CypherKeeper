@@ -1,0 +1,81 @@
+<div class="RegistrationContainer">
+  <div style="font-size: 20px; font-weight: bold;">Registration</div>
+  <form nz-form [formGroup]="_FormsService.RegisterForm" (ngSubmit)="RegisterSubmit()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Username" nzRequired>Username</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorUsernameTpl">
+        <input nz-input type="text" formControlName="Username" id="Username" />
+        <ng-template #errorUsernameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Username!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Password" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorPasswordTpl">
+        <input nz-input type="text" formControlName="Password" id="Password" />
+        <ng-template #errorPasswordTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Password!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Email" nzRequired>Email</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorEmailTpl">
+        <input nz-input type="text" formControlName="Email" id="Email" />
+        <ng-template #errorEmailTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Email!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="FirstName" nzRequired>FirstName</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorFirstNameTpl">
+        <input nz-input type="text" formControlName="FirstName" id="FirstName" />
+        <ng-template #errorFirstNameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter FirstName!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="LastName" nzRequired>LastName</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorLastNameTpl">
+        <input nz-input type="text" formControlName="LastName" id="LastName" />
+        <ng-template #errorLastNameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter LastName!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <button nz-button nzType="primary" type="Submit">Submit</button>
+    </nz-form-item>
+  </form>
+</div>
+
+
+<div class="RegistrationContainer">
+  <div style="font-size: 20px; font-weight: bold;">Login</div>
+  <form nz-form [formGroup]="_FormsService.LoginForm" (ngSubmit)="LoginSubmit()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Username" nzRequired>Username</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorUsernameTpl">
+        <input nz-input type="text" formControlName="Username" id="Username" />
+        <ng-template #errorUsernameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Username!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Password" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorPasswordTpl">
+        <input nz-input type="text" formControlName="Password" id="Password" />
+        <ng-template #errorPasswordTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Password!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <button nz-button nzType="primary" type="Submit">Submit</button>
+    </nz-form-item>
+  </form>
+</div>
