@@ -6,18 +6,20 @@ import { AdminControllerService } from '../../Services/APIServices/admin-control
 import { Router } from '@angular/router';
 import { ImageControllerService } from '../../Services/APIServices/image-controller.service';
 import { ImagesModel } from 'src/app/Models/ImagesModel';
+import { tbIconsModel } from 'src/app/Models/tbIconsModel';
+import { TbIconsControllerService } from '../../Services/APIServices/tb-icons-controller.service';
 
 @Component({
-  selector: 'image-selector',
-  templateUrl: './image-selector.component.html',
-  styleUrls: ['./image-selector.component.css']
+  selector: 'icon-selector',
+  templateUrl: './icon-selector.component.html',
+  styleUrls: ['./icon-selector.component.css']
 })
-export class ImageSelectorComponent {
+export class IconSelectorComponent {
 
   @ViewChild("HiddenFileSelector") HiddenFileSelector!: any;
-  @Output() OnImageSelect = new EventEmitter<string>();
+  @Output() OnIconSelect = new EventEmitter<tbIconsModel>();
 
-  CurrentUserImages:Array<ImagesModel> = [];
+  CurrentUserIcons:Array<tbIconsModel> = [];
 
   constructor(
     public _FormsService:FormsService,
@@ -26,19 +28,19 @@ export class ImageSelectorComponent {
     public _AdminControllerService:AdminControllerService,
     public _Router: Router,
     public _ImageControllerService:ImageControllerService,
+    public _TbIconsControllerService:TbIconsControllerService,
   ) { }
 
   ngOnInit(): void {
-    this.SetCurrentuserImages();
+    this.SetCurrentuserIcons();
   }
 
-  SetCurrentuserImages(){
-    this._AdminControllerService.GetImages().subscribe((response:any) => {
+  SetCurrentuserIcons(){
+    this._TbIconsControllerService.Get().subscribe((response:any) => {
       if(response.code == 1){
-        this.CurrentUserImages = response.document;
-        this.CurrentUserImages.reverse();
+        this.CurrentUserIcons = response.document.records;
+        this.CurrentUserIcons.reverse();
       }
-      console.log(this.CurrentUserImages);
     })
   }
 
@@ -51,14 +53,25 @@ export class ImageSelectorComponent {
     const file = event.target.files[0];
     this._ImageControllerService.UploadImage(file).subscribe((response:any) => {
       if(response.code == 1){
-        this.CurrentUserImages = response.document.allImages;
-        this.CurrentUserImages.reverse();
+        let NewIconModel:tbIconsModel = {
+          id: crypto.randomUUID(),
+          link: response.document.newImageLink,
+          isDeleted: false,
+          createdDate: new Date().toISOString(),
+          updatedDate: null,
+          deletedDate: null
+        };
+        this._TbIconsControllerService.Add(NewIconModel).subscribe((response:any) => {
+          if(response.code == 1){
+            this.CurrentUserIcons.unshift(response.document);
+          }
+        })
       }
     });
   }
 
-  ImageSelected(link:string){
-    this.OnImageSelect.emit(link);
+  IconSelected(data:tbIconsModel){
+    this.OnIconSelect.emit(data);
   }
   
 }

@@ -2,3 +2,31 @@
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
     background-color: white;
 }
+
+.ImageSelectorContainer{
+    padding: 10px;
+    border: 1px solid rgb(224, 224, 224);
+    height: 80vh;
+    overflow: auto;
+}
+
+.SelectedIconIMG{
+    width: 50px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+
+.ContextMenuItemContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ContextMenuItemContainer div{
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}

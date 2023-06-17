@@ -29,5 +29,5 @@ export const MenuStylesConstant: Array<MenuStyles> = [
 ];
 
 // export const APIUrl = `http://offers-assess.at.ply.gg:60431/CypherKeeperAPI`;
-export const APIUrl = `http://192.168.0.105/CypherKeeperAPI`;
-// export const APIUrl = `https://localhost:44376`;
+// export const APIUrl = `http://192.168.0.105/CypherKeeperAPI`;
+export const APIUrl = `https://localhost:44376`;

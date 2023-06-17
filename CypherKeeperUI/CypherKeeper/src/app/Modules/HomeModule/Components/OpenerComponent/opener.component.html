@@ -1,14 +1,65 @@
 <div style="display: flex; justify-content: flex-start;">
-  <div style="width: 300px;">
-    <InfiniteMenu #InfiniteMenu [(MenuModel)]="AllGroups_IM_Data" [ShadeMultiplier]="2" [ShowOpenForAll]="false"
-      [IconHeight]="'25px'" [IconWidth]="'25px'" [MenuStyles]="MenuStylesConstant" [Loading]="false"
-      [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event, ContectMenuGroup)">
-    </InfiniteMenu>
+  <div>
+    <div style="width: 300px;">
+      <button nz-button nzType="primary" nzBlock (click)="_ShowCreateGroupDrawerForNullParent()">
+        <div class="ContextMenuItemContainer">
+          <div><span nz-icon nzType="plus" nzTheme="outline"></span></div>
+          <div>Create New Group</div>
+        </div>
+      </button>
+    </div>
+    <div style="width: 300px; height: calc(100vh - 32px); overflow: auto;">
+      <InfiniteMenu #InfiniteMenu [(MenuModel)]="AllGroups_IM_Data" [ShadeMultiplier]="2" [ShowOpenForAll]="false"
+        [IconHeight]="'25px'" [IconWidth]="'25px'" [MenuStyles]="MenuStylesConstant" [Loading]="false"
+        [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event, ContectMenuGroup)">
+      </InfiniteMenu>
+    </div>
+  </div>
+  <div style="background-color: beige; width: calc(100vw - 300px); overflow: auto; height: 100vh;">
+
   </div>
 </div>
 
-
-
+<ng-container *ngIf="this.CurrentContextGroupMenu">
+  <nz-drawer [nzClosable]="true" [nzVisible]="ShowCreateGroupDrawer" nzPlacement="right"
+    nzTitle="Create New Group - {{this.CurrentContextGroupMenu.Title}}" [nzMaskClosable]="true"
+    (nzOnClose)="OnCloseCreateGroupDrawer()" [nzFooter]="CreateGroupDrawerFooterTpl"
+    [nzBodyStyle]="{ overflow: 'auto' }" nzWrapClassName="CreateGroupDrawerWrapper">
+    <ng-container *nzDrawerContent>
+      <div style="padding-bottom: 10px;">
+        <div>
+          Group Name:
+        </div>
+        <div>
+          <input nz-input type="text" [(ngModel)]="tbGroupsAddForm.name" />
+        </div>
+      </div>
+      <div style="padding-bottom: 10px;">
+        <div>
+          Parent Group:
+        </div>
+        <div>
+          <input nz-input type="text" [value]="this.CurrentContextGroupMenu.Title" [disabled]="true" />
+        </div>
+      </div>
+      <div style="padding-bottom: 10px;">
+        <div>
+          Group Icon:
+        </div>
+        <div>
+          <img *ngIf="SelectedIcon" [src]="SelectedIcon.link" class="SelectedIconIMG"><br>
+          <button nz-button nzType="primary" (click)="OpenSelectIconModal()">Select Icon</button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #CreateGroupDrawerFooterTpl>
+      <div style="float: right">
+        <button nz-button style="margin-right: 8px;" (click)="OnCloseCreateGroupDrawer()">Cancel</button>
+        <button nz-button nzType="primary" (click)="SubmitCreateGroupDrawer()">Submit</button>
+      </div>
+    </ng-template>
+  </nz-drawer>
+</ng-container>
 
 <nz-dropdown-menu #ContectMenuGroup="nzDropdownMenu">
   <div *ngIf="this.CurrentContextGroupMenu" class="ContectMenuGroupContainer">
@@ -17,9 +68,55 @@
     </div>
     <div>
       <ul nz-menu>
-        <li nz-menu-item>Create New Group</li>
-        <li nz-menu-item>Delete Group</li>
+        <li nz-menu-item (click)="_ShowCreateGroupDrawer()">
+          <div class="ContextMenuItemContainer">
+            <div><span nz-icon nzType="plus" nzTheme="outline"></span></div>
+            <div>Create New Group</div>
+          </div>
+        </li>
+        <li nz-menu-item (click)="DeleteGroup()">
+          <div class="ContextMenuItemContainer">
+            <div><span nz-icon nzType="delete" nzTheme="outline"></span></div>
+            <div>Delete Group</div>
+          </div>
+        </li>
+        <li nz-menu-item (click)="RenameGroupShowModal()">
+          <div class="ContextMenuItemContainer">
+            <div><span nz-icon nzType="edit" nzTheme="outline"></span></div>
+            <div>Rename Group</div>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
 </nz-dropdown-menu>
+
+
+<nz-modal nzCentered [(nzVisible)]="SelectIconModalIsVisible" nzTitle="Select Icon"
+  (nzOnCancel)="SelectIconModalIsVisibleHandleCancel()" [nzFooter]="null" nzWidth="90vw">
+  <ng-container *nzModalContent>
+    <div class="ImageSelectorContainer">
+      <icon-selector (OnIconSelect)="IconSelected($event)"></icon-selector>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<ng-container *ngIf="CurrentContextGroupMenu">
+  <nz-modal [(nzVisible)]="RenameGroupModalIsVisible"
+    nzTitle="Edit Group - {{CurrentContextGroupMenu.Title}}" (nzOnCancel)="RenameGroupModalHandleCancel()"
+    (nzOnOk)="RenameGroupModalHandleOk()" [nzOkDisabled]="!RenamedGroupName">
+    <ng-container *nzModalContent>
+      <div>
+        <div>
+          Group Name:
+        </div>
+        <div>
+          <input nz-input type="text" [(ngModel)]="RenamedGroupName" />
+          <div *ngIf="!RenamedGroupName" style="color: red;">
+            Please Enter New Group Name!!
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </nz-modal>
+</ng-container>

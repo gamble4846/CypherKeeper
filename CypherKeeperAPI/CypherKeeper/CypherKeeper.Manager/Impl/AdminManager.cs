@@ -227,7 +227,8 @@ namespace CypherKeeper.Manager.Impl
 
             if (result > 0)
             {
-                return new APIResponse(ResponseCode.SUCCESS, "Image Added", OldImages);
+                dynamic ToReturn = new { AllImages = OldImages, NewImageLink = ImageLink };
+                return new APIResponse(ResponseCode.SUCCESS, "Image Added", ToReturn);
             }
             else
             {

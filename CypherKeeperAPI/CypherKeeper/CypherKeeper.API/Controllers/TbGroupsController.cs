@@ -55,12 +55,11 @@ namespace CypherKeeper.API.Controllers
 
         [HttpPost]
         [Route("/api/TbGroups/Add")]
-        public ActionResult Add(tbGroupsModel model)
+        public ActionResult Add(tbGroupsAddModel AddModel)
         {
             try
             {
-                model.CreatedDate = DateTime.UtcNow;
-                return Ok(TbGroupsManager.Add(model));
+                return Ok(TbGroupsManager.Add(AddModel));
             }
             catch (Exception ex)
             {
@@ -104,6 +103,20 @@ namespace CypherKeeper.API.Controllers
             try
             {
                 return Ok(TbGroupsManager.Restore(Id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
+        [HttpPatch]
+        [Route("/api/TbGroups/Rename/{Id}/{NewName}")]
+        public ActionResult Rename(Guid Id, string NewName)
+        {
+            try
+            {
+                return Ok(TbGroupsManager.Rename(Id, NewName));
             }
             catch (Exception ex)
             {

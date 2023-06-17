@@ -77,7 +77,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
-            Parameters.Add(new SqlParameter("@DeletedDate", DateTime.UtcNow.ToString()));
+            Parameters.Add(new SqlParameter("@DeletedDate", _CF.GetSQLCurrentDateTime()));
             var Query = "UPDATE tbIcons SET isDeleted = 1, DeletedDate = @DeletedDate WHERE Id = @Id";
             return _EC.Query(Query, Parameters, true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }

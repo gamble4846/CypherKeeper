@@ -77,7 +77,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var _EC = new EasyCrud(ConnectionString);
             List<SqlParameter> Parameters = new List<SqlParameter>();
             Parameters.Add(new SqlParameter("@Id", Id));
-            Parameters.Add(new SqlParameter("@DeletedDate", DateTime.UtcNow.ToString()));
+            Parameters.Add(new SqlParameter("@DeletedDate", _CF.GetSQLCurrentDateTime()));
             var Query = "UPDATE tbGroups SET isDeleted = 1, DeletedDate = @DeletedDate WHERE Id = @Id";
             return _EC.Query(Query, Parameters,true, GSEnums.ExecuteType.ExecuteNonQuery) > 0;
         }
@@ -100,6 +100,19 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                 WhereCondition = " WHERE isDeleted = 0 ";
             }
             return _EC.Count<tbGroupsModel>(WhereCondition, null, GSEnums.WithInQuery.ReadPast);
+        }
+
+        public int GetTotalByParentGroupId(Guid? ParentGroupId, bool onlyNonDeleted = true)
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            var WhereCondition = " WHERE ParentGroupId = @ParentGroupId ";
+            if (onlyNonDeleted)
+            {
+                WhereCondition += " AND isDeleted = 0 ";
+            }
+            List<SqlParameter> Parameters = new List<SqlParameter>();
+            Parameters.Add(new SqlParameter("@ParentGroupId", (object)ParentGroupId ?? DBNull.Value));
+            return _EC.Count<tbGroupsModel>(WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
     }
 }

@@ -264,7 +264,14 @@ namespace CypherKeeper.AuthLayer.Utility
             }
         }
 
+        public string GetSQLCurrentDateTime()
+        {
+            var CurrentUTCDate = DateTime.UtcNow;
+            var DateString = CurrentUTCDate.Year + "-" + CurrentUTCDate.Month + "-" + CurrentUTCDate.Day + " " + CurrentUTCDate.Hour + ":" + CurrentUTCDate.Minute + ":" + CurrentUTCDate.Second;
+            return DateString;
+        }
 
+         
         public string DecryptRSAEncryptedString(string cipherText, string privateKey = null)
         {
             var RSACryptographySection = Configuration.GetSection("RSACryptography");

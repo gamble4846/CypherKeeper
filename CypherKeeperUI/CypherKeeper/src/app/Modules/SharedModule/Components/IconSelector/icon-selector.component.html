@@ -1,0 +1,14 @@
+<div class="ImageSelectorContainer">
+  <div class="UploadNewContainer">
+    <button (click)="SelectFile()">+ New</button>
+  </div>
+  <div class="UploadedImagesContainer">
+    <ul class="ImagesContainer">
+      <li class="Image-Wrap" *ngFor="let Icon of CurrentUserIcons">
+        <img class="Image" loading="lazy" [src]="Icon.link" alt="" (click)="IconSelected(Icon)">
+      </li>
+    </ul>
+  </div>
+</div>
+
+<input type="file" #HiddenFileSelector style="display: none;" (change)="UploadFile($event)">

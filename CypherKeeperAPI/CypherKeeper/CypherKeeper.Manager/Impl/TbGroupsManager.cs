@@ -69,15 +69,29 @@ namespace CypherKeeper.Manager.Impl
             return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
 
-        public APIResponse Add(tbGroupsModel model)
+        public APIResponse Add(tbGroupsAddModel AddModel)
         {
+            var model = new tbGroupsModel()
+            {
+                Id = Guid.NewGuid(),
+                Name = AddModel.Name,
+                ParentGroupId = AddModel.ParentGroupId,
+                IconId = AddModel.IconId,
+                isDeleted = false,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = null,
+                DeletedDate = null,
+                ArrangePosition = 0,
+            };
             model = CommonFunctions.EncryptModel(model);
+
             tbGroupsModel FinalResult = new tbGroupsModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
                     SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
+                    model.ArrangePosition = SQLTbGroupsDataAccess.GetTotalByParentGroupId(model.ParentGroupId);
                     var result = SQLTbGroupsDataAccess.Add(model);
                     if (result != null)
                     {
@@ -156,6 +170,29 @@ namespace CypherKeeper.Manager.Impl
                     else
                     {
                         return new APIResponse(ResponseCode.ERROR, "Record Not Restored");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+        }
+
+        public APIResponse Rename(Guid Id, string NewName)
+        {
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var OldGroupData = SQLTbGroupsDataAccess.GetById(Id);
+                    if(OldGroupData == null)
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Group Not Found");
+                    }
+                    else
+                    {
+                        OldGroupData.Name = NewName;
+                        OldGroupData.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupData.Id, OldGroupData);
                     }
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);

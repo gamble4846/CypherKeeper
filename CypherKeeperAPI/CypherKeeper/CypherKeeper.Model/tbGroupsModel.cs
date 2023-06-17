@@ -18,6 +18,13 @@ namespace CypherKeeper.Model
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public DateTime? DeletedDate { get; set; }
-        public int ArrangePosition { get; set; }
+        public int? ArrangePosition { get; set; }
+    }
+
+    public class tbGroupsAddModel
+    {
+        public String Name { get; set; }
+        public Guid? ParentGroupId { get; set; }
+        public Guid? IconId { get; set; }
     }
 }

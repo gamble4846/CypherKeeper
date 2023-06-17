@@ -17,5 +17,6 @@ namespace CypherKeeper.DataAccess.SQL.Interface
         bool Delete(Guid Id);
         bool Restore(Guid Id);
         int Total(bool onlyNonDeleted = true);
+        int GetTotalByParentGroupId(Guid? ParentGroupId, bool onlyNonDeleted = true);
     }
 }

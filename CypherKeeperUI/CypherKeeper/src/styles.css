@@ -6,6 +6,11 @@
   src: url(./assets/Fonts/Rubik.ttf);
 }
 
-body{
-    font-family: Rubik;
+body {
+  font-family: Rubik;
+}
+
+.CreateGroupDrawerWrapper{
+  width: 700px !important;
+  max-width: 100vw;
 }

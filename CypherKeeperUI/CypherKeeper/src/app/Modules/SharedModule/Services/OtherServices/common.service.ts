@@ -10,28 +10,28 @@ export class CommonService {
 
   constructor(
 
-  ){
+  ) {
     this.encryptMod = new JsEncryptModule.JSEncrypt();
   }
 
-  showMessage(type: string, message:string): void {
-    console.log(type,message);
+  showMessage(type: string, message: string): void {
+    console.log(type, message);
   }
 
   ParseJwt(token: string) {
-    try{
+    try {
       var base64Url = token.split('.')[1];
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
-  
+
       return JSON.parse(jsonPayload);
     }
-    catch{
+    catch {
       return null;
     }
-    
+
   }
 
   RsaEncrypt(data: string, key: string) {
@@ -46,25 +46,25 @@ export class CommonService {
     return decypherText;
   }
 
-  GenerateRSAPairKeys(){
+  GenerateRSAPairKeys() {
     var encryptMod = new JsEncryptModule.JSEncrypt();
-    var PrivateKey = encryptMod.getPrivateKey(); 
+    var PrivateKey = encryptMod.getPrivateKey();
     var PublicKey = encryptMod.getPublicKey();
     return {
-      "PrivateKey":PrivateKey,
-      "PublicKey":PublicKey
+      "PrivateKey": PrivateKey,
+      "PublicKey": PublicKey
     }
   }
 
-  EncodeBase64(data:string){
+  EncodeBase64(data: string) {
     return btoa(data).toString();
   }
 
-  DecodeBase64(data:string){
+  DecodeBase64(data: string) {
     return atob(data).toString();
   }
 
-  LogSomething(data:any){
+  LogSomething(data: any) {
     console.log(data);
   }
 
@@ -76,8 +76,8 @@ export class CommonService {
     return DecryptedString;
   }
 
-  GroupBy(xs:any, key:any){
-    return xs.reduce((rv:any, x:any) => {
+  GroupBy(xs: any, key: any) {
+    return xs.reduce((rv: any, x: any) => {
       (rv[x[key]] = rv[x[key]] || []).push(x);
       return rv;
     }, {});
