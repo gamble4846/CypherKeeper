@@ -53,6 +53,20 @@ namespace CypherKeeper.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/api/TbStringKeyFields/GetByKeyId/{KeyId}")]
+        public ActionResult GetByKeyId(Guid KeyId, bool onlyNonDeleted = true)
+        {
+            try
+            {
+                return Ok(TbStringKeyFieldsManager.GetByKeyId(KeyId, onlyNonDeleted));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
         [HttpPost]
         [Route("/api/TbStringKeyFields/Add")]
         public ActionResult Add(tbStringKeyFieldsModel model)

@@ -14,14 +14,20 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { KeyComponent } from './Components/KeyComponent/key.component';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 @NgModule({
   declarations: [
-    OpenerComponent
+    OpenerComponent,
+    KeyComponent
   ],
   imports: [
     CommonModule,
+    NzFormModule,
+    NzSelectModule,
     HomeRoutingModule,
     InfiniteMenuModule,
     NzDropDownModule,

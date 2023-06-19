@@ -1,4 +1,5 @@
-﻿using CypherKeeper.Model;
+﻿using CypherKeeper.AuthLayer.Utility;
+using CypherKeeper.Model;
 using EasyCrudLibrary.Model;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace CypherKeeper.DataAccess.SQL.Interface
     public interface ITbStringKeyFieldsDataAccess
     {
         List<tbStringKeyFieldsModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true);
+        List<tbStringKeyFieldsModel> GetByKeyId(Guid KeyId, bool onlyNonDeleted = true);
         tbStringKeyFieldsModel GetById(Guid Id, bool onlyNonDeleted = true);
         tbStringKeyFieldsModel Add(tbStringKeyFieldsModel model);
         bool Update(Guid Id, tbStringKeyFieldsModel model);

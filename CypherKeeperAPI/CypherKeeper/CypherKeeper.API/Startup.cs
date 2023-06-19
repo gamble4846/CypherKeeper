@@ -77,6 +77,7 @@ namespace CypherKeeper.API
             services.AddTransient<ITbStringKeyFieldsManager, TbStringKeyFieldsManager>();
             services.AddTransient<ITbWebsitesManager, TbWebsitesManager>();
             services.AddTransient<IImageManager, ImageManager>();
+            services.AddTransient<IMixedManager, MixedManager>();
             #endregion
 
         }

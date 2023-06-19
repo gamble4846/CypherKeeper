@@ -1,0 +1,54 @@
+<div style="padding: 20px;">
+  <button nz-button nzType="primary" (click)="BackClicked()">Back</button><br>
+  <form nz-form [formGroup]="_FormsService.KeyForm" (ngSubmit)="KeySave()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Name" nzRequired>Name</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorNameTpl">
+        <input nz-input type="text" formControlName="Name" id="Name" />
+        <ng-template #errorNameTpl let-control>
+          <ng-container *ngIf="control.hasError('required')">Please enter Name!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="UserName" nzRequired>UserName</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input type="text" formControlName="UserName" id="UserName" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Password" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input type="text" formControlName="Password" id="Password" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="WebsiteId" nzRequired>WebsiteId</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input type="text" formControlName="WebsiteId" id="WebsiteId" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Notes" nzRequired>Notes</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <textarea nz-input type="text" formControlName="Notes" id="Notes"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <div>
+    <button nz-button nzType="primary" type="button" style="margin-bottom: 10px;" (click)="AddCustomFieldEmpty()">Add Custom Field</button>
+    <div *ngFor="let CustomFiled of CurrentTbStringKeyFields" style="padding: 5px 0px;">
+      <div style="display: flex; justify-content: center;">
+        <div><input nz-input type="text" [(ngModel)]="CustomFiled.name" placeholder="Name"/></div>
+        <div><input nz-input type="text" [(ngModel)]="CustomFiled.value" placeholder="Value"/></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <nz-form-item>
+      <button nz-button nzType="primary" type="button" (click)="KeySave()">Save</button>
+    </nz-form-item>
+  </div>
+</div>

@@ -36,6 +36,19 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             return _EC.GetList<tbStringKeyFieldsModel>(page, itemsPerPage, orderBy, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
 
+        public List<tbStringKeyFieldsModel> GetByKeyId(Guid KeyId, bool onlyNonDeleted = true)
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            List<SqlParameter> Parameters = new List<SqlParameter>();
+            var WhereCondition = " WHERE ParentKeyId = @ParentKeyId";
+            Parameters.Add(new SqlParameter("@ParentKeyId", KeyId));
+            if (onlyNonDeleted)
+            {
+                WhereCondition = " AND isDeleted = 0 ";
+            }
+            return _EC.GetList<tbStringKeyFieldsModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
+        }
+
         public tbStringKeyFieldsModel GetById(Guid Id, bool onlyNonDeleted = true)
         {
             var _EC = new EasyCrud(ConnectionString);

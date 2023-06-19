@@ -8,6 +8,7 @@ export class FormsService {
   RegisterForm!: FormGroup;
   LoginForm!: FormGroup;
   AddServerForm!:FormGroup;
+  KeyForm!:FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
@@ -34,6 +35,16 @@ export class FormsService {
       DatabaseType: [null, [Validators.required]],
       ConnectionString: [null, [Validators.required]],
       Key: [null, [Validators.required]]
+    });
+  }
+
+  SetupKeyForm(){
+    this.KeyForm = this.fb.group({
+      Name: [null, [Validators.required]],
+      UserName: [null],
+      Password: [null],
+      WebsiteId: [null],
+      Notes: [null],
     });
   }
 }

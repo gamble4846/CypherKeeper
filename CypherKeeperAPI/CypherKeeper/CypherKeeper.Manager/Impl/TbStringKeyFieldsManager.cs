@@ -67,6 +67,40 @@ namespace CypherKeeper.Manager.Impl
             return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
 
+        public APIResponse GetByKeyId(Guid KeyId, bool onlyNonDeleted = true)
+        {
+            var GlobalResult = new List<tbStringKeyFieldsModel>();
+            var GlobalTotal = 0;
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLTbStringKeyFieldsDataAccess = new TbStringKeyFieldsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var result = SQLTbStringKeyFieldsDataAccess.GetByKeyId(KeyId, onlyNonDeleted);
+                    if (result != null && result.Count > 0)
+                    {
+                        GlobalResult = result;
+                        GlobalTotal = SQLTbStringKeyFieldsDataAccess.Total();
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "No Records Found");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+
+            for (var i = 0; i < GlobalResult.Count; i++)
+            {
+                GlobalResult[i] = CommonFunctions.DecryptModel(GlobalResult[i]);
+            }
+
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(GlobalResult);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
+        }
+
         public APIResponse Add(tbStringKeyFieldsModel model)
         {
             model = CommonFunctions.EncryptModel(model);

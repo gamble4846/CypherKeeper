@@ -14,6 +14,7 @@ import { tbGroupsAddModel } from 'src/app/Models/tbGroupsAddModel';
 import { tbIconsModel } from 'src/app/Models/tbIconsModel';
 import { TbIconsControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-icons-controller.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 
 @Component({
   selector: 'app-opener',
@@ -39,6 +40,9 @@ export class OpenerComponent {
   AllIcons_Completed: boolean = false;
   AllGroups_Completed: boolean = false;
   IsEditingIcon: boolean = false;
+  IsKeyOpen: boolean = false;
+  OpenedKey: tbKeysModel | null = null;
+  SelectedGroup:tbGroupsModel | undefined;
 
   constructor(
     public _FormsService: FormsService,
@@ -305,6 +309,16 @@ export class OpenerComponent {
   }
 
   GroupSelected(SelectedMenuData: MenuData) {
-    console.log(SelectedMenuData);
+    this.SelectedGroup = SelectedMenuData.CustomData;
+  }
+
+  OpenKey(Key:tbKeysModel | null){
+    this.OpenedKey = Key;
+    this.IsKeyOpen = true;
+  }
+
+  CloseKey(){
+    this.OpenedKey = null;
+    this.IsKeyOpen = false;
   }
 }
