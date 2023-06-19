@@ -12,7 +12,6 @@
       <InfiniteMenu #InfiniteMenu [(MenuModel)]="AllGroups_IM_Data" [ShadeMultiplier]="2" [ShowOpenForAll]="false"
         [IconHeight]="'25px'" [IconWidth]="'25px'" [MenuStyles]="MenuStylesConstant" [Loading]="false"
         [ShowOnlyIcon]="false" (MenuItemOnContextMenu)="_MenuItemOnContextMenu($event, ContectMenuGroup)">
-        (MenuSelected)="GroupSelected($event)"
       </InfiniteMenu>
     </div>
   </div>
@@ -49,7 +48,7 @@
         </div>
         <div>
           <img *ngIf="SelectedIcon" [src]="SelectedIcon.link" class="SelectedIconIMG"><br>
-          <button nz-button nzType="primary" (click)="SelectIconForAdd()">Select Icon</button>
+          <button nz-button nzType="primary" (click)="OpenSelectIconModal()">Select Icon</button>
         </div>
       </div>
     </ng-container>
@@ -87,12 +86,6 @@
             <div>Rename Group</div>
           </div>
         </li>
-        <li nz-menu-item (click)="SelectIconForEdit()">
-          <div class="ContextMenuItemContainer">
-            <div><span nz-icon nzType="file-image" nzTheme="outline"></span></div>
-            <div>Change Icon</div>
-          </div>
-        </li>
       </ul>
     </div>
   </div>
@@ -109,9 +102,9 @@
 </nz-modal>
 
 <ng-container *ngIf="CurrentContextGroupMenu">
-  <nz-modal [(nzVisible)]="RenameGroupModalIsVisible" nzTitle="Edit Group - {{CurrentContextGroupMenu.Title}}"
-    (nzOnCancel)="RenameGroupModalHandleCancel()" (nzOnOk)="RenameGroupModalHandleOk()"
-    [nzOkDisabled]="!RenamedGroupName">
+  <nz-modal [(nzVisible)]="RenameGroupModalIsVisible"
+    nzTitle="Edit Group - {{CurrentContextGroupMenu.Title}}" (nzOnCancel)="RenameGroupModalHandleCancel()"
+    (nzOnOk)="RenameGroupModalHandleOk()" [nzOkDisabled]="!RenamedGroupName">
     <ng-container *nzModalContent>
       <div>
         <div>

@@ -29,9 +29,4 @@ export class TbGroupsService {
     let apiLink = `${CONSTANTS.APIUrl}/api/TbGroups/Rename/${Id}/${NewName}`;
     return this.http.patch(apiLink, {});
   }
-
-  ChangeIcon(Id:string, IconId:string){
-    let apiLink = `${CONSTANTS.APIUrl}/api/TbGroups/ChangeIcon/${Id}/${IconId}`;
-    return this.http.patch(apiLink, {});
-  }
 }

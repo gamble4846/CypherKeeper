@@ -123,19 +123,5 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
             }
         }
-
-        [HttpPatch]
-        [Route("/api/TbGroups/ChangeIcon/{Id}/{IconId}")]
-        public ActionResult ChangeIcon(Guid Id, Guid IconId)
-        {
-            try
-            {
-                return Ok(TbGroupsManager.ChangeIcon(Id, IconId));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
-            }
-        }
     }
 }

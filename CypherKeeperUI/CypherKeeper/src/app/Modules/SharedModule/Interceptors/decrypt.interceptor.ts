@@ -31,7 +31,6 @@ export class DecryptInterceptor implements HttpInterceptor {
           if(data.body.isEncrypted){
             let DecryptKey = this._AuthService.GetRSAPrivateKeyForAPI();
             let DecryptedString = this._CommonService.GetDecryptedStringFromEncryptedArrayRSA(data.body.document,DecryptKey);
-            console.log(DecryptedString);
             data.body.document = JSON.parse(DecryptedString);
             return data.body;
           }
