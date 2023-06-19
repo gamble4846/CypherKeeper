@@ -4,6 +4,7 @@ export const InterceptorSkipLoaderHeader = 'X-Skip-Loader-Interceptor';
 export const InterceptorSkipTokkenHeader = 'X-Skip-Tokken-Interceptor';
 export const InterceptorSkipErrorHeader = "X-Skip-Error-Interceptor";
 export const InterceptorSkipDecryptHeader = "X-Skip-Decrypt-Interceptor";
+export const InterceptorSkipPublicKeyHeader = "X-Skip-PublicKey-Interceptor";
 
 export const PublicKeyForRSA = `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4ZpfUUHimSe1Z+9BVBIN1CG9i

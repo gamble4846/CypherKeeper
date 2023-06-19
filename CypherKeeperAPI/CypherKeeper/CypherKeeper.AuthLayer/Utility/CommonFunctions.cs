@@ -200,19 +200,7 @@ namespace CypherKeeper.AuthLayer.Utility
         {
             try
             {
-                var accessToken = GetTokenFromHeader();
-                if (string.IsNullOrEmpty(accessToken)) { return null; }
-
-                var claims = GetClaimsFromToken(accessToken);
-                if (claims == null) { return null; }
-
-                var LoginDataClaim = claims.Find(x => x.Type == "LoginData");
-                if (LoginDataClaim == null) { return null; }
-
-                var LoginData = JsonConvert.DeserializeObject<LoginModel>(LoginDataClaim.Value);
-                if (LoginData == null) { return null; }
-
-                return LoginData.NewPublicKey;
+                return HttpContextAccessor.HttpContext.Request.Headers["PublicEncryptionKey"];
             }
             catch (Exception)
             {

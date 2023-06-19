@@ -10,6 +10,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
 import { CommonService } from '../Services/OtherServices/common.service';
 import { AuthService } from '../Services/OtherServices/auth.service';
+import { AppInitializerService } from '../Services/OtherServices/app-initializer.service';
 
 @Injectable()
 export class DecryptInterceptor implements HttpInterceptor {
@@ -17,6 +18,7 @@ export class DecryptInterceptor implements HttpInterceptor {
   constructor(
     private _CommonService:CommonService,
     private _AuthService:AuthService,
+    private _AppInitializerService:AppInitializerService,
   ) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -29,7 +31,7 @@ export class DecryptInterceptor implements HttpInterceptor {
       tap((data:any) => {
         try{
           if(data.body.isEncrypted){
-            let DecryptKey = this._AuthService.GetRSAPrivateKeyForAPI();
+            let DecryptKey =  this._AppInitializerService.privateKey;
             let DecryptedString = this._CommonService.GetDecryptedStringFromEncryptedArrayRSA(data.body.document,DecryptKey);
             data.body.document = JSON.parse(DecryptedString);
             return data.body;

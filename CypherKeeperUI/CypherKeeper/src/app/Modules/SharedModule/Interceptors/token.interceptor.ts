@@ -26,8 +26,7 @@ export class TokenInterceptor implements HttpInterceptor {
         Authorization: 'Bearer ' + this._AuthService.GetJWTToken()
       }
     });
-
-    console.log(tokenizedReq);
+    
     return next.handle(tokenizedReq);
   }
 }

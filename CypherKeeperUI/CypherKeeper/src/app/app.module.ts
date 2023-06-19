@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,8 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DecryptInterceptor } from './Modules/SharedModule/Interceptors/decrypt.interceptor';
+import { AppInitializerService } from './Modules/SharedModule/Services/OtherServices/app-initializer.service';
+import { PublicEncryptionKeyInterceptor } from './Modules/SharedModule/Interceptors/public-encryption-key.interceptor';
 
 registerLocaleData(en);
 
@@ -28,10 +30,13 @@ registerLocaleData(en);
     BrowserAnimationsModule
   ],
   providers: [
+    AppInitializerService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DecryptInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: PublicEncryptionKeyInterceptor, multi: true },
     { provide: NZ_I18N, useValue: en_US },
+    { provide: APP_INITIALIZER, multi: true, deps: [AppInitializerService], useFactory: (_AppInitializerService: AppInitializerService) => { return () => { return _AppInitializerService.loadEverything(); }; }, },
   ],
   bootstrap: [AppComponent]
 })
