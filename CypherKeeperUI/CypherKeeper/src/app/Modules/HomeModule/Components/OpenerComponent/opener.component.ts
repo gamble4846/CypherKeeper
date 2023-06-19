@@ -38,6 +38,7 @@ export class OpenerComponent {
   RenamedGroupName:string = "";
   AllIcons_Completed:boolean = false;
   AllGroups_Completed:boolean = false;
+  IsEditingIcon:boolean = false;
 
   constructor(
     public _FormsService: FormsService,
@@ -60,6 +61,7 @@ export class OpenerComponent {
 
   UpdateGroups() {
     this._TbGroupsService.Get().subscribe((response: any) => {
+      console.log(response);
       if (response.code == 1) {
         this.AllGroups = response.document.records;
         this.AllGroups_Completed = true;
@@ -70,6 +72,7 @@ export class OpenerComponent {
 
   UpdateAllIcons(){
     this._TbIconsControllerService.Get().subscribe((response:any) => {
+      console.log(response);
       if(response.code == 1){
         this.AllIcons = response.document.records;
         this.AllIcons_Completed = true;
@@ -206,9 +209,22 @@ export class OpenerComponent {
   }
 
   IconSelected(IconsModel:tbIconsModel){
-    this.SelectedIcon = IconsModel;
-    this.tbGroupsAddForm.iconId = IconsModel.id;
-    this.SelectIconModalIsVisibleHandleCancel();
+    if(this.IsEditingIcon){
+      this._TbGroupsService.ChangeIcon(this.CurrentContextGroupMenu?.CustomData.Id, IconsModel.id).subscribe((response:any) => {
+        if(response.code == 1){
+          this.SelectIconModalIsVisibleHandleCancel();
+          this.AllIcons_Completed = true;
+          this.AllGroups_Completed = false;
+          this.UpdateGroups();
+          this.IsEditingIcon = false;
+        }
+      })
+    }
+    else{
+      this.SelectedIcon = IconsModel;
+      this.tbGroupsAddForm.iconId = IconsModel.id;
+      this.SelectIconModalIsVisibleHandleCancel();
+    }
   }
  
   SubmitCreateGroupDrawer(){
@@ -268,5 +284,19 @@ export class OpenerComponent {
         }
       })
     }
+  }
+
+  SelectIconForAdd(){
+    this.IsEditingIcon = false;
+    this.OpenSelectIconModal();
+  }
+
+  SelectIconForEdit(){
+    this.IsEditingIcon = true;
+    this.OpenSelectIconModal();
+  }
+
+  GroupSelected(SelectedMenuData:MenuData){
+    console.log(SelectedMenuData);
   }
 }

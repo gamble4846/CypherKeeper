@@ -184,13 +184,38 @@ namespace CypherKeeper.Manager.Impl
                     SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var OldGroupData = SQLTbGroupsDataAccess.GetById(Id);
-                    if(OldGroupData == null)
+                    OldGroupData = CommonFunctions.DecryptModel(OldGroupData);
+                    if (OldGroupData == null)
                     {
                         return new APIResponse(ResponseCode.ERROR, "Group Not Found");
                     }
                     else
                     {
                         OldGroupData.Name = NewName;
+                        OldGroupData.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupData.Id, OldGroupData);
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+        }
+
+        public APIResponse ChangeIcon(Guid Id, Guid IconId)
+        {
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var OldGroupData = SQLTbGroupsDataAccess.GetById(Id);
+                    OldGroupData = CommonFunctions.DecryptModel(OldGroupData);
+                    if (OldGroupData == null)
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Group Not Found");
+                    }
+                    else
+                    {
+                        OldGroupData.IconId = IconId;
                         OldGroupData.UpdatedDate = DateTime.UtcNow;
                         return Update(OldGroupData.Id, OldGroupData);
                     }
