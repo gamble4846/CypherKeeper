@@ -6,7 +6,7 @@ import { AdminControllerService } from '../../Services/APIServices/admin-control
 import { Router } from '@angular/router';
 import { ImageControllerService } from '../../Services/APIServices/image-controller.service';
 import { ImagesModel } from 'src/app/Models/ImagesModel';
-import { tbIconsModel } from 'src/app/Models/tbIconsModel';
+import { tbIconsModel, tbIconsModel_NUll } from 'src/app/Models/tbIconsModel';
 import { TbIconsControllerService } from '../../Services/APIServices/tb-icons-controller.service';
 
 @Component({
@@ -70,7 +70,7 @@ export class IconSelectorComponent {
     });
   }
 
-  IconSelected(data:tbIconsModel){
+  IconSelected(data:tbIconsModel | undefined){
     this.OnIconSelect.emit(data);
   }
   

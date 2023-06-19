@@ -15,9 +15,12 @@ import { ImagesModel } from 'src/app/Models/ImagesModel';
 export class ImageSelectorComponent {
 
   @ViewChild("HiddenFileSelector") HiddenFileSelector!: any;
-  @Output() OnImageSelect = new EventEmitter<string>();
+  @Output() OnImageSelect = new EventEmitter<string | null>();
 
   CurrentUserImages:Array<ImagesModel> = [];
+  NullUserImage:ImagesModel = {
+    imageLink: null
+  }
 
   constructor(
     public _FormsService:FormsService,
@@ -57,7 +60,7 @@ export class ImageSelectorComponent {
     });
   }
 
-  ImageSelected(link:string){
+  ImageSelected(link:string | null){
     this.OnImageSelect.emit(link);
   }
   

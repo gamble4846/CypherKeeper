@@ -17,6 +17,6 @@ namespace CypherKeeper.Manager.Interface
         APIResponse Delete(Guid Id);
         APIResponse Restore(Guid Id);
         APIResponse Rename(Guid Id, string NewName);
-        APIResponse ChangeIcon(Guid Id, Guid IconId);
+        APIResponse ChangeIcon(Guid Id, Guid? IconId);
     }
 }

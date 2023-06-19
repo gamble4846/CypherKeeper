@@ -1,3 +1,3 @@
 export interface ImagesModel {
-    imageLink: string;
+    imageLink: string | null;
 }

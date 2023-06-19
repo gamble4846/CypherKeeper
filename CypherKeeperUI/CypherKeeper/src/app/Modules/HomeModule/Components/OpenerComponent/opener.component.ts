@@ -31,14 +31,14 @@ export class OpenerComponent {
     parentGroupId: null,
     iconId: null
   };
-  SelectIconModalIsVisible:boolean = false;
-  SelectedIcon:tbIconsModel | undefined;
+  SelectIconModalIsVisible: boolean = false;
+  SelectedIcon: tbIconsModel | undefined;
   AllIcons: Array<tbIconsModel> = [];
-  RenameGroupModalIsVisible:boolean = false;
-  RenamedGroupName:string = "";
-  AllIcons_Completed:boolean = false;
-  AllGroups_Completed:boolean = false;
-  IsEditingIcon:boolean = false;
+  RenameGroupModalIsVisible: boolean = false;
+  RenamedGroupName: string = "";
+  AllIcons_Completed: boolean = false;
+  AllGroups_Completed: boolean = false;
+  IsEditingIcon: boolean = false;
 
   constructor(
     public _FormsService: FormsService,
@@ -49,7 +49,7 @@ export class OpenerComponent {
     public _ImageControllerService: ImageControllerService,
     public _TbGroupsService: TbGroupsService,
     private nzContextMenuService: NzContextMenuService,
-    public _TbIconsControllerService:TbIconsControllerService,
+    public _TbIconsControllerService: TbIconsControllerService,
     private _NzModalService: NzModalService,
   ) { }
 
@@ -65,18 +65,18 @@ export class OpenerComponent {
       if (response.code == 1) {
         this.AllGroups = response.document.records;
         this.AllGroups_Completed = true;
-        if(this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
+        if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
       }
     })
   }
 
-  UpdateAllIcons(){
-    this._TbIconsControllerService.Get().subscribe((response:any) => {
+  UpdateAllIcons() {
+    this._TbIconsControllerService.Get().subscribe((response: any) => {
       console.log(response);
-      if(response.code == 1){
+      if (response.code == 1) {
         this.AllIcons = response.document.records;
         this.AllIcons_Completed = true;
-        if(this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
+        if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
       }
     })
   }
@@ -114,26 +114,26 @@ export class OpenerComponent {
     console.log(this.AllGroups_IM_Data);
   }
 
-  ReOpenMenuFromOldMenu(Old_AllGroups_IM_Data:Array<MenuData>){
+  ReOpenMenuFromOldMenu(Old_AllGroups_IM_Data: Array<MenuData>) {
     let IdsAndOpen = this.GetIdsAndOpen(Old_AllGroups_IM_Data);
-    IdsAndOpen = IdsAndOpen.filter((x:any) => x.isOpen);
+    IdsAndOpen = IdsAndOpen.filter((x: any) => x.isOpen);
     this._ReOpenMenuFromOldMenu(IdsAndOpen, this.AllGroups_IM_Data)
     console.log(IdsAndOpen);
   }
 
-  _ReOpenMenuFromOldMenu(IdsAndOpen:Array<any>, AllGroups_IM_Data:Array<MenuData>){
-    AllGroups_IM_Data.forEach((group:MenuData) => {
-      let currentIdOpen = IdsAndOpen.find((x:any) => x.id == group.Id);
-      if(currentIdOpen){
+  _ReOpenMenuFromOldMenu(IdsAndOpen: Array<any>, AllGroups_IM_Data: Array<MenuData>) {
+    AllGroups_IM_Data.forEach((group: MenuData) => {
+      let currentIdOpen = IdsAndOpen.find((x: any) => x.id == group.Id);
+      if (currentIdOpen) {
         group.IsOpen = true;
       }
       this._ReOpenMenuFromOldMenu(IdsAndOpen, group.Children);
     });
   }
 
-  GetIdsAndOpen(Old_AllGroups_IM_Data:Array<MenuData>){
-    let toReturn:Array<any> = [];
-    Old_AllGroups_IM_Data.forEach((GroupData:MenuData) => {
+  GetIdsAndOpen(Old_AllGroups_IM_Data: Array<MenuData>) {
+    let toReturn: Array<any> = [];
+    Old_AllGroups_IM_Data.forEach((GroupData: MenuData) => {
       toReturn.push({
         id: GroupData.Id,
         isOpen: GroupData.IsOpen
@@ -143,10 +143,10 @@ export class OpenerComponent {
     return toReturn;
   }
 
-  GetIconLink(IconId:any){
-    if(IconId){
+  GetIconLink(IconId: any) {
+    if (IconId) {
       var CurrentIconData = this.AllIcons.find(x => x.id == IconId);
-      if(CurrentIconData){
+      if (CurrentIconData) {
         return CurrentIconData.link;
       }
     }
@@ -182,8 +182,8 @@ export class OpenerComponent {
     this.nzContextMenuService.close();
   }
 
-  _ShowCreateGroupDrawerForNullParent(){
-    let Empty:MenuData = {
+  _ShowCreateGroupDrawerForNullParent() {
+    let Empty: MenuData = {
       Title: 'NULL',
       Children: [],
       CustomData: {
@@ -192,7 +192,7 @@ export class OpenerComponent {
     }
     this.CurrentContextGroupMenu = Empty;
     this.ShowCreateGroupDrawer = true;
-    
+
   }
 
   OnCloseCreateGroupDrawer() {
@@ -200,18 +200,26 @@ export class OpenerComponent {
     this.ResetGroupsAddForm();
   }
 
-  OpenSelectIconModal(){
+  OpenSelectIconModal() {
     this.SelectIconModalIsVisible = true;
   }
 
-  SelectIconModalIsVisibleHandleCancel(){
+  SelectIconModalIsVisibleHandleCancel() {
     this.SelectIconModalIsVisible = false;
   }
 
-  IconSelected(IconsModel:tbIconsModel){
-    if(this.IsEditingIcon){
-      this._TbGroupsService.ChangeIcon(this.CurrentContextGroupMenu?.CustomData.Id, IconsModel.id).subscribe((response:any) => {
-        if(response.code == 1){
+  IconSelected(IconsModel: tbIconsModel | undefined) {
+    let IconId: string | null;
+    if (IconsModel == undefined) {
+      IconId = null;
+    }
+    else {
+      IconId = IconsModel.id;
+    }
+
+    if (this.IsEditingIcon) {
+      this._TbGroupsService.ChangeIcon(this.CurrentContextGroupMenu?.CustomData.Id, IconId).subscribe((response: any) => {
+        if (response.code == 1) {
           this.SelectIconModalIsVisibleHandleCancel();
           this.AllIcons_Completed = true;
           this.AllGroups_Completed = false;
@@ -220,17 +228,17 @@ export class OpenerComponent {
         }
       })
     }
-    else{
+    else {
       this.SelectedIcon = IconsModel;
-      this.tbGroupsAddForm.iconId = IconsModel.id;
+      this.tbGroupsAddForm.iconId = IconId;
       this.SelectIconModalIsVisibleHandleCancel();
     }
   }
- 
-  SubmitCreateGroupDrawer(){
+
+  SubmitCreateGroupDrawer() {
     this.tbGroupsAddForm.parentGroupId = this.CurrentContextGroupMenu?.CustomData.Id;
-    this._TbGroupsService.Add(this.tbGroupsAddForm).subscribe((response:any) => {
-      if(response.code == 1){
+    this._TbGroupsService.Add(this.tbGroupsAddForm).subscribe((response: any) => {
+      if (response.code == 1) {
         this.AllIcons_Completed = false;
         this.AllGroups_Completed = false;
 
@@ -241,7 +249,7 @@ export class OpenerComponent {
     })
   }
 
-  DeleteGroup(){
+  DeleteGroup() {
     this._NzModalService.confirm({
       nzTitle: 'Are you sure delete this Group (' + this.CurrentContextGroupMenu?.Title + ')?',
       nzContent: '<b style="color: red;">Deleting this group makes all the children group inaccessible, you can restore this group to access all the childrens</b>',
@@ -249,8 +257,8 @@ export class OpenerComponent {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        this._TbGroupsService.Delete(this.CurrentContextGroupMenu?.CustomData.Id).subscribe((response:any) => {
-          if(response.code == 1){
+        this._TbGroupsService.Delete(this.CurrentContextGroupMenu?.CustomData.Id).subscribe((response: any) => {
+          if (response.code == 1) {
             this.AllIcons_Completed = true;
             this.AllGroups_Completed = false;
             this.UpdateGroups();
@@ -262,20 +270,20 @@ export class OpenerComponent {
     });
   }
 
-  RenameGroupShowModal(){
+  RenameGroupShowModal() {
     this.RenamedGroupName = this.CurrentContextGroupMenu?.Title || "";
     this.RenameGroupModalIsVisible = true;
   }
 
-  RenameGroupModalHandleCancel(){
+  RenameGroupModalHandleCancel() {
     this.RenameGroupModalIsVisible = false;
     this.CurrentContextGroupMenu = undefined;
   }
 
-  RenameGroupModalHandleOk(){
-    if(this.RenamedGroupName && this.CurrentContextGroupMenu?.Id){
-      this._TbGroupsService.Rename(this.CurrentContextGroupMenu?.Id, this.RenamedGroupName).subscribe((response:any) => {
-        if(response.code == 1){
+  RenameGroupModalHandleOk() {
+    if (this.RenamedGroupName && this.CurrentContextGroupMenu?.Id) {
+      this._TbGroupsService.Rename(this.CurrentContextGroupMenu?.Id, this.RenamedGroupName).subscribe((response: any) => {
+        if (response.code == 1) {
           this.RenameGroupModalIsVisible = false;
           this.CurrentContextGroupMenu = undefined;
           this.AllIcons_Completed = true;
@@ -286,17 +294,17 @@ export class OpenerComponent {
     }
   }
 
-  SelectIconForAdd(){
+  SelectIconForAdd() {
     this.IsEditingIcon = false;
     this.OpenSelectIconModal();
   }
 
-  SelectIconForEdit(){
+  SelectIconForEdit() {
     this.IsEditingIcon = true;
     this.OpenSelectIconModal();
   }
 
-  GroupSelected(SelectedMenuData:MenuData){
+  GroupSelected(SelectedMenuData: MenuData) {
     console.log(SelectedMenuData);
   }
 }

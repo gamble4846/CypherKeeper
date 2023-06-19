@@ -4,6 +4,9 @@
   </div>
   <div class="UploadedImagesContainer">
     <ul class="ImagesContainer">
+      <li class="Image-Wrap">
+        <img class="Image" loading="lazy" src="https://i.imgur.com/fDwXjSx.png" alt="" (click)="ImageSelected(NullUserImage.imageLink)">
+      </li>
       <li class="Image-Wrap" *ngFor="let Image of CurrentUserImages">
         <img class="Image" loading="lazy" [src]="Image.imageLink" alt="" (click)="ImageSelected(Image.imageLink)">
       </li>

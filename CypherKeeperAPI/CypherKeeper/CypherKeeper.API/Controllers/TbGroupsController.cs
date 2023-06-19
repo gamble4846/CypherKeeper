@@ -125,8 +125,8 @@ namespace CypherKeeper.API.Controllers
         }
 
         [HttpPatch]
-        [Route("/api/TbGroups/ChangeIcon/{Id}/{IconId}")]
-        public ActionResult ChangeIcon(Guid Id, Guid IconId)
+        [Route("/api/TbGroups/ChangeIcon/{Id}")]
+        public ActionResult ChangeIcon(Guid Id, Guid? IconId)
         {
             try
             {

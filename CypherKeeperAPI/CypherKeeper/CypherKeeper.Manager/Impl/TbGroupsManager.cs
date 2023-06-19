@@ -200,7 +200,7 @@ namespace CypherKeeper.Manager.Impl
             }
         }
 
-        public APIResponse ChangeIcon(Guid Id, Guid IconId)
+        public APIResponse ChangeIcon(Guid Id, Guid? IconId)
         {
             switch (CurrentServer.DatabaseType)
             {

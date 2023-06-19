@@ -27,7 +27,7 @@ namespace CypherKeeper.AuthLayer.Models
         public string DatabaseType { get; set; }
         public string ConnectionString { get; set; }
         public string Key { get; set; }
-        public string ImageLink { get; set; }
+        public string? ImageLink { get; set; }
     }
 
     public class ServerDisplayModel
