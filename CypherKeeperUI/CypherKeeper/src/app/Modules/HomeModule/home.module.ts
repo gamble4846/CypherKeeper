@@ -12,6 +12,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzInputModule,
     NzModalModule,
     SharedModule,
-    NzIconModule
+    NzIconModule,
+    NzGridModule,
+    NzCardModule
   ]
 })
 export class HomeModule { }
