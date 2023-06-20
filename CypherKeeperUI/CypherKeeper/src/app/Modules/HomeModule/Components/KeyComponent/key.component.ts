@@ -74,6 +74,8 @@ export class KeyComponent {
         WebsiteId: this.CurrentKey.WebsiteId,
         Notes: this.CurrentKey.Notes,
       })
+
+      this.GetKeyHistory();
     }
     if (this.CurrentGroup == null) {
       this.CurrentGroup = {
@@ -91,6 +93,14 @@ export class KeyComponent {
     console.log(this.CurrentKey);
     console.log(this.CurrentGroup);
     this.GetOldTbStringKeyFields();
+  }
+
+  GetKeyHistory(){
+    if(this.CurrentKey){
+      this._MixedControllerService.GetKeyHistory(this.CurrentKey.Id).subscribe((response:any) => {
+        console.log(response);
+      })
+    }
   }
 
   BackClicked() {

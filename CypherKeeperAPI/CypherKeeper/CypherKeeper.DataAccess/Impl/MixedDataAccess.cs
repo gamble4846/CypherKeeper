@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -39,6 +40,39 @@ namespace CypherKeeper.DataAccess.SQL.Impl
         {
             var _EC = new EasyCrud(ConnectionString);
             tbKeysModel KeysModel_Save = new tbKeysModel();
+            if (model.Key.Id != null)
+            {
+                var OldKeyData = SQLTbKeysDataAccess.GetById(model.Key.Id ?? Guid.NewGuid());
+                var OldStringKeyFields = SQLTbStringKeyFieldsDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
+
+                OldKeyData = _CF.DecryptModel(OldKeyData);
+                for (int i = 0; i < OldStringKeyFields.Count; i++)
+                {
+                    OldStringKeyFields[i] = _CF.DecryptModel(OldStringKeyFields[i]);
+                }
+
+                var _KeysJSONModel = new KeysJSONModel()
+                {
+                    Key = OldKeyData,
+                    CustomFields = OldStringKeyFields,
+                };
+
+                var KeysJSON = Newtonsoft.Json.JsonConvert.SerializeObject(_KeysJSONModel);
+
+
+                var toAddToHistory = new tbKeysHistoryModel()
+                {
+                    KeyId = model.Key.Id ?? Guid.NewGuid(),
+                    KeysJSON = KeysJSON,
+                    Type = "",
+                    isDeleted = false,
+                    Date = DateTime.UtcNow,
+                };
+
+                toAddToHistory = _CF.EncryptModel(toAddToHistory);
+
+                toAddToHistory.Id = new Guid(_EC.Add(toAddToHistory, "Id", "Id", false));
+            }
             //Key
             //-------------------------------------------------------------
             if (model.Key.Id != null)
@@ -132,6 +166,15 @@ namespace CypherKeeper.DataAccess.SQL.Impl
 
             _EC.SaveChanges();
             return KeysModel_Save.Id;
+        }
+
+        public List<tbKeysHistoryModel> GetKeyHistory(Guid KeyId)
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            List<SqlParameter> Parameters = new List<SqlParameter>();
+            Parameters.Add(new SqlParameter("@KeyId", KeyId));
+            var WhereCondition = " WHERE KeyId = @KeyId AND isDeleted = 0";
+            return _EC.GetList<tbKeysHistoryModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
     }
 }

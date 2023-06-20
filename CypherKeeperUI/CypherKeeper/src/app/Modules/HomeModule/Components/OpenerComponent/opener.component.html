@@ -20,7 +20,7 @@
     <div style="width: calc(100vw - 300px); overflow: auto; height: 100vh;" *ngIf="!IsKeyOpen">
       <div nz-row>
         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px;">
-          <nz-card nzHoverable style="width:240px" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(null)">
+          <nz-card nzHoverable style="width:100%" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(null)">
             <nz-card-meta nzTitle="New Key" nzDescription="Create New Key"></nz-card-meta>
           </nz-card>
           <ng-template #CoverTemplate_NewKey>
@@ -32,7 +32,7 @@
           </ng-template>
         </div>
         <div *ngFor="let Key of CurrentGroupKeys" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px;">
-          <nz-card nzHoverable style="width:240px" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(Key)">
+          <nz-card nzHoverable style="width:100%" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(Key)">
             <nz-card-meta [nzTitle]="Key.Name" [nzDescription]="Key.UserName"></nz-card-meta>
           </nz-card>
           <ng-template #CoverTemplate_NewKey>

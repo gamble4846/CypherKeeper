@@ -14,4 +14,9 @@ export class MixedControllerService {
     let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/SaveKey`;
     return this.http.post(apiLink, model);
   }
+
+  GetKeyHistory(KeyId:string){
+    let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/KeyHistory/${KeyId}`;
+    return this.http.get(apiLink);
+  }
 }

@@ -7,6 +7,7 @@ using CypherKeeper.Model;
 using EasyCrudLibrary.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Evaluation;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,39 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+        }
+
+        public APIResponse GetKeyHistory(Guid KeyId)
+        {
+            List<tbKeysHistoryModel> GlobalResult = new List<tbKeysHistoryModel>();
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLMixedDataAccess = new MixedDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var result = SQLMixedDataAccess.GetKeyHistory(KeyId);
+                    if (result != null)
+                    {
+                        GlobalResult = result;
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Saved");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+
+            for (var i = 0; i < GlobalResult.Count; i++)
+            {
+                GlobalResult[i] = CommonFunctions.DecryptModel(GlobalResult[i]);
+            }
+
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(GlobalResult);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
     }
 }

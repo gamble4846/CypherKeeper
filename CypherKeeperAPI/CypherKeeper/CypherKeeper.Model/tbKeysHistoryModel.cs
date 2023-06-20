@@ -17,4 +17,10 @@ namespace CypherKeeper.Model
         public Boolean isDeleted { get; set; } = false;
         public DateTime Date { get; set; }
     }
+
+    public class KeysJSONModel
+    {
+        public tbKeysModel Key { get; set; }
+        public List<tbStringKeyFieldsModel> CustomFields { get; set; }
+    }
 }

@@ -12,5 +12,6 @@ namespace CypherKeeper.Manager.Interface
     public interface IMixedManager
     {
         APIResponse SaveKey(SavedKeyModel model);
+        APIResponse GetKeyHistory(Guid KeyId);
     }
 }

@@ -11,5 +11,6 @@ namespace CypherKeeper.DataAccess.SQL.Interface
     public interface IMixedDataAccess
     {
         dynamic SaveKey(SavedKeyModel model);
+        List<tbKeysHistoryModel> GetKeyHistory(Guid KeyId);
     }
 }
