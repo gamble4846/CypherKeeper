@@ -16,6 +16,8 @@ import { TbIconsControllerService } from 'src/app/Modules/SharedModule/Services/
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 import { TbKeysControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-keys-controller.service';
+import { tbWebsitesModel } from 'src/app/Models/tbWebsitesModel';
+import { TbWebsitesControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-websites-controller.service';
 
 @Component({
   selector: 'app-opener',
@@ -45,6 +47,7 @@ export class OpenerComponent {
   OpenedKey: tbKeysModel | null = null;
   SelectedGroup:tbGroupsModel | undefined;
   CurrentGroupKeys: Array<tbKeysModel> = [];
+  AllWebsites:Array<tbWebsitesModel> = [];
 
   constructor(
     public _FormsService: FormsService,
@@ -58,12 +61,22 @@ export class OpenerComponent {
     public _TbIconsControllerService: TbIconsControllerService,
     private _NzModalService: NzModalService,
     private _TbKeysControllerService:TbKeysControllerService,
+    private _TbWebsitesControllerService:TbWebsitesControllerService,
   ) { }
 
   ngOnInit(): void {
     this.MenuStylesConstant = CONSTANTS.MenuStylesConstant;
     this.UpdateGroups();
     this.UpdateAllIcons();
+    this.UpdateAllWebsites();
+  }
+
+  UpdateAllWebsites(){
+    this._TbWebsitesControllerService.Get().subscribe((response:any) => {
+      if(response.code == 1){
+        this.AllWebsites = response.document.records;
+      }
+    })
   }
 
   UpdateGroups() {
@@ -86,6 +99,21 @@ export class OpenerComponent {
         if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
       }
     })
+  }
+
+  Get_Icon_By_WebSiteId(WebsiteId:string | null){
+    if(WebsiteId){
+      let Website:any = this.AllWebsites.find((x:tbWebsitesModel) => x.id == WebsiteId);
+      console.log(Website);
+      if(Website){
+        let Icon:any = this.AllIcons.find((x:tbIconsModel) => x.id == Website.iconId);
+        console.log(Icon);
+        if(Icon && Icon.link){
+          return Icon.link;
+        }
+      }
+    }
+    return "https://i.imgur.com/inF7171.jpeg";
   }
 
   SetupGroupsMenuData() {
