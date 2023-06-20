@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SavedKeyModel, ToSaveStringKeyField } from 'src/app/Models/SavedKeyModel';
 import { tbGroupsModel } from 'src/app/Models/tbGroupsModel';
+import { tbKeysHistoryModel } from 'src/app/Models/tbKeysHistoryModel';
 import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 import { tbStringKeyFieldsModel } from 'src/app/Models/tbStringKeyFieldsModel';
 import { MixedControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/mixed-controller.service';
@@ -41,6 +42,8 @@ export class KeyComponent {
   @Output() OnBack = new EventEmitter<any>();
 
   CurrentTbStringKeyFields: Array<tbStringKeyFieldsModel> = [];
+  ShowHistoryDrawer: boolean = false;
+  KeyHistories: Array<tbKeysHistoryModel> =[];
 
   constructor(
     private _AppInitializerService: AppInitializerService,
@@ -99,6 +102,10 @@ export class KeyComponent {
     if(this.CurrentKey){
       this._MixedControllerService.GetKeyHistory(this.CurrentKey.Id).subscribe((response:any) => {
         console.log(response);
+        if(response.code == 1){
+          this.KeyHistories = response.document;
+          this.KeyHistories.reverse();
+        }
       })
     }
   }
@@ -110,7 +117,6 @@ export class KeyComponent {
   GetOldTbStringKeyFields() {
     if (this.CurrentKey && this.CurrentKey.Id) {
       this._TbStringKeyFieldsControllerService.GetByKeyId(this.CurrentKey.Id).subscribe((response: any) => {
-        console.log(response);
         if (response.code == 1) {
           this.CurrentTbStringKeyFields = response.document;
           this.CurrentTbStringKeyFields = [...this.CurrentTbStringKeyFields]
@@ -199,5 +205,17 @@ export class KeyComponent {
     this.CurrentTbStringKeyFields.push(newCustomField);
     this.CurrentTbStringKeyFields = [...this.CurrentTbStringKeyFields];
     console.log(this.CurrentTbStringKeyFields);
+  }
+
+  ShowHistory(){
+    this.ShowHistoryDrawer = true;
+  }
+
+  OnCloseHistoryDrawer(){
+    this.ShowHistoryDrawer = false;
+  }
+
+  JsonObjectHistory(JsonString:string){
+    return JSON.parse(JsonString);
   }
 }

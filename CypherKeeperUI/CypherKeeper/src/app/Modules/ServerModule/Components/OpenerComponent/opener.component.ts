@@ -33,6 +33,7 @@ export class OpenerComponent {
   ) {}
 
   ngOnInit(): void {
+    this._AuthService.RemoveJWTSelectedServerToken();
     this._FormsService.SetupAddServerForm();
     this.AllowedDatabaseTypes = CONSTANTS.AllowedDatabaseTypes;
     this.UpdateAllServers();

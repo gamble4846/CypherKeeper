@@ -23,6 +23,8 @@ export class LoginSignUpComponent {
   ) {}
 
   ngOnInit(): void {
+    this._AuthService.RemoveJWTUserToken();
+    this._AuthService.RemoveJWTSelectedServerToken();
     this._FormsService.SetupRegisterForm();
     this._FormsService.SetupLoginForm();
   }

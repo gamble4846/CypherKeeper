@@ -104,10 +104,8 @@ export class OpenerComponent {
   Get_Icon_By_WebSiteId(WebsiteId:string | null){
     if(WebsiteId){
       let Website:any = this.AllWebsites.find((x:tbWebsitesModel) => x.id == WebsiteId);
-      console.log(Website);
       if(Website){
         let Icon:any = this.AllIcons.find((x:tbIconsModel) => x.id == Website.iconId);
-        console.log(Icon);
         if(Icon && Icon.link){
           return Icon.link;
         }

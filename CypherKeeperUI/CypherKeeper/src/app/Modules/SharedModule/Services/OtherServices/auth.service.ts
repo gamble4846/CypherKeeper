@@ -13,9 +13,18 @@ export class AuthService {
     localStorage.setItem("UserToken", token);
   }
 
+  RemoveJWTUserToken(){
+    localStorage.removeItem("UserToken");
+  }
+
   AddJWTSelectedServerToken(token:string){
     sessionStorage.setItem("SelectedServerToken", token);
   }
+
+  RemoveJWTSelectedServerToken(){
+    sessionStorage.removeItem("SelectedServerToken");
+  }
+
 
   SetRSAPrivateKeyForAPI(PrivateKey:string){
     var Base64String = this._CS.EncodeBase64(PrivateKey);
