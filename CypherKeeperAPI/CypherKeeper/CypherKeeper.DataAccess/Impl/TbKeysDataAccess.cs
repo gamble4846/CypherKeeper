@@ -43,6 +43,15 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             return _EC.GetList<tbKeysModel>(page, itemsPerPage, orderBy, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
 
+        public List<tbKeysModel> GetByGroupId(Guid GroupId)
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            List<SqlParameter> Parameters = new List<SqlParameter>();
+            Parameters.Add(new SqlParameter("@ParentGroupId", GroupId));
+            var WhereCondition = " WHERE ParentGroupId = @ParentGroupId AND isDeleted = 0";
+            return _EC.GetList<tbKeysModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
+        }
+
         public tbKeysModel GetById(Guid Id, bool onlyNonDeleted = true)
         {
             var _EC = new EasyCrud(ConnectionString);

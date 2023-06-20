@@ -13,10 +13,17 @@ namespace CypherKeeper.Model
         public Guid Id { get; set; } = Guid.NewGuid();
         public String Name { get; set; }
         public String Link { get; set; }
-        public Guid IconId { get; set; }
+        public Guid? IconId { get; set; }
         public Boolean isDeleted { get; set; } = false;
         public DateTime? DeletedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+    }
+
+    public class tbWebsitesModel_ToAdd
+    {
+        public string Name { get; set; }
+        public string? Link { get; set; }
+        public Guid? IconId { get; set; }
     }
 }

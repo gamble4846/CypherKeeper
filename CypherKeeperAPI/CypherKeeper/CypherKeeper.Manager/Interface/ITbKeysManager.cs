@@ -12,6 +12,7 @@ namespace CypherKeeper.Manager.Interface
     public interface ITbKeysManager
     {
         APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true);
+        APIResponse GetByGroupId(Guid GroupId);
         APIResponse Add(tbKeysModel model);
         APIResponse Update(Guid Id, tbKeysModel model);
         APIResponse Delete(Guid Id);

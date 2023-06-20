@@ -1,0 +1,13 @@
+.ImageSelectorContainer{
+    padding: 10px;
+    border: 1px solid rgb(224, 224, 224);
+    height: 80vh;
+    overflow: auto;
+}
+
+.SelectedIconIMG{
+    width: 50px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    margin-bottom: 5px;
+}

@@ -55,11 +55,10 @@ namespace CypherKeeper.API.Controllers
 
         [HttpPost]
         [Route("/api/TbWebsites/Add")]
-        public ActionResult Add(tbWebsitesModel model)
+        public ActionResult Add(tbWebsitesModel_ToAdd model)
         {
             try
             {
-                model.CreatedDate = DateTime.UtcNow;
                 return Ok(TbWebsitesManager.Add(model));
             }
             catch (Exception ex)

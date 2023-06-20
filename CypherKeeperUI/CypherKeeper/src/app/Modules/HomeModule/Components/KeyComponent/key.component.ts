@@ -15,17 +15,17 @@ import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherService
 })
 export class KeyComponent {
   @Input() CurrentKey: tbKeysModel | null = {
-    id: '',
-    parentGroupId: '',
-    name: '',
-    userName: '',
-    password: '',
-    websiteId: null,
-    notes: '',
+    Id: '',
+    ParentGroupId: '',
+    Name: '',
+    UserName: '',
+    Password: '',
+    WebsiteId: null,
+    Notes: '',
     isDeleted: false,
-    deletedDate: null,
-    updatedDate: null,
-    createdDate: ''
+    DeletedDate: null,
+    UpdatedDate: null,
+    CreatedDate: ''
   };
   @Input() CurrentGroup: tbGroupsModel | null = {
     Id: '',
@@ -50,20 +50,30 @@ export class KeyComponent {
   ) { }
 
   ngOnInit(): void {
+    this._FormsService.SetupKeyForm();
     if (this.CurrentKey == null) {
       this.CurrentKey = {
-        id: '',
-        parentGroupId: '',
-        name: '',
-        userName: '',
-        password: '',
-        websiteId: null,
-        notes: '',
+        Id: '',
+        ParentGroupId: '',
+        Name: '',
+        UserName: '',
+        Password: '',
+        WebsiteId: null,
+        Notes: '',
         isDeleted: false,
-        deletedDate: null,
-        updatedDate: null,
-        createdDate: ''
+        DeletedDate: null,
+        UpdatedDate: null,
+        CreatedDate: ''
       };
+    }
+    else{
+      this._FormsService.KeyForm.patchValue({
+        Name: this.CurrentKey.Name,
+        UserName: this.CurrentKey.UserName,
+        Password: this.CurrentKey.Password,
+        WebsiteId: this.CurrentKey.WebsiteId,
+        Notes: this.CurrentKey.Notes,
+      })
     }
     if (this.CurrentGroup == null) {
       this.CurrentGroup = {
@@ -81,7 +91,6 @@ export class KeyComponent {
     console.log(this.CurrentKey);
     console.log(this.CurrentGroup);
     this.GetOldTbStringKeyFields();
-    this._FormsService.SetupKeyForm();
   }
 
   BackClicked() {
@@ -89,17 +98,19 @@ export class KeyComponent {
   }
 
   GetOldTbStringKeyFields() {
-    if (this.CurrentKey && this.CurrentKey.id) {
-      this._TbStringKeyFieldsControllerService.GetByKeyId(this.CurrentKey.id).subscribe((response: any) => {
+    if (this.CurrentKey && this.CurrentKey.Id) {
+      this._TbStringKeyFieldsControllerService.GetByKeyId(this.CurrentKey.Id).subscribe((response: any) => {
         console.log(response);
         if (response.code == 1) {
           this.CurrentTbStringKeyFields = response.document;
+          this.CurrentTbStringKeyFields = [...this.CurrentTbStringKeyFields]
         }
       })
     }
   }
 
   KeySave() {
+    console.log(this._FormsService.KeyForm);
     let toSaveModel: SavedKeyModel = {
       key: {
         id: null,
@@ -114,12 +125,12 @@ export class KeyComponent {
     };
 
     let KeyID: string | null = null;
-    if (this.CurrentKey && this.CurrentKey.id) {
-      KeyID = this.CurrentKey.id;
+    if (this.CurrentKey && this.CurrentKey.Id) {
+      KeyID = this.CurrentKey.Id;
     }
 
     if (this._FormsService.KeyForm.valid && this.CurrentGroup) {
-      let WebsiteId_:string | null = null;
+      let WebsiteId_: string | null = null;
       if (this._FormsService.KeyForm.value['WebsiteId']) {
         WebsiteId_ = this._FormsService.KeyForm.value['WebsiteId'];
       }
@@ -136,20 +147,20 @@ export class KeyComponent {
 
       this.CurrentTbStringKeyFields.forEach((StringKeyField: tbStringKeyFieldsModel) => {
         let KeyID_STRFLD: string | null = null;
-        if (StringKeyField.id) {
-          KeyID_STRFLD = StringKeyField.id;
+        if (StringKeyField.Id) {
+          KeyID_STRFLD = StringKeyField.Id;
         }
 
         let CurrentKeyField: ToSaveStringKeyField = {
           id: KeyID_STRFLD,
-          name: StringKeyField.name,
-          value: StringKeyField.value
+          name: StringKeyField.Name,
+          value: StringKeyField.Value
         };
 
         toSaveModel.stringKeyFields.push(CurrentKeyField);
       });
 
-      this._MixedControllerService.SaveKey(toSaveModel).subscribe((response:any) => {
+      this._MixedControllerService.SaveKey(toSaveModel).subscribe((response: any) => {
         console.log(response);
       })
     } else {
@@ -165,14 +176,14 @@ export class KeyComponent {
   AddCustomFieldEmpty() {
     console.log("here");
     let newCustomField: tbStringKeyFieldsModel = {
-      id: '',
-      name: '',
-      value: '',
-      parentKeyId: '',
+      Id: '',
+      Name: '',
+      Value: '',
+      ParentKeyId: '',
       isDeleted: false,
-      deletedDate: null,
-      createdDate: '',
-      updatedDate: null
+      DeletedDate: null,
+      CreatedDate: '',
+      UpdatedDate: null
     };
 
     this.CurrentTbStringKeyFields.push(newCustomField);

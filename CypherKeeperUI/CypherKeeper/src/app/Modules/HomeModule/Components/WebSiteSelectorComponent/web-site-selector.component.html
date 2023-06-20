@@ -1,0 +1,48 @@
+<nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+  <nz-select [(ngModel)]="SelectedWebsiteID" (ngModelChange)="WebsiteChanged()">
+    <nz-option [nzValue]="website.id" [nzLabel]="website.name" *ngFor="let website of AllWebsites"></nz-option>
+  </nz-select>
+</nz-input-group>
+<ng-template #suffixIconButton>
+  <button nz-button nzType="primary" nzSearch type="button" (click)="ShowAddWebsiteModal()"><span nz-icon nzType="plus"></span></button>
+</ng-template>
+
+<nz-modal [(nzVisible)]="IsAddWebsiteModalVisible" nzTitle="Add Website" (nzOnCancel)="AddWebsiteModalHandleCancel()" (nzOnOk)="AddWebsiteModalHandleOk()">
+  <ng-container *nzModalContent>
+    <div style="padding-bottom: 10px;">
+      <div>
+        Name:
+      </div>
+      <div>
+        <input nz-input type="text" [(ngModel)]="NewWebsite.Name" />
+      </div>
+    </div>
+    <div style="padding-bottom: 10px;">
+      <div>
+        Link:
+      </div>
+      <div>
+        <input nz-input type="text" [(ngModel)]="NewWebsite.Link" />
+      </div>
+    </div>
+    <div style="padding-bottom: 10px;">
+      <div>
+        Icon:
+      </div>
+      <div>
+        <img *ngIf="SelectedIcon" [src]="SelectedIcon.link" class="SelectedIconIMG"><br>
+        <button nz-button nzType="primary" (click)="OpenSelectIconModal()">Select Icon</button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
+
+
+<nz-modal nzCentered [(nzVisible)]="SelectIconModalIsVisible" nzTitle="Select Icon"
+  (nzOnCancel)="SelectIconModalIsVisibleHandleCancel()" [nzFooter]="null" nzWidth="90vw">
+  <ng-container *nzModalContent>
+    <div class="ImageSelectorContainer">
+      <icon-selector (OnIconSelect)="IconSelected($event)"></icon-selector>
+    </div>
+  </ng-container>
+</nz-modal>

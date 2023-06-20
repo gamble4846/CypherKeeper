@@ -53,6 +53,20 @@ namespace CypherKeeper.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/api/TbKeys/GetByGroupId/{GroupId}")]
+        public ActionResult GetByGroupId(Guid GroupId)
+        {
+            try
+            {
+                return Ok(TbKeysManager.GetByGroupId(GroupId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+            }
+        }
+
         [HttpPost]
         [Route("/api/TbKeys/Add")]
         public ActionResult Add(tbKeysModel model)

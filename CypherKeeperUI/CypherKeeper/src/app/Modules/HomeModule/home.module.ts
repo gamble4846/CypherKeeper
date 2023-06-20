@@ -17,12 +17,14 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { KeyComponent } from './Components/KeyComponent/key.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { WebSiteSelectorComponent } from './Components/WebSiteSelectorComponent/web-site-selector.component';
 
 
 @NgModule({
   declarations: [
     OpenerComponent,
-    KeyComponent
+    KeyComponent,
+    WebSiteSelectorComponent
   ],
   imports: [
     CommonModule,

@@ -15,6 +15,7 @@ import { tbIconsModel } from 'src/app/Models/tbIconsModel';
 import { TbIconsControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-icons-controller.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { tbKeysModel } from 'src/app/Models/tbKeysModel';
+import { TbKeysControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-keys-controller.service';
 
 @Component({
   selector: 'app-opener',
@@ -43,6 +44,7 @@ export class OpenerComponent {
   IsKeyOpen: boolean = false;
   OpenedKey: tbKeysModel | null = null;
   SelectedGroup:tbGroupsModel | undefined;
+  CurrentGroupKeys: Array<tbKeysModel> = [];
 
   constructor(
     public _FormsService: FormsService,
@@ -55,6 +57,7 @@ export class OpenerComponent {
     private nzContextMenuService: NzContextMenuService,
     public _TbIconsControllerService: TbIconsControllerService,
     private _NzModalService: NzModalService,
+    private _TbKeysControllerService:TbKeysControllerService,
   ) { }
 
   ngOnInit(): void {
@@ -310,6 +313,7 @@ export class OpenerComponent {
 
   GroupSelected(SelectedMenuData: MenuData) {
     this.SelectedGroup = SelectedMenuData.CustomData;
+    this.GetKeysForGroup();
   }
 
   OpenKey(Key:tbKeysModel | null){
@@ -320,5 +324,16 @@ export class OpenerComponent {
   CloseKey(){
     this.OpenedKey = null;
     this.IsKeyOpen = false;
+  }
+
+  GetKeysForGroup(){
+    if(this.SelectedGroup){
+      this._TbKeysControllerService.GetByGroupId(this.SelectedGroup.Id).subscribe((response:any) => {
+        if(response.code == 1){
+          this.CurrentGroupKeys = response.document;
+        }
+        console.log(this.CurrentGroupKeys);
+      })
+    }
   }
 }

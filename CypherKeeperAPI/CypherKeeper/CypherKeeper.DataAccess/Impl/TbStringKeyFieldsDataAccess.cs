@@ -44,7 +44,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             Parameters.Add(new SqlParameter("@ParentKeyId", KeyId));
             if (onlyNonDeleted)
             {
-                WhereCondition = " AND isDeleted = 0 ";
+                WhereCondition += " AND isDeleted = 0 ";
             }
             return _EC.GetList<tbStringKeyFieldsModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }

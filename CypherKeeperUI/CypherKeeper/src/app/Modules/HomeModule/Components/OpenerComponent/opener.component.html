@@ -19,31 +19,29 @@
   <ng-container *ngIf="SelectedGroup">
     <div style="width: calc(100vw - 300px); overflow: auto; height: 100vh;" *ngIf="!IsKeyOpen">
       <div nz-row>
-        <div nz-col nzXs="24" nzSm="12" nzMd="6" nzLg="4" nzXl="6">
-          <div style="padding: 10px;">
-            <nz-card nzHoverable style="width:240px" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(null)">
-              <nz-card-meta nzTitle="New Key" nzDescription="Create New Key"></nz-card-meta>
-            </nz-card>
-            <ng-template #CoverTemplate_NewKey>
-              <div
-                style="background-color: rgb(233, 233, 233); display: flex; justify-content: center; padding: 10px 0px;">
-                <img alt="example" src="https://i.imgur.com/MAPERzw.jpeg"
-                  style="height: 100px; aspect-ratio: 1/1; object-fit: contain;" />
-              </div>
-            </ng-template>
-          </div>
-          <!-- <div *ngFor="let Server of AllServers" (click)="OpenServerKeyModal(Server)" style="padding: 10px;">
-            <nz-card nzHoverable style="width:240px" [nzCover]="coverTemplate">
-              <nz-card-meta [nzTitle]="Server.serverName" [nzDescription]="Server.databaseType"></nz-card-meta>
-            </nz-card>
-            <ng-template #coverTemplate>
-              <div
-                style="background-color: rgb(233, 233, 233); display: flex; justify-content: center; padding: 10px 0px;">
-                <img alt="example" [src]="GetServerImage(Server)"
-                  style="height: 100px; aspect-ratio: 1/1; object-fit: contain;" />
-              </div>
-            </ng-template>
-          </div> -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px;">
+          <nz-card nzHoverable style="width:240px" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(null)">
+            <nz-card-meta nzTitle="New Key" nzDescription="Create New Key"></nz-card-meta>
+          </nz-card>
+          <ng-template #CoverTemplate_NewKey>
+            <div
+              style="background-color: rgb(233, 233, 233); display: flex; justify-content: center; padding: 10px 0px;">
+              <img alt="example" src="https://i.imgur.com/MAPERzw.jpeg"
+                style="height: 100px; aspect-ratio: 1/1; object-fit: contain;" />
+            </div>
+          </ng-template>
+        </div>
+        <div *ngFor="let Key of CurrentGroupKeys" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px;">
+          <nz-card nzHoverable style="width:240px" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(Key)">
+            <nz-card-meta [nzTitle]="Key.Name" [nzDescription]="Key.UserName"></nz-card-meta>
+          </nz-card>
+          <ng-template #CoverTemplate_NewKey>
+            <div
+              style="background-color: rgb(233, 233, 233); display: flex; justify-content: center; padding: 10px 0px;">
+              <img alt="example" src="https://i.imgur.com/MAPERzw.jpeg"
+                style="height: 100px; aspect-ratio: 1/1; object-fit: contain;" />
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>

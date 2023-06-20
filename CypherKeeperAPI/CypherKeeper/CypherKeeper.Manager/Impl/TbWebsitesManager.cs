@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,15 +62,26 @@ namespace CypherKeeper.Manager.Impl
             return new APIResponse(ResponseCode.SUCCESS, "Records Found", response);
         }
 
-        public APIResponse Add(tbWebsitesModel model)
+        public APIResponse Add(tbWebsitesModel_ToAdd model)
         {
+            tbWebsitesModel ToAddModel = new tbWebsitesModel()
+            {
+                Name = model.Name,
+                Link = model.Link,
+                IconId = model.IconId,
+                isDeleted = false,
+                DeletedDate = null,
+                UpdatedDate = null,
+                CreatedDate = DateTime.UtcNow,
+            };
+
             tbWebsitesModel FinalResult = new tbWebsitesModel();
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
                     SQLTbWebsitesDataAccess = new TbWebsitesDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
-                    var result = SQLTbWebsitesDataAccess.Add(model);
+                    var result = SQLTbWebsitesDataAccess.Add(ToAddModel);
                     if (result != null)
                     {
                         FinalResult = result;

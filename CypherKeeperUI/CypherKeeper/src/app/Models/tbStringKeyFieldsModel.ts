@@ -1,10 +1,10 @@
 export interface tbStringKeyFieldsModel {
-    id: string;
-    name: string;
-    value: string;
-    parentKeyId: string;
+    Id: string;
+    Name: string;
+    Value: string;
+    ParentKeyId: string;
     isDeleted: boolean;
-    deletedDate: string | null;
-    createdDate: string;
-    updatedDate: string | null;
+    DeletedDate: string | null;
+    CreatedDate: string;
+    UpdatedDate: string | null;
 }

@@ -63,7 +63,7 @@ namespace CypherKeeper.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, ex));
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
             }
         }
 

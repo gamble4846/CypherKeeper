@@ -25,7 +25,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="WebsiteId" nzRequired>WebsiteId</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
-        <input nz-input type="text" formControlName="WebsiteId" id="WebsiteId" />
+        <web-site-selector [_FormGroup]="_FormsService.KeyForm"></web-site-selector>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -40,8 +40,8 @@
     <button nz-button nzType="primary" type="button" style="margin-bottom: 10px;" (click)="AddCustomFieldEmpty()">Add Custom Field</button>
     <div *ngFor="let CustomFiled of CurrentTbStringKeyFields" style="padding: 5px 0px;">
       <div style="display: flex; justify-content: center;">
-        <div><input nz-input type="text" [(ngModel)]="CustomFiled.name" placeholder="Name"/></div>
-        <div><input nz-input type="text" [(ngModel)]="CustomFiled.value" placeholder="Value"/></div>
+        <div><input nz-input type="text" [(ngModel)]="CustomFiled.Name" placeholder="Name"/></div>
+        <div><input nz-input type="text" [(ngModel)]="CustomFiled.Value" placeholder="Value"/></div>
       </div>
     </div>
   </div>

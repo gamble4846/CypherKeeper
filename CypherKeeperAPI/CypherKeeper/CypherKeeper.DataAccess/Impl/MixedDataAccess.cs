@@ -97,6 +97,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                     tbStringKeyFields.Name = StringKeyField.Name;
                     tbStringKeyFields.Value = StringKeyField.Value;
                     tbStringKeyFields.UpdatedDate = DateTime.UtcNow;
+                    tbStringKeyFields = _CF.EncryptModel(tbStringKeyFields);
 
                     List<SqlParameter> Parameters = new List<SqlParameter>();
                     Parameters.Add(new SqlParameter("@Id", tbStringKeyFields.Id));
