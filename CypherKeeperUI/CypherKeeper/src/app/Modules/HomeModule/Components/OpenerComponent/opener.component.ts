@@ -352,6 +352,7 @@ export class OpenerComponent {
   CloseKey(){
     this.OpenedKey = null;
     this.IsKeyOpen = false;
+    this.GetKeysForGroup();
   }
 
   GetKeysForGroup(){
