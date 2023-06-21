@@ -457,8 +457,17 @@ namespace CypherKeeper.AuthLayer.Utility
         public Totp GetTotp(string SecretKey)
         {
             var secretKey = Base32Encoding.ToBytes(SecretKey);
-            var totp = new Totp(secretKey);
+            var Step = 30;
+            var Mode = OtpHashMode.Sha256;
+            int TOTPSize = 6;
+            TimeCorrection timeCorrection = null;
+            var totp = new Totp(secretKey, Step, Mode, TOTPSize, timeCorrection);
             var totpCode = totp.ComputeTotp();
+            var remainingTime = totp.RemainingSeconds();
+
+
+            var hotp = new Hotp(secretKey, Mode, TOTPSize);
+            var hotpCode = hotp.ComputeHOTP(1);
             return totp;
         }
     }
