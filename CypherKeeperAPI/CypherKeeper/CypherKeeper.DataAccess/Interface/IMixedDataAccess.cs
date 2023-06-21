@@ -12,5 +12,6 @@ namespace CypherKeeper.DataAccess.SQL.Interface
     {
         dynamic SaveKey(SavedKeyModel model);
         List<tbKeysHistoryModel> GetKeyHistory(Guid KeyId);
+        bool DublicateKey(Guid KeyId);
     }
 }

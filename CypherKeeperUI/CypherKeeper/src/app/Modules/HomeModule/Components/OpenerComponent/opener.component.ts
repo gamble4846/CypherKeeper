@@ -18,6 +18,7 @@ import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 import { TbKeysControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-keys-controller.service';
 import { tbWebsitesModel } from 'src/app/Models/tbWebsitesModel';
 import { TbWebsitesControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-websites-controller.service';
+import { MixedControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/mixed-controller.service';
 
 @Component({
   selector: 'app-opener',
@@ -48,6 +49,7 @@ export class OpenerComponent {
   SelectedGroup:tbGroupsModel | undefined;
   CurrentGroupKeys: Array<tbKeysModel> = [];
   AllWebsites:Array<tbWebsitesModel> = [];
+  CurrentKeyContext:tbKeysModel | undefined;
 
   constructor(
     public _FormsService: FormsService,
@@ -62,6 +64,7 @@ export class OpenerComponent {
     private _NzModalService: NzModalService,
     private _TbKeysControllerService:TbKeysControllerService,
     private _TbWebsitesControllerService:TbWebsitesControllerService,
+    private _MixedControllerService:MixedControllerService,
   ) { }
 
   ngOnInit(): void {
@@ -360,6 +363,21 @@ export class OpenerComponent {
           this.CurrentGroupKeys = response.document;
         }
         console.log(this.CurrentGroupKeys);
+      })
+    }
+  }
+
+  KeyContextMenu(event:MouseEvent, key:tbKeysModel, Menu:NzDropdownMenuComponent){
+    this.CurrentKeyContext = key;
+    this.nzContextMenuService.create(event, Menu);
+  }
+
+  DublicateKey_Context(){
+    if(this.CurrentKeyContext){
+      this._MixedControllerService.DublicateKey(this.CurrentKeyContext.Id).subscribe((response:any) => {
+        if(response.code == 1){
+          this.GetKeysForGroup();
+        }
       })
     }
   }

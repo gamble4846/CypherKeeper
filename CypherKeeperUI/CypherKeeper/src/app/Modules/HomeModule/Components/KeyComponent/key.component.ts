@@ -178,6 +178,11 @@ export class KeyComponent {
 
       this._MixedControllerService.SaveKey(toSaveModel).subscribe((response: any) => {
         console.log(response);
+        if(response.code == 1){
+          if(!toSaveModel.key.id){
+            this.BackClicked();
+          }
+        }
       })
     } else {
       Object.values(this._FormsService.KeyForm.controls).forEach(control => {

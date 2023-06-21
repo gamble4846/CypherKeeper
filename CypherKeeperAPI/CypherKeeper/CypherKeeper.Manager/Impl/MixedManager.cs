@@ -86,5 +86,26 @@ namespace CypherKeeper.Manager.Impl
 
             return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
+
+        public APIResponse DublicateKey(Guid KeyId)
+        {
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLMixedDataAccess = new MixedDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var result = SQLMixedDataAccess.DublicateKey(KeyId);
+                    if (result != null)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Saved", result);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Saved");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+        }
     }
 }

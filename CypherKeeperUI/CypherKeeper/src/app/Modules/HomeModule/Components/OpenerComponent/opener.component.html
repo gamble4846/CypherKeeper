@@ -32,7 +32,7 @@
           </ng-template>
         </div>
         <div *ngFor="let Key of CurrentGroupKeys" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px;">
-          <nz-card nzHoverable style="width:100%" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(Key)">
+          <nz-card nzHoverable style="width:100%" [nzCover]="CoverTemplate_NewKey" (click)="OpenKey(Key)" (contextmenu)="KeyContextMenu($event, Key, KeyContext)">
             <nz-card-meta [nzTitle]="Key.Name" [nzDescription]="Key.UserName"></nz-card-meta>
           </nz-card>
           <ng-template #CoverTemplate_NewKey>
@@ -157,3 +157,14 @@
     </ng-container>
   </nz-modal>
 </ng-container>
+
+<nz-dropdown-menu #KeyContext="nzDropdownMenu">
+  <ng-container *ngIf="CurrentKeyContext">
+    <ul nz-menu>
+      <li nz-menu-item (click)="DublicateKey_Context()">Dublicate</li>
+    </ul>
+  </ng-container>
+</nz-dropdown-menu>
+
+
+

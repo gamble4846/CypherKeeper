@@ -176,5 +176,23 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             var WhereCondition = " WHERE KeyId = @KeyId AND isDeleted = 0";
             return _EC.GetList<tbKeysHistoryModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
+
+        public bool DublicateKey(Guid KeyId)
+        {
+            var _EC = new EasyCrud(ConnectionString);
+            var OldKeyData = SQLTbKeysDataAccess.GetById(KeyId);
+            var OldKeyHistory = GetKeyHistory(KeyId);
+            OldKeyHistory.Reverse();
+
+            var NewKey = SQLTbKeysDataAccess.Add(OldKeyData);
+            foreach(var history in OldKeyHistory)
+            {
+                history.KeyId = NewKey.Id;
+                history.Id = new Guid(_EC.Add(history, "Id", "Id", false));
+            }
+
+            _EC.SaveChanges();
+            return true;
+        }
     }
 }

@@ -19,4 +19,9 @@ export class MixedControllerService {
     let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/KeyHistory/${KeyId}`;
     return this.http.get(apiLink);
   }
+
+  DublicateKey(KeyId:string){
+    let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/DublicateKey/${KeyId}`;
+    return this.http.get(apiLink);
+  }
 }
