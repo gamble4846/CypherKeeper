@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CypherKeeper.Manager", "Cyp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CypherKeeper.AuthLayer", "CypherKeeper.AuthLayer\CypherKeeper.AuthLayer.csproj", "{332C244D-8BE4-4A3F-8C19-F99CFCBD2900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CypherKeeper.DataAccess.MongoDB", "CypherKeeper.DataAccess.MongoDB\CypherKeeper.DataAccess.MongoDB.csproj", "{694117AB-4F4E-488E-A7BD-3C47DA296BA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CypherKeeper.DataAccess.MongoDB", "CypherKeeper.DataAccess.MongoDB\CypherKeeper.DataAccess.MongoDB.csproj", "{694117AB-4F4E-488E-A7BD-3C47DA296BA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Security.Principal;
 using CypherKeeper.Model;
+using OtpNet;
 
 namespace CypherKeeper.AuthLayer.Utility
 {
@@ -451,6 +452,14 @@ namespace CypherKeeper.AuthLayer.Utility
             }
 
             return EncryptedResponseStrings;
+        }
+
+        public Totp GetTotp(string SecretKey)
+        {
+            var secretKey = Base32Encoding.ToBytes(SecretKey);
+            var totp = new Totp(secretKey);
+            var totpCode = totp.ComputeTotp();
+            return totp;
         }
     }
 }
