@@ -80,5 +80,19 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
             }
         }
+
+        [HttpGet]
+        [Route("/api/Mixed/DublicateGroup/{GroupId}")]
+        public ActionResult DublicateGroup(Guid GroupId)
+        {
+            try
+            {
+                return Ok(MixedManager.DublicateGroup(GroupId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace CypherKeeper.DataAccess.SQL.Interface
     {
         dynamic SaveKey(SavedKeyModel model);
         List<tbKeysHistoryModel> GetKeyHistory(Guid KeyId);
-        bool DublicateKey(Guid KeyId);
+        bool DublicateKey(Guid KeyId, Guid? NewGroupId = null);
+        bool DublicateGroup(Guid GroupId);
     }
 }

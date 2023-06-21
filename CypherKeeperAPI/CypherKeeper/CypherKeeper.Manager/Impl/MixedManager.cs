@@ -95,7 +95,28 @@ namespace CypherKeeper.Manager.Impl
                     SQLMixedDataAccess = new MixedDataAccess(CurrentServer.ConnectionString, CommonFunctions);
 
                     var result = SQLMixedDataAccess.DublicateKey(KeyId);
-                    if (result != null)
+                    if (result)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Saved", result);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Saved");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+        }
+
+        public APIResponse DublicateGroup(Guid GroupId)
+        {
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLMixedDataAccess = new MixedDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var result = SQLMixedDataAccess.DublicateGroup(GroupId);
+                    if (result)
                     {
                         return new APIResponse(ResponseCode.SUCCESS, "Record Saved", result);
                     }

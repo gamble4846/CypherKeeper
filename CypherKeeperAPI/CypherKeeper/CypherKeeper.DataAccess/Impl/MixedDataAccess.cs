@@ -24,6 +24,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
         private string ConnectionString { get; set; }
         private CypherKeeper.DataAccess.SQL.Interface.ITbKeysDataAccess SQLTbKeysDataAccess { get; set; }
         private CypherKeeper.DataAccess.SQL.Interface.ITbStringKeyFieldsDataAccess SQLTbStringKeyFieldsDataAccess { get; set; }
+        private CypherKeeper.DataAccess.SQL.Interface.ITbGroupsDataAccess SQLTbGroupsDataAccess { get; set; }
         public MixedDataAccess(string connectionString, CommonFunctions _cf)
         {
             try
@@ -32,6 +33,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                 _CF = _cf;
                 SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, _CF);
                 SQLTbStringKeyFieldsDataAccess = new TbStringKeyFieldsDataAccess(ConnectionString, _CF);
+                SQLTbGroupsDataAccess = new TbGroupsDataAccess(ConnectionString, _CF);
             }
             catch (Exception) { }
         }
@@ -177,12 +179,17 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             return _EC.GetList<tbKeysHistoryModel>(-1, -1, null, WhereCondition, Parameters, GSEnums.WithInQuery.ReadPast);
         }
 
-        public bool DublicateKey(Guid KeyId)
+        public bool DublicateKey(Guid KeyId, Guid? NewGroupId = null)
         {
             var _EC = new EasyCrud(ConnectionString);
             var OldKeyData = SQLTbKeysDataAccess.GetById(KeyId);
             var OldKeyHistory = GetKeyHistory(KeyId);
             OldKeyHistory.Reverse();
+
+            if(NewGroupId != null)
+            {
+                OldKeyData.ParentGroupId = NewGroupId ?? Guid.NewGuid();
+            }
 
             var NewKey = SQLTbKeysDataAccess.Add(OldKeyData);
             foreach(var history in OldKeyHistory)
@@ -192,6 +199,20 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             }
 
             _EC.SaveChanges();
+            return true;
+        }
+
+        public bool DublicateGroup(Guid GroupId)
+        {
+            var OldGroupData = SQLTbGroupsDataAccess.GetById(GroupId);
+            var OldKeys = SQLTbKeysDataAccess.GetByGroupId(GroupId);
+
+            var NewGroup = SQLTbGroupsDataAccess.Add(OldGroupData);
+            foreach(var key in OldKeys)
+            {
+                DublicateKey(key.Id, NewGroup.Id);
+            }
+
             return true;
         }
     }

@@ -14,5 +14,6 @@ namespace CypherKeeper.Manager.Interface
         APIResponse SaveKey(SavedKeyModel model);
         APIResponse GetKeyHistory(Guid KeyId);
         APIResponse DublicateKey(Guid KeyId);
+        APIResponse DublicateGroup(Guid GroupId);
     }
 }

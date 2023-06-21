@@ -391,4 +391,16 @@ export class OpenerComponent {
       })
     }
   }
+
+  DublicateGroup(){
+    if(this.CurrentContextGroupMenu && this.CurrentContextGroupMenu.Id){
+      this._MixedControllerService.DublicateGroup(this.CurrentContextGroupMenu.Id).subscribe((response:any) => {
+        if(response.code == 1){
+          this.AllIcons_Completed = true;
+          this.AllGroups_Completed = false;
+          this.UpdateGroups();
+        }
+      })
+    }
+  }
 }
