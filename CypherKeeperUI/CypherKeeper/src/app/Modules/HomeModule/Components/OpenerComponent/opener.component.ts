@@ -381,4 +381,14 @@ export class OpenerComponent {
       })
     }
   }
+
+  DeleteKey_Context(){
+    if(this.CurrentKeyContext){
+      this._TbKeysControllerService.Delete(this.CurrentKeyContext.Id).subscribe((response:any) => {
+        if(response.code == 1){
+          this.GetKeysForGroup();
+        }
+      })
+    }
+  }
 }

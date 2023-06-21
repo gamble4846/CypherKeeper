@@ -13,4 +13,9 @@ export class TbKeysControllerService {
     let apiLink = `${CONSTANTS.APIUrl}/api/TbKeys/GetByGroupId/${groupId}`;
     return this.http.get(apiLink);
   }
+
+  Delete(KeyId:string){
+    let apiLink = `${CONSTANTS.APIUrl}/api/TbKeys/Delete/${KeyId}`;
+    return this.http.delete(apiLink);
+  }
 }
