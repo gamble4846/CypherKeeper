@@ -470,5 +470,19 @@ namespace CypherKeeper.AuthLayer.Utility
             var hotpCode = hotp.ComputeHOTP(1);
             return totp;
         }
+
+        public tbTwoFactorAuthModel EncryptModel(tbTwoFactorAuthModel model)
+        {
+            model.Name = Encrypt(model.Name, GetCurrentServer().Key);
+            model.SecretKey = Encrypt(model.SecretKey, GetCurrentServer().Key);
+            return model;
+        }
+
+        public tbTwoFactorAuthModel DecryptModel(tbTwoFactorAuthModel model)
+        {
+            model.Name = Decrypt(model.Name, GetCurrentServer().Key);
+            model.SecretKey = Decrypt(model.SecretKey, GetCurrentServer().Key);
+            return model;
+        }
     }
 }

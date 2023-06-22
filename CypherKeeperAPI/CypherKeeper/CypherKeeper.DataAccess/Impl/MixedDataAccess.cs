@@ -7,6 +7,7 @@ using EasyCrudLibrary.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
+using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson.IO;
 using System;
@@ -25,6 +26,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
         private CypherKeeper.DataAccess.SQL.Interface.ITbKeysDataAccess SQLTbKeysDataAccess { get; set; }
         private CypherKeeper.DataAccess.SQL.Interface.ITbStringKeyFieldsDataAccess SQLTbStringKeyFieldsDataAccess { get; set; }
         private CypherKeeper.DataAccess.SQL.Interface.ITbGroupsDataAccess SQLTbGroupsDataAccess { get; set; }
+        private CypherKeeper.DataAccess.SQL.Interface.ITbTwoFactorAuthDataAccess SQLTbTwoFactorAuthDataAccess { get; set; }
         public MixedDataAccess(string connectionString, CommonFunctions _cf)
         {
             try
@@ -46,17 +48,23 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             {
                 var OldKeyData = SQLTbKeysDataAccess.GetById(model.Key.Id ?? Guid.NewGuid());
                 var OldStringKeyFields = SQLTbStringKeyFieldsDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
+                var OldTwoFactorAuths = SQLTbTwoFactorAuthDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
 
                 OldKeyData = _CF.DecryptModel(OldKeyData);
                 for (int i = 0; i < OldStringKeyFields.Count; i++)
                 {
                     OldStringKeyFields[i] = _CF.DecryptModel(OldStringKeyFields[i]);
                 }
+                for (int i = 0; i < OldTwoFactorAuths.Count; i++)
+                {
+                    OldTwoFactorAuths[i] = _CF.DecryptModel(OldTwoFactorAuths[i]);
+                }
 
                 var _KeysJSONModel = new KeysJSONModel()
                 {
                     Key = OldKeyData,
                     CustomFields = OldStringKeyFields,
+                    TwoFactorAuths = OldTwoFactorAuths
                 };
 
                 var KeysJSON = Newtonsoft.Json.JsonConvert.SerializeObject(_KeysJSONModel);
@@ -166,6 +174,57 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                 }
             }
 
+            foreach (var TwoFactorAuth in model.TwoFactorAuths)
+            {
+                var TwoFactorAuthModel = new tbTwoFactorAuthModel();
+                if (TwoFactorAuth.Id != null)
+                {
+                    TwoFactorAuthModel = SQLTbTwoFactorAuthDataAccess.GetById(TwoFactorAuth.Id ?? Guid.NewGuid());
+                    TwoFactorAuthModel = _CF.DecryptModel(TwoFactorAuthModel);
+                    TwoFactorAuthModel.Name = TwoFactorAuth.Name;
+                    TwoFactorAuthModel.SecretKey = TwoFactorAuth.SecretKey;
+                    TwoFactorAuthModel.Mode = TwoFactorAuth.Mode;
+                    TwoFactorAuthModel.CodeSize = TwoFactorAuth.CodeSize;
+                    TwoFactorAuthModel.Type = TwoFactorAuth.Type;
+                    TwoFactorAuthModel.KeyId = TwoFactorAuth.KeyId;
+                    TwoFactorAuthModel.UpdatedDate = DateTime.UtcNow;
+                    TwoFactorAuthModel = _CF.EncryptModel(TwoFactorAuthModel);
+
+                    List<SqlParameter> Parameters = new List<SqlParameter>();
+                    Parameters.Add(new SqlParameter("@Id", TwoFactorAuth.Id));
+                    var WhereCondition = " WHERE Id = @Id ";
+                    if (_EC.Update(TwoFactorAuthModel, WhereCondition, Parameters, "Id", false).ToUpper() == "TRUE")
+                    {
+                        //Success
+                    }
+                    else
+                    {
+                        _EC.RollBack();
+                        throw new Exception("Error Updating Key");
+                    }
+                }
+                else
+                {
+                    TwoFactorAuthModel = new tbTwoFactorAuthModel()
+                    {
+                        Name = TwoFactorAuth.Name,
+                        SecretKey = TwoFactorAuth.SecretKey,
+                        Mode = TwoFactorAuth.Mode,
+                        CodeSize = TwoFactorAuth.CodeSize,
+                        Type = TwoFactorAuth.Type,
+                        KeyId = TwoFactorAuth.KeyId,
+                        isDeleted = false,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedDate = null,
+                        DeletedDate = null,
+                        ArrangePosition = SQLTbTwoFactorAuthDataAccess.Total() + 1,
+                    };
+
+                    TwoFactorAuthModel = _CF.EncryptModel(TwoFactorAuthModel);
+                    TwoFactorAuthModel.Id = new Guid(_EC.Add(TwoFactorAuthModel, "Id", "Id", false));
+                }
+            }
+
             _EC.SaveChanges();
             return KeysModel_Save.Id;
         }
@@ -183,6 +242,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
         {
             var _EC = new EasyCrud(ConnectionString);
             var OldKeyData = SQLTbKeysDataAccess.GetById(KeyId);
+            var OldStringKeyFields = SQLTbStringKeyFieldsDataAccess.GetByKeyId(KeyId);
             var OldKeyHistory = GetKeyHistory(KeyId);
             OldKeyHistory.Reverse();
 
@@ -196,6 +256,12 @@ namespace CypherKeeper.DataAccess.SQL.Impl
             {
                 history.KeyId = NewKey.Id;
                 history.Id = new Guid(_EC.Add(history, "Id", "Id", false));
+            }
+
+            foreach(var customKeyData in OldStringKeyFields)
+            {
+                customKeyData.ParentKeyId = NewKey.Id;
+                customKeyData.Id = new Guid(_EC.Add(customKeyData, "Id", "Id", false));
             }
 
             _EC.SaveChanges();

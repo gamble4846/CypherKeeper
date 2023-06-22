@@ -22,5 +22,6 @@ namespace CypherKeeper.Model
     {
         public tbKeysModel Key { get; set; }
         public List<tbStringKeyFieldsModel> CustomFields { get; set; }
+        public List<tbTwoFactorAuthModel> TwoFactorAuths { get; set; }
     }
 }

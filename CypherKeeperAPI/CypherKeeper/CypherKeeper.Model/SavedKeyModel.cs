@@ -10,6 +10,7 @@ namespace CypherKeeper.Model
     {
         public ToSaveKey Key { get; set; }
         public List<ToSaveStringKeyField> StringKeyFields { get; set; }
+        public List<tbTwoFactorAuthModel_ADD> TwoFactorAuths { get; set; }
     }
 
     public class ToSaveKey
