@@ -52,6 +52,7 @@ export class KeyComponent {
   TwoFAModalIsVisible: boolean = false;
   TwoFAModalTitle: string = "Add New 2FA";
   TwoFA_Id_Code:Array<TwoFAViewModel> = [];
+  Timers:Array<any> = [];
 
   constructor(
     private _AppInitializerService: AppInitializerService,
@@ -136,27 +137,32 @@ export class KeyComponent {
           this.TwoFA_Id_Code[index] = response.document;
         }
         this.TwoFA_Id_Code = [...this.TwoFA_Id_Code];
+        
+
+        let timer = setTimeout(() => {
+          this.UpdateOrGetTwoFAFor(TwoFAId, false);
+        }, response.document.Time * 1000);
+
+
+        this.Timers.push(timer);
 
         if(ReappendTimeOut){
           this.SubtractTime(TwoFAId);
-
-          setTimeout(() => {
-            this.UpdateOrGetTwoFAFor(TwoFAId, false);
-          }, response.document.Time * 1000);
         }
       }
     })
   }
 
   SubtractTime(TwoFAId:string){
-    setTimeout(() => {
+    let timer = setTimeout(() => {
       try{
         let index2 = this.TwoFA_Id_Code.findIndex(x => x.Id == TwoFAId);
         this.TwoFA_Id_Code[index2].Time = this.TwoFA_Id_Code[index2].Time - 1;
         this.SubtractTime(TwoFAId);
       }
       catch(ex){}
-    }, 1000)
+    }, 1000);
+    this.Timers.push(timer);
   }
 
   GetKeyHistory() {
@@ -173,6 +179,12 @@ export class KeyComponent {
 
   BackClicked() {
     this.OnBack.emit(null);
+    this.Timers.forEach((timer:any) => {
+      try{
+        clearTimeout(timer);
+      }
+      catch(ex){}
+    });
   }
 
   GetOldTbStringKeyFields() {
