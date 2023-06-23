@@ -45,11 +45,15 @@ namespace CypherKeeper.DataAccess.SQL.Impl
         {
             var _EC = new EasyCrud(ConnectionString);
             tbKeysModel KeysModel_Save = new tbKeysModel();
+            List<tbStringKeyFieldsModel> OldStringKeyFields = new List<tbStringKeyFieldsModel>();
+            List<tbTwoFactorAuthModel> OldTwoFactorAuths = new List<tbTwoFactorAuthModel>();
+            List<tbStringKeyFieldsModel> OldStringKeyFields_ToDelete = new List<tbStringKeyFieldsModel>();
+            List<tbTwoFactorAuthModel> OldTwoFactorAuths_ToDelete = new List<tbTwoFactorAuthModel>();
             if (model.Key.Id != null)
             {
                 var OldKeyData = SQLTbKeysDataAccess.GetById(model.Key.Id ?? Guid.NewGuid());
-                var OldStringKeyFields = SQLTbStringKeyFieldsDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
-                var OldTwoFactorAuths = SQLTbTwoFactorAuthDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
+                OldStringKeyFields = SQLTbStringKeyFieldsDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
+                OldTwoFactorAuths = SQLTbTwoFactorAuthDataAccess.GetByKeyId(model.Key.Id ?? Guid.NewGuid());
 
                 OldKeyData = _CF.DecryptModel(OldKeyData);
                 for (int i = 0; i < OldStringKeyFields.Count; i++)
@@ -227,6 +231,35 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                     TwoFactorAuthModel.Id = new Guid(_EC.Add(TwoFactorAuthModel, "Id", "Id", false));
                 }
             }
+
+
+            foreach(var StringKeyField in OldStringKeyFields)
+            {
+                if(model.StringKeyFields.Where(x => x.Id == StringKeyField.Id).FirstOrDefault() == null)
+                {
+                    OldStringKeyFields_ToDelete.Add(StringKeyField);
+                }
+            }
+
+            foreach (var TwoFactorAuth in OldTwoFactorAuths)
+            {
+                if (model.TwoFactorAuths.Where(x => x.Id == TwoFactorAuth.Id).FirstOrDefault() == null)
+                {
+                    OldTwoFactorAuths_ToDelete.Add(TwoFactorAuth);
+                }
+            }
+
+
+            foreach (var StringKeyField in OldStringKeyFields_ToDelete)
+            {
+                var deleted = SQLTbStringKeyFieldsDataAccess.Delete(StringKeyField.Id);
+            }
+
+            foreach (var TwoFactorAuth in OldTwoFactorAuths_ToDelete)
+            {
+                var deleted = SQLTbTwoFactorAuthDataAccess.Delete(TwoFactorAuth.Id);
+            }
+
 
             _EC.SaveChanges();
             return KeysModel_Save.Id;
