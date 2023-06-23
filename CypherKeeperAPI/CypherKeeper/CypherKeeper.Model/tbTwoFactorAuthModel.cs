@@ -32,6 +32,6 @@ namespace CypherKeeper.Model
         public String Mode { get; set; } = "Sha256";
         public Int32 CodeSize { get; set; } = 6;
         public String Type { get; set; } = "TOTP";
-        public Guid KeyId { get; set; }
+        public Guid? KeyId { get; set; }
     }
 }

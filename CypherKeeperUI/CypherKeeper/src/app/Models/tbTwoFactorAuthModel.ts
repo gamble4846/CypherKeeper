@@ -19,5 +19,6 @@ export interface tbTwoFactorAuthModel_ADD {
     Mode: string;
     CodeSize: number;
     Type: string;
-    KeyId: string;
+    KeyId: string | null;
+    Id: string | null;
 }

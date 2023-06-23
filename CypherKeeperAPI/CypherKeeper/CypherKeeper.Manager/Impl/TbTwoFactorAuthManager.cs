@@ -110,7 +110,7 @@ namespace CypherKeeper.Manager.Impl
                 Mode = AddModel.Mode,
                 CodeSize = AddModel.CodeSize,
                 Type = AddModel.Type,
-                KeyId = AddModel.KeyId, 
+                KeyId = AddModel.KeyId ?? Guid.NewGuid(), 
                 isDeleted = false,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = null,

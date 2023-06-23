@@ -36,6 +36,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                 SQLTbKeysDataAccess = new TbKeysDataAccess(ConnectionString, _CF);
                 SQLTbStringKeyFieldsDataAccess = new TbStringKeyFieldsDataAccess(ConnectionString, _CF);
                 SQLTbGroupsDataAccess = new TbGroupsDataAccess(ConnectionString, _CF);
+                SQLTbTwoFactorAuthDataAccess = new TbTwoFactorAuthDataAccess(ConnectionString, _CF);
             }
             catch (Exception) { }
         }
@@ -186,7 +187,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                     TwoFactorAuthModel.Mode = TwoFactorAuth.Mode;
                     TwoFactorAuthModel.CodeSize = TwoFactorAuth.CodeSize;
                     TwoFactorAuthModel.Type = TwoFactorAuth.Type;
-                    TwoFactorAuthModel.KeyId = TwoFactorAuth.KeyId;
+                    TwoFactorAuthModel.KeyId = KeysModel_Save.Id;
                     TwoFactorAuthModel.UpdatedDate = DateTime.UtcNow;
                     TwoFactorAuthModel = _CF.EncryptModel(TwoFactorAuthModel);
 
@@ -212,7 +213,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                         Mode = TwoFactorAuth.Mode,
                         CodeSize = TwoFactorAuth.CodeSize,
                         Type = TwoFactorAuth.Type,
-                        KeyId = TwoFactorAuth.KeyId,
+                        KeyId = KeysModel_Save.Id,
                         isDeleted = false,
                         CreatedDate = DateTime.UtcNow,
                         UpdatedDate = null,

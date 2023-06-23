@@ -9,6 +9,7 @@ export class FormsService {
   LoginForm!: FormGroup;
   AddServerForm!:FormGroup;
   KeyForm!:FormGroup;
+  TwoFAForm!:FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
@@ -45,6 +46,17 @@ export class FormsService {
       Password: [null],
       WebsiteId: [null],
       Notes: [null],
+    });
+  }
+
+  SetupTwoFAForm(){
+    this.TwoFAForm = this.fb.group({
+      Name: [null, [Validators.required]],
+      SecretKey: [null, [Validators.required]],
+      Mode: ['Sha256', [Validators.required]],
+      CodeSize: [6, [Validators.required]],
+      Type: ['TOTP', [Validators.required]],
+      Id: [{value: null, disabled: true}]
     });
   }
 }

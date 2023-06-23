@@ -1,6 +1,7 @@
 <div style="padding: 20px;">
   <button nz-button nzType="primary" (click)="BackClicked()">Back</button>
-  <button nz-button nzType="primary" (click)="ShowHistory()" *ngIf="CurrentKey && CurrentKey.Id" style="margin-left: 20px;">History</button><br>
+  <button nz-button nzType="primary" (click)="ShowHistory()" *ngIf="CurrentKey && CurrentKey.Id"
+    style="margin-left: 20px;">History</button><br>
   <form nz-form [formGroup]="_FormsService.KeyForm" (ngSubmit)="KeySave()">
     <nz-form-item>
       <nz-form-label [nzSm]="10" [nzXs]="16" nzFor="Name" nzRequired>Name</nz-form-label>
@@ -49,6 +50,38 @@
   </div>
 
   <div>
+    <button nz-button nzType="primary" type="button" style="margin-bottom: 10px;" (click)="OpenTwoFAModel(null)">Add
+      Two FA</button>
+    <div nz-row>
+      <div *ngFor="let TWOFA of KeyTwoFactors" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6"
+        style="padding: 10px;">
+        <ng-container *ngIf="TWOFA.Id">
+          <nz-card nzHoverable style="width:100%; cursor: default;" [nzCover]="CoverTemplate_NewKey">
+            <nz-card-meta [nzTitle]="TWOFA.Name"></nz-card-meta>
+          </nz-card>
+          <ng-template #CoverTemplate_NewKey>
+            <div style="display: flex; justify-content: center; padding: 10px 0px;">
+              {{TWOFA.Name}}
+              <span (click)="OpenTwoFAModel(TWOFA)">Edit</span>
+            </div>
+          </ng-template>
+        </ng-container>
+        <ng-container *ngIf="!TWOFA.Id">
+          <nz-card nzHoverable style="width:100%; cursor: not-allowed;" [nzCover]="CoverTemplate_NewKey">
+            <nz-card-meta [nzTitle]="TWOFA.Name"></nz-card-meta>
+          </nz-card>
+          <ng-template #CoverTemplate_NewKey>
+            <div style="display: flex; justify-content: center; padding: 10px 0px;">
+              Save Key To Edit or to Generate OTP
+            </div>
+          </ng-template>
+        </ng-container>
+        
+      </div>
+    </div>
+  </div>
+
+  <div>
     <nz-form-item>
       <button nz-button nzType="primary" type="button" (click)="KeySave()">Save</button>
     </nz-form-item>
@@ -69,7 +102,8 @@
         <div><b>Notes:</b> {{JsonObjectHistory(history.KeysJSON).Key.Notes}}</div>
         <br>
         <b>Custom Fields</b>
-        <div *ngFor="let CusField of JsonObjectHistory(history.KeysJSON).CustomFields" style="border: 1px solid grey; padding: 5px; border-radius: 5px; margin-bottom: 2px;">
+        <div *ngFor="let CusField of JsonObjectHistory(history.KeysJSON).CustomFields"
+          style="border: 1px solid grey; padding: 5px; border-radius: 5px; margin-bottom: 2px;">
           <div><b>Name:</b> {{CusField.Name}}</div>
           <div><b>Value:</b> {{CusField.Value}}</div>
         </div>
@@ -77,3 +111,64 @@
     </ng-container>
   </nz-drawer>
 </ng-container>
+
+<nz-modal [(nzVisible)]="TwoFAModalIsVisible" [nzTitle]="TwoFAModalTitle" (nzOnCancel)="TwoFAModalHandleCancel()" (nzOnOk)="TwoFASubmit()">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="_FormsService.TwoFAForm" (ngSubmit)="TwoFASubmit()">
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Name" nzRequired>Name</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorNameTpl">
+          <input nz-input type="text" formControlName="Name" id="Name" />
+          <ng-template #errorNameTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter Name!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="SecretKey" nzRequired>SecretKey</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorSecretKeyTpl">
+          <input nz-input type="text" formControlName="SecretKey" id="SecretKey" />
+          <ng-template #errorSecretKeyTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter SecretKey!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Mode" nzRequired>Mode</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorModeTpl">
+          <input nz-input type="text" formControlName="Mode" id="Mode" />
+          <ng-template #errorModeTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter Mode!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="CodeSize" nzRequired>CodeSize</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorCodeSizeTpl">
+          <input nz-input type="text" formControlName="CodeSize" id="CodeSize" />
+          <ng-template #errorCodeSizeTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter CodeSize!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Type" nzRequired>Type</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTypeTpl">
+          <input nz-input type="text" formControlName="Type" id="Type" />
+          <ng-template #errorTypeTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter Type!</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Id" nzRequired>Id</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input nz-input type="text" formControlName="Id" id="Id" [disabled]="true"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <button nz-button nzType="primary" type="Submit">Submit</button>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

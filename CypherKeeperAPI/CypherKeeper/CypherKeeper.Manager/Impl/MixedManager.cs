@@ -35,6 +35,25 @@ namespace CypherKeeper.Manager.Impl
 
         public APIResponse SaveKey(SavedKeyModel model)
         {
+            //Decrypt Everything
+            //------------------------------
+            model.Key.Name = CommonFunctions.DecryptRSAEncryptedString(model.Key.Name);
+            model.Key.Notes = CommonFunctions.DecryptRSAEncryptedString(model.Key.Notes);
+            model.Key.Password = CommonFunctions.DecryptRSAEncryptedString(model.Key.Password);
+            model.Key.UserName = CommonFunctions.DecryptRSAEncryptedString(model.Key.UserName);
+
+            foreach(var SKF in model.StringKeyFields)
+            {
+                SKF.Name = CommonFunctions.DecryptRSAEncryptedString(SKF.Name);
+                SKF.Value = CommonFunctions.DecryptRSAEncryptedString(SKF.Value);
+            }
+
+            foreach (var TFA in model.TwoFactorAuths)
+            {
+                TFA.SecretKey = CommonFunctions.DecryptRSAEncryptedString(TFA.SecretKey);
+            }
+            //------------------------------
+
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":

@@ -4,10 +4,14 @@ import { tbGroupsModel } from 'src/app/Models/tbGroupsModel';
 import { tbKeysHistoryModel } from 'src/app/Models/tbKeysHistoryModel';
 import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 import { tbStringKeyFieldsModel } from 'src/app/Models/tbStringKeyFieldsModel';
+import { tbTwoFactorAuthModel, tbTwoFactorAuthModel_ADD } from 'src/app/Models/tbTwoFactorAuthModel';
 import { MixedControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/mixed-controller.service';
 import { TbStringKeyFieldsControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-string-key-fields-controller.service';
+import { TbTwoFactorAuthControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-two-factor-auth-controller.service';
 import { AppInitializerService } from 'src/app/Modules/SharedModule/Services/OtherServices/app-initializer.service';
 import { FormsService } from 'src/app/Modules/SharedModule/Services/OtherServices/forms.service';
+import * as CONSTANTS from 'src/app/Modules/SharedModule/Constants/CONSTANTS';
+import { CommonService } from 'src/app/Modules/SharedModule/Services/OtherServices/common.service';
 
 @Component({
   selector: 'key-component',
@@ -43,17 +47,23 @@ export class KeyComponent {
 
   CurrentTbStringKeyFields: Array<tbStringKeyFieldsModel> = [];
   ShowHistoryDrawer: boolean = false;
-  KeyHistories: Array<tbKeysHistoryModel> =[];
+  KeyHistories: Array<tbKeysHistoryModel> = [];
+  KeyTwoFactors: Array<tbTwoFactorAuthModel> = [];
+  TwoFAModalIsVisible: boolean = false;
+  TwoFAModalTitle: string = "Add New 2FA";
 
   constructor(
     private _AppInitializerService: AppInitializerService,
     private _TbStringKeyFieldsControllerService: TbStringKeyFieldsControllerService,
     public _FormsService: FormsService,
     public _MixedControllerService: MixedControllerService,
+    public _TbTwoFactorAuthControllerService: TbTwoFactorAuthControllerService,
+    public _CommonService:CommonService,
   ) { }
 
   ngOnInit(): void {
     this._FormsService.SetupKeyForm();
+    this._FormsService.SetupTwoFAForm();
     if (this.CurrentKey == null) {
       this.CurrentKey = {
         Id: '',
@@ -69,7 +79,7 @@ export class KeyComponent {
         CreatedDate: ''
       };
     }
-    else{
+    else {
       this._FormsService.KeyForm.patchValue({
         Name: this.CurrentKey.Name,
         UserName: this.CurrentKey.UserName,
@@ -79,6 +89,7 @@ export class KeyComponent {
       })
 
       this.GetKeyHistory();
+      this.UpdateTwoFactorAuths();
     }
     if (this.CurrentGroup == null) {
       this.CurrentGroup = {
@@ -98,11 +109,20 @@ export class KeyComponent {
     this.GetOldTbStringKeyFields();
   }
 
-  GetKeyHistory(){
-    if(this.CurrentKey){
-      this._MixedControllerService.GetKeyHistory(this.CurrentKey.Id).subscribe((response:any) => {
+  UpdateTwoFactorAuths() {
+    this._TbTwoFactorAuthControllerService.Get().subscribe((response: any) => {
+      if (response.code == 1) {
+        this.KeyTwoFactors = response.document.records;
+      }
+      console.log(this.KeyTwoFactors);
+    });
+  }
+
+  GetKeyHistory() {
+    if (this.CurrentKey) {
+      this._MixedControllerService.GetKeyHistory(this.CurrentKey.Id).subscribe((response: any) => {
         console.log(response);
-        if(response.code == 1){
+        if (response.code == 1) {
           this.KeyHistories = response.document;
           this.KeyHistories.reverse();
         }
@@ -137,7 +157,8 @@ export class KeyComponent {
         websiteId: null,
         notes: ''
       },
-      stringKeyFields: []
+      stringKeyFields: [],
+      twoFactorAuths: [],
     };
 
     let KeyID: string | null = null;
@@ -176,10 +197,47 @@ export class KeyComponent {
         toSaveModel.stringKeyFields.push(CurrentKeyField);
       });
 
+      this.KeyTwoFactors.forEach((TwoFA: tbTwoFactorAuthModel) => {
+        let ID_TWOFA: string | null = null;
+        if (TwoFA.Id) {
+          ID_TWOFA = TwoFA.Id;
+        }
+
+        let CurrentTwoFA: tbTwoFactorAuthModel_ADD = {
+          Name: TwoFA.Name,
+          SecretKey: TwoFA.SecretKey,
+          Mode: TwoFA.Mode,
+          CodeSize: TwoFA.CodeSize,
+          Type: TwoFA.Type,
+          KeyId: null,
+          Id: ID_TWOFA,
+        };
+
+        toSaveModel.twoFactorAuths.push(CurrentTwoFA);
+      })
+
+
+      //Encrypting
+      //----------------------------------------------------
+      toSaveModel.key.name = this._CommonService.RsaEncrypt(toSaveModel.key.name, CONSTANTS.PublicKeyForRSA);
+      toSaveModel.key.notes = this._CommonService.RsaEncrypt(toSaveModel.key.notes, CONSTANTS.PublicKeyForRSA);
+      toSaveModel.key.password = this._CommonService.RsaEncrypt(toSaveModel.key.password, CONSTANTS.PublicKeyForRSA);
+      toSaveModel.key.userName = this._CommonService.RsaEncrypt(toSaveModel.key.userName, CONSTANTS.PublicKeyForRSA);
+
+      toSaveModel.stringKeyFields.forEach((SKF:ToSaveStringKeyField) => {
+        SKF.name = this._CommonService.RsaEncrypt(SKF.name, CONSTANTS.PublicKeyForRSA);
+        SKF.value = this._CommonService.RsaEncrypt(SKF.value, CONSTANTS.PublicKeyForRSA);
+      });
+
+      toSaveModel.twoFactorAuths.forEach((TFA: tbTwoFactorAuthModel_ADD) => {
+        TFA.SecretKey = this._CommonService.RsaEncrypt(TFA.SecretKey, CONSTANTS.PublicKeyForRSA);
+      });
+      //----------------------------------------------------
+
       this._MixedControllerService.SaveKey(toSaveModel).subscribe((response: any) => {
         console.log(response);
-        if(response.code == 1){
-          if(!toSaveModel.key.id){
+        if (response.code == 1) {
+          if (!toSaveModel.key.id) {
             this.BackClicked();
           }
         }
@@ -212,15 +270,92 @@ export class KeyComponent {
     console.log(this.CurrentTbStringKeyFields);
   }
 
-  ShowHistory(){
+  ShowHistory() {
     this.ShowHistoryDrawer = true;
   }
 
-  OnCloseHistoryDrawer(){
+  OnCloseHistoryDrawer() {
     this.ShowHistoryDrawer = false;
   }
 
-  JsonObjectHistory(JsonString:string){
+  JsonObjectHistory(JsonString: string) {
     return JSON.parse(JsonString);
+  }
+
+  OpenTwoFAModel(data: tbTwoFactorAuthModel | null) {
+    if (data == null) {
+      this.TwoFAModalTitle = "Add New 2FA";
+      // this._FormsService.TwoFAForm.reset();
+      this._FormsService.SetupTwoFAForm();
+    }
+    else {
+      this.TwoFAModalTitle = "Edit 2FA - " + data.Name;
+      this._FormsService.TwoFAForm.patchValue({
+        Name: data.Name,
+        SecretKey: data.SecretKey,
+        Mode: data.Mode,
+        CodeSize: data.CodeSize,
+        Type: data.Type,
+        Id: data.Id,
+      })
+    }
+    this.TwoFAModalIsVisible = true;
+  }
+
+  TwoFAModalHandleCancel() {
+    this.TwoFAModalIsVisible = false;
+  }
+
+  TwoFASubmit() {
+    if (this._FormsService.TwoFAForm.valid) {
+      let CKeyId: string | null = null;
+
+      if (this.CurrentKey) {
+        CKeyId = this.CurrentKey.Id;
+      }
+
+      var TwoFAData_Add: tbTwoFactorAuthModel_ADD = {
+        Name: this._FormsService.TwoFAForm.value['Name'],
+        SecretKey: this._FormsService.TwoFAForm.value['SecretKey'],
+        Mode: this._FormsService.TwoFAForm.value['Mode'],
+        CodeSize: this._FormsService.TwoFAForm.value['CodeSize'],
+        Type: this._FormsService.TwoFAForm.value['Type'],
+        KeyId: CKeyId,
+        Id: this._FormsService.TwoFAForm.value['Id'],
+      };
+
+      var TwoFAData: tbTwoFactorAuthModel = {
+        Id: TwoFAData_Add.Id ?? '',
+        Name: TwoFAData_Add.Name,
+        SecretKey: TwoFAData_Add.SecretKey,
+        Mode: TwoFAData_Add.Mode,
+        CodeSize: TwoFAData_Add.CodeSize,
+        Type: TwoFAData_Add.Type,
+        KeyId: TwoFAData_Add.KeyId ?? '',
+        isDeleted: false,
+        CreatedDate: '',
+        UpdatedDate: null,
+        DeletedDate: null,
+        ArrangePosition: null
+      };
+
+      if (TwoFAData.Id) {
+        this.KeyTwoFactors[this.KeyTwoFactors.findIndex((x: any) => x.Id == TwoFAData.Id)] = TwoFAData;
+        this.KeyTwoFactors = [...this.KeyTwoFactors];
+      }
+      else {
+        this.KeyTwoFactors.push(TwoFAData);
+        this.KeyTwoFactors = [...this.KeyTwoFactors];
+      }
+      
+      this.TwoFAModalIsVisible = false;
+    } else {
+      Object.values(this._FormsService.TwoFAForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 }

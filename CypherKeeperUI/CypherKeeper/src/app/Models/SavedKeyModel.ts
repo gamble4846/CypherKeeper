@@ -1,6 +1,9 @@
+import { tbTwoFactorAuthModel_ADD } from "./tbTwoFactorAuthModel";
+
 export interface SavedKeyModel {
     key: ToSaveKey;
     stringKeyFields: ToSaveStringKeyField[];
+    twoFactorAuths: tbTwoFactorAuthModel_ADD[];
 }
 
 export interface ToSaveKey {
