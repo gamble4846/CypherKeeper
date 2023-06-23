@@ -4,7 +4,7 @@ import { tbGroupsModel } from 'src/app/Models/tbGroupsModel';
 import { tbKeysHistoryModel } from 'src/app/Models/tbKeysHistoryModel';
 import { tbKeysModel } from 'src/app/Models/tbKeysModel';
 import { tbStringKeyFieldsModel } from 'src/app/Models/tbStringKeyFieldsModel';
-import { tbTwoFactorAuthModel, tbTwoFactorAuthModel_ADD } from 'src/app/Models/tbTwoFactorAuthModel';
+import { TwoFAViewModel, tbTwoFactorAuthModel, tbTwoFactorAuthModel_ADD } from 'src/app/Models/tbTwoFactorAuthModel';
 import { MixedControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/mixed-controller.service';
 import { TbStringKeyFieldsControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-string-key-fields-controller.service';
 import { TbTwoFactorAuthControllerService } from 'src/app/Modules/SharedModule/Services/APIServices/tb-two-factor-auth-controller.service';
@@ -51,6 +51,7 @@ export class KeyComponent {
   KeyTwoFactors: Array<tbTwoFactorAuthModel> = [];
   TwoFAModalIsVisible: boolean = false;
   TwoFAModalTitle: string = "Add New 2FA";
+  TwoFA_Id_Code:Array<TwoFAViewModel> = [];
 
   constructor(
     private _AppInitializerService: AppInitializerService,
@@ -113,9 +114,46 @@ export class KeyComponent {
     this._TbTwoFactorAuthControllerService.Get().subscribe((response: any) => {
       if (response.code == 1) {
         this.KeyTwoFactors = response.document.records;
+        this.UpdateCodesForTwoFA();
       }
-      console.log(this.KeyTwoFactors);
     });
+  }
+
+  UpdateCodesForTwoFA(){
+    this.KeyTwoFactors.forEach((TwoFA:tbTwoFactorAuthModel) => {
+      this.UpdateOrGetTwoFAFor(TwoFA.Id);
+      this.SubtractTime(TwoFA.Id);
+    });
+  }
+
+  UpdateOrGetTwoFAFor(TwoFAId:string){
+    this._MixedControllerService.GetTwoFACodeData(TwoFAId).subscribe((response:any) => {
+      if(response.code == 1){
+        let index = this.TwoFA_Id_Code.findIndex(x => x.Id == TwoFAId);
+        if(index == -1){
+          this.TwoFA_Id_Code.push(response.document);
+        }
+        else{
+          this.TwoFA_Id_Code[index] = response.document;
+        }
+        this.TwoFA_Id_Code = [...this.TwoFA_Id_Code];
+
+        setTimeout(() => {
+          this.UpdateOrGetTwoFAFor(TwoFAId);
+        }, response.document.Time * 1000);
+      }
+    })
+  }
+
+  SubtractTime(TwoFAId:string){
+    setTimeout(() => {
+      try{
+        let index2 = this.TwoFA_Id_Code.findIndex(x => x.Id == TwoFAId);
+        this.TwoFA_Id_Code[index2].Time = this.TwoFA_Id_Code[index2].Time - 1;
+        this.SubtractTime(TwoFAId);
+      }
+      catch(ex){}
+    }, 1000)
   }
 
   GetKeyHistory() {
@@ -210,6 +248,7 @@ export class KeyComponent {
           CodeSize: TwoFA.CodeSize,
           Type: TwoFA.Type,
           KeyId: null,
+          Step: TwoFA.Step,
           Id: ID_TWOFA,
         };
 
@@ -233,6 +272,8 @@ export class KeyComponent {
         TFA.SecretKey = this._CommonService.RsaEncrypt(TFA.SecretKey, CONSTANTS.PublicKeyForRSA);
       });
       //----------------------------------------------------
+
+      console.log(toSaveModel);
 
       this._MixedControllerService.SaveKey(toSaveModel).subscribe((response: any) => {
         console.log(response);
@@ -321,6 +362,7 @@ export class KeyComponent {
         CodeSize: this._FormsService.TwoFAForm.value['CodeSize'],
         Type: this._FormsService.TwoFAForm.value['Type'],
         KeyId: CKeyId,
+        Step: this._FormsService.TwoFAForm.value['Step'],
         Id: this._FormsService.TwoFAForm.value['Id'],
       };
 
@@ -332,12 +374,15 @@ export class KeyComponent {
         CodeSize: TwoFAData_Add.CodeSize,
         Type: TwoFAData_Add.Type,
         KeyId: TwoFAData_Add.KeyId ?? '',
+        Step: TwoFAData_Add.Step,
         isDeleted: false,
         CreatedDate: '',
         UpdatedDate: null,
         DeletedDate: null,
         ArrangePosition: null
       };
+
+      console.log(TwoFAData);
 
       if (TwoFAData.Id) {
         this.KeyTwoFactors[this.KeyTwoFactors.findIndex((x: any) => x.Id == TwoFAData.Id)] = TwoFAData;
@@ -347,6 +392,8 @@ export class KeyComponent {
         this.KeyTwoFactors.push(TwoFAData);
         this.KeyTwoFactors = [...this.KeyTwoFactors];
       }
+
+      console.log(this.KeyTwoFactors);
       
       this.TwoFAModalIsVisible = false;
     } else {
@@ -356,6 +403,28 @@ export class KeyComponent {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+    }
+  }
+
+  GetCurrentCode(TwoFaID:string){
+    // console.log("GetCurrentCode", this.TwoFA_Id_Code);
+    let currentTWOFA = this.TwoFA_Id_Code.find(x => x.Id == TwoFaID);
+    if(currentTWOFA){
+      return currentTWOFA.Code;
+    }
+    else{
+      return 'Waiting For Code..';
+    }
+  }
+
+  GetProgressPercentageTwoFA(TwoFaID:string){
+    // console.log("GetCurrentCode", this.TwoFA_Id_Code);
+    let currentTWOFA = this.TwoFA_Id_Code.find(x => x.Id == TwoFaID);
+    if(currentTWOFA){
+      return (100 * currentTWOFA.Time) / currentTWOFA.Step;
+    }
+    else{
+      return 0;
     }
   }
 }

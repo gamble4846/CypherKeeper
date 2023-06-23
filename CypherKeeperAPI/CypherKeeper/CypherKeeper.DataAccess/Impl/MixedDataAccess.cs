@@ -189,6 +189,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                     TwoFactorAuthModel.Type = TwoFactorAuth.Type;
                     TwoFactorAuthModel.KeyId = KeysModel_Save.Id;
                     TwoFactorAuthModel.UpdatedDate = DateTime.UtcNow;
+                    TwoFactorAuthModel.Step = TwoFactorAuth.Step;
                     TwoFactorAuthModel = _CF.EncryptModel(TwoFactorAuthModel);
 
                     List<SqlParameter> Parameters = new List<SqlParameter>();
@@ -218,6 +219,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                         CreatedDate = DateTime.UtcNow,
                         UpdatedDate = null,
                         DeletedDate = null,
+                        Step = TwoFactorAuth.Step,
                         ArrangePosition = SQLTbTwoFactorAuthDataAccess.Total() + 1,
                     };
 

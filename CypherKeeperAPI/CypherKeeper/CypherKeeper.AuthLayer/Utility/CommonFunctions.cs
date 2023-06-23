@@ -15,6 +15,7 @@ using MongoDB.Driver;
 using System.Security.Principal;
 using CypherKeeper.Model;
 using OtpNet;
+//using System.Runtime.Intrinsics.Arm;
 
 namespace CypherKeeper.AuthLayer.Utility
 {
@@ -454,21 +455,48 @@ namespace CypherKeeper.AuthLayer.Utility
             return EncryptedResponseStrings;
         }
 
-        public Totp GetTotp(string SecretKey)
+        public Totp GetTotp(Int32 Step, string Mode, int Size, string SecretKey)
         {
             var secretKey = Base32Encoding.ToBytes(SecretKey);
-            var Step = 30;
-            var Mode = OtpHashMode.Sha256;
-            int TOTPSize = 6;
             TimeCorrection timeCorrection = null;
-            var totp = new Totp(secretKey, Step, Mode, TOTPSize, timeCorrection);
-            var totpCode = totp.ComputeTotp();
-            var remainingTime = totp.RemainingSeconds();
-
-
-            var hotp = new Hotp(secretKey, Mode, TOTPSize);
-            var hotpCode = hotp.ComputeHOTP(1);
+            var totp = new Totp(secretKey, Step, GetOTPMode_ENUM(Mode), Size, timeCorrection);
             return totp;
+            //var totpCode = totp.ComputeTotp();
+            //var remainingTime = totp.RemainingSeconds();
+
+
+            //var hotp = new Hotp(secretKey, Mode, TOTPSize);
+            //var hotpCode = hotp.ComputeHOTP(1);
+
+        }
+
+        public Hotp GetHotp(string Mode, int Size, string SecretKey)
+        {
+            var secretKey = Base32Encoding.ToBytes(SecretKey);
+            var hotp = new Hotp(secretKey, GetOTPMode_ENUM(Mode), Size);
+            return hotp;
+            //var totpCode = totp.ComputeTotp();
+            //var remainingTime = totp.RemainingSeconds();
+
+
+            //var hotp = new Hotp(secretKey, Mode, TOTPSize);
+            //var hotpCode = hotp.ComputeHOTP(1);
+
+        }
+
+        public OtpHashMode GetOTPMode_ENUM(string Mode)
+        {
+            switch (Mode)
+            {
+                case "Sha1":
+                    return OtpHashMode.Sha1;
+                case "Sha256":
+                    return OtpHashMode.Sha256;
+                case "Sha512":
+                    return OtpHashMode.Sha512;
+                default:
+                    return OtpHashMode.Sha256;
+            }
         }
 
         public tbTwoFactorAuthModel EncryptModel(tbTwoFactorAuthModel model)

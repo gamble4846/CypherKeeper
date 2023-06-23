@@ -94,5 +94,19 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
             }
         }
+
+        [HttpGet]
+        [Route("/api/Mixed/GetTwoFACodeData/{TwoFAId}")]
+        public ActionResult GetTwoFACodeData(Guid TwoFAId)
+        {
+            try
+            {
+                return Ok(MixedManager.GetTwoFACodeData(TwoFAId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
+            }
+        }
     }
 }

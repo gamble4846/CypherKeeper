@@ -123,20 +123,6 @@ namespace CypherKeeper.API.Controllers
                 return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
             }
         }
-
-        [HttpGet]
-        [Route("/api/Test")]
-        public ActionResult Test(string SecretKey)
-        {
-            try
-            {
-                return Ok(JsonConvert.SerializeObject(CommonFunctions.GetTotp(SecretKey)));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
-            }
-        }
     }
 }
  

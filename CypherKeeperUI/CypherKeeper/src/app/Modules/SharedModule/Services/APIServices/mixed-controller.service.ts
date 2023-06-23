@@ -29,4 +29,9 @@ export class MixedControllerService {
     let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/DublicateGroup/${KeyId}`;
     return this.http.get(apiLink);
   }
+
+  GetTwoFACodeData(TwoFAId:string){
+    let apiLink = `${CONSTANTS.APIUrl}/api/Mixed/GetTwoFACodeData/${TwoFAId}`;
+    return this.http.get(apiLink);
+  }
 }

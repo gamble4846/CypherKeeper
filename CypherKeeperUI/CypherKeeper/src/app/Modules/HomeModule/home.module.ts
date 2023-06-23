@@ -5,6 +5,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { OpenerComponent } from './Components/OpenerComponent/opener.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from "../SharedModule/shared.module";
+import { WebSiteSelectorComponent } from './Components/WebSiteSelectorComponent/web-site-selector.component';
 
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
@@ -17,7 +18,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { KeyComponent } from './Components/KeyComponent/key.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { WebSiteSelectorComponent } from './Components/WebSiteSelectorComponent/web-site-selector.component';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { WebSiteSelectorComponent } from './Components/WebSiteSelectorComponent/
     SharedModule,
     NzIconModule,
     NzGridModule,
-    NzCardModule
+    NzCardModule,
+    NzProgressModule
   ]
 })
 export class HomeModule { }

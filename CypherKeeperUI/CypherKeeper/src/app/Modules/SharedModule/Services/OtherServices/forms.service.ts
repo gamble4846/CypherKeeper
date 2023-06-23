@@ -56,7 +56,8 @@ export class FormsService {
       Mode: ['Sha256', [Validators.required]],
       CodeSize: [6, [Validators.required]],
       Type: ['TOTP', [Validators.required]],
-      Id: [{value: null, disabled: true}]
+      Step: [30, [Validators.required]],
+      Id: [null]
     });
   }
 }

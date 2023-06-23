@@ -11,6 +11,7 @@ export interface tbTwoFactorAuthModel {
     UpdatedDate: string | null;
     DeletedDate: string | null;
     ArrangePosition: number | null;
+    Step: number;
 }
 
 export interface tbTwoFactorAuthModel_ADD {
@@ -21,4 +22,12 @@ export interface tbTwoFactorAuthModel_ADD {
     Type: string;
     KeyId: string | null;
     Id: string | null;
+    Step: number;
+}
+
+export interface TwoFAViewModel{
+    Id: string,
+    Code: string,
+    Time: number,
+    Step: number,
 }

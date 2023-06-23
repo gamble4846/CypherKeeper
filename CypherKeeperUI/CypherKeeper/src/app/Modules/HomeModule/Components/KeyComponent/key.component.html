@@ -56,21 +56,26 @@
       <div *ngFor="let TWOFA of KeyTwoFactors" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6"
         style="padding: 10px;">
         <ng-container *ngIf="TWOFA.Id">
-          <nz-card nzHoverable style="width:100%; cursor: default;" [nzCover]="CoverTemplate_NewKey">
+          <nz-card nzHoverable style="width:100%; cursor: default;" [nzCover]="CoverTemplate">
             <nz-card-meta [nzTitle]="TWOFA.Name"></nz-card-meta>
+            <span (click)="OpenTwoFAModel(TWOFA)">Edit</span>
           </nz-card>
-          <ng-template #CoverTemplate_NewKey>
+          <ng-template #CoverTemplate>
             <div style="display: flex; justify-content: center; padding: 10px 0px;">
-              {{TWOFA.Name}}
-              <span (click)="OpenTwoFAModel(TWOFA)">Edit</span>
+              <div style="width: 100%; padding: 0px 10px;">
+                <div style="font-size: 20px; text-align: center;">
+                  {{GetCurrentCode(TWOFA.Id)}}
+                </div>
+                <nz-progress [nzPercent]="GetProgressPercentageTwoFA(TWOFA.Id)" [nzShowInfo]="false"></nz-progress>
+              </div>
             </div>
           </ng-template>
         </ng-container>
         <ng-container *ngIf="!TWOFA.Id">
-          <nz-card nzHoverable style="width:100%; cursor: not-allowed;" [nzCover]="CoverTemplate_NewKey">
+          <nz-card nzHoverable style="width:100%; cursor: not-allowed;" [nzCover]="CoverTemplate">
             <nz-card-meta [nzTitle]="TWOFA.Name"></nz-card-meta>
           </nz-card>
-          <ng-template #CoverTemplate_NewKey>
+          <ng-template #CoverTemplate>
             <div style="display: flex; justify-content: center; padding: 10px 0px;">
               Save Key To Edit or to Generate OTP
             </div>
@@ -161,13 +166,19 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Id" nzRequired>Id</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24">
-          <input nz-input type="text" formControlName="Id" id="Id" [disabled]="true"/>
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Step" nzRequired>Step</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorStepTpl">
+          <input nz-input type="text" formControlName="Step" id="Step" />
+          <ng-template #errorStepTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Please enter Step!</ng-container>
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
-        <button nz-button nzType="primary" type="Submit">Submit</button>
+      <nz-form-item style="display: none;">
+        <nz-form-label [nzSm]="8" [nzXs]="16" nzFor="Id" nzRequired>Id</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input nz-input type="text" formControlName="Id" id="Id"/>
+        </nz-form-control>
       </nz-form-item>
     </form>
   </ng-container>

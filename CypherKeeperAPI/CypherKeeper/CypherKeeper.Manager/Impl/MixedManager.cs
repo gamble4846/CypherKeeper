@@ -1,4 +1,5 @@
-﻿using CypherKeeper.AuthLayer.Models;
+﻿using Azure;
+using CypherKeeper.AuthLayer.Models;
 using CypherKeeper.AuthLayer.Utility;
 using CypherKeeper.DataAccess.SQL.Impl;
 using CypherKeeper.DataAccess.SQL.Interface;
@@ -9,10 +10,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Evaluation;
 using Microsoft.Extensions.Configuration;
+using OtpNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CypherKeeper.Manager.Impl
@@ -21,6 +24,7 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.IMixedDataAccess SQLMixedDataAccess { get; set; }
+        CypherKeeper.DataAccess.SQL.Interface.ITbTwoFactorAuthDataAccess SQLTbTwoFactorAuthDataAccess { get; set; }
         public SelectedServerModel CurrentServer { get; set; }
 
         public MixedManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -146,6 +150,54 @@ namespace CypherKeeper.Manager.Impl
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
             }
+        }
+
+        public APIResponse GetTwoFACodeData(Guid TwoFAId)
+        {
+            var GlobalResult = new tbTwoFactorAuthModel();
+            switch (CurrentServer.DatabaseType)
+            {
+                case "SQLServer":
+                    SQLTbTwoFactorAuthDataAccess = new TbTwoFactorAuthDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+
+                    var result = SQLTbTwoFactorAuthDataAccess.GetById(TwoFAId);
+                    if (result != null)
+                    {
+                        result = CommonFunctions.DecryptModel(result);
+                        GlobalResult = result;
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Saved");
+                    }
+                default:
+                    return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
+            }
+
+            var toReturnData = new TwoFAViewModel()
+            {
+                Id = GlobalResult.Id,
+                Code = "0",
+                Time = 0,
+                Step = GlobalResult.Step,
+            };
+
+            if (GlobalResult.Type == "TOTP")
+            {
+                var totp = CommonFunctions.GetTotp(GlobalResult.Step, GlobalResult.Mode, GlobalResult.CodeSize, GlobalResult.SecretKey);
+                toReturnData.Code = totp.ComputeTotp();
+                toReturnData.Time = totp.RemainingSeconds();
+            }
+            else
+            {
+                var hotp = CommonFunctions.GetHotp(GlobalResult.Mode, GlobalResult.CodeSize, GlobalResult.SecretKey);
+                toReturnData.Code = hotp.ComputeHOTP(1);
+            }
+
+            var stringResponse = Newtonsoft.Json.JsonConvert.SerializeObject(toReturnData);
+            var EncryptedStringsResponse = CommonFunctions.EncryptFinalResponseString(stringResponse);
+            return new APIResponse(ResponseCode.SUCCESS, "Records Found", EncryptedStringsResponse, true);
         }
     }
 }

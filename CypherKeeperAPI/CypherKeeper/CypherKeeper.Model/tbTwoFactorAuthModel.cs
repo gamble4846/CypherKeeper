@@ -22,6 +22,7 @@ namespace CypherKeeper.Model
         public DateTime? UpdatedDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public Int32? ArrangePosition { get; set; }
+        public Int32 Step { get; set; }
     }
 
     public class tbTwoFactorAuthModel_ADD
@@ -32,6 +33,15 @@ namespace CypherKeeper.Model
         public String Mode { get; set; } = "Sha256";
         public Int32 CodeSize { get; set; } = 6;
         public String Type { get; set; } = "TOTP";
+        public Int32 Step { get; set; } = 30;
         public Guid? KeyId { get; set; }
+    }
+
+    public class TwoFAViewModel
+    {
+        public Guid Id { get; set; }
+        public string Code { get; set; }
+        public int Time { get; set; }
+        public int Step { get; set; }
     }
 }
