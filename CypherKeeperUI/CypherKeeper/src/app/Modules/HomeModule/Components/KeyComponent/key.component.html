@@ -66,6 +66,9 @@
                 <div style="font-size: 20px; text-align: center;">
                   {{GetCurrentCode(TWOFA.Id)}}
                 </div>
+                <div style="font-size: 10px; text-align: center;">
+                  {{GetRemainingTime(TWOFA.Id)}} sec
+                </div>
                 <nz-progress [nzPercent]="GetProgressPercentageTwoFA(TWOFA.Id)" [nzShowInfo]="false"></nz-progress>
               </div>
             </div>

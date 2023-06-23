@@ -53,7 +53,7 @@ export class FormsService {
     this.TwoFAForm = this.fb.group({
       Name: [null, [Validators.required]],
       SecretKey: [null, [Validators.required]],
-      Mode: ['Sha256', [Validators.required]],
+      Mode: ['Sha1', [Validators.required]],
       CodeSize: [6, [Validators.required]],
       Type: ['TOTP', [Validators.required]],
       Step: [30, [Validators.required]],
