@@ -45,6 +45,7 @@
       <div style="display: flex; justify-content: center;">
         <div><input nz-input type="text" [(ngModel)]="CustomFiled.Name" placeholder="Name" /></div>
         <div><input nz-input type="text" [(ngModel)]="CustomFiled.Value" placeholder="Value" /></div>
+        <div><button nz-button nzType="primary" nzDanger (click)="DeleteCustomField(CustomFiled)"><span nz-icon nzType="delete" nzTheme="outline"></span></button></div>
       </div>
     </div>
   </div>
@@ -58,7 +59,8 @@
         <ng-container *ngIf="TWOFA.Id">
           <nz-card nzHoverable style="width:100%; cursor: default;" [nzCover]="CoverTemplate">
             <nz-card-meta [nzTitle]="TWOFA.Name"></nz-card-meta>
-            <span (click)="OpenTwoFAModel(TWOFA)">Edit</span>
+            <span (click)="OpenTwoFAModel(TWOFA)" style="padding-left: 10px; cursor: pointer;">Edit</span>
+            <span (click)="DeleteTwoFA(TWOFA)" style="padding-left: 10px; cursor: pointer;">Delete</span>
           </nz-card>
           <ng-template #CoverTemplate>
             <div style="display: flex; justify-content: center; padding: 10px 0px;">

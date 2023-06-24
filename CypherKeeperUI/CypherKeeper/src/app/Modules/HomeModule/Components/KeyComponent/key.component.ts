@@ -453,4 +453,18 @@ export class KeyComponent {
       return 0;
     }
   }
+
+  DeleteCustomField(data:tbStringKeyFieldsModel){
+    let index = this.CurrentTbStringKeyFields.findIndex((x:tbStringKeyFieldsModel) => x.Id == data.Id);
+    if(index != -1){
+      this.CurrentTbStringKeyFields.splice(index, 1);
+    }
+  }
+
+  DeleteTwoFA(data:tbTwoFactorAuthModel){
+    let index = this.KeyTwoFactors.findIndex((x:tbTwoFactorAuthModel) => x.Id == data.Id);
+    if(index != -1){
+      this.KeyTwoFactors.splice(index, 1);
+    }
+  }
 }
