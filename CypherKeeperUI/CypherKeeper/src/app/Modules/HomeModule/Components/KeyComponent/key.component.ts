@@ -115,6 +115,7 @@ export class KeyComponent {
     this._TbTwoFactorAuthControllerService.Get().subscribe((response: any) => {
       if (response.code == 1) {
         this.KeyTwoFactors = response.document.records;
+        this.KeyTwoFactors.sort((a,b) => (a.ArrangePosition ?? 0) - (b.ArrangePosition ?? 0)); // b - a for reverse sort
         this.UpdateCodesForTwoFA();
       }
     });

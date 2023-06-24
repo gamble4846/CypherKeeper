@@ -179,8 +179,10 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                 }
             }
 
+            var TwoFAIndex = -1;
             foreach (var TwoFactorAuth in model.TwoFactorAuths)
             {
+                TwoFAIndex++;
                 var TwoFactorAuthModel = new tbTwoFactorAuthModel();
                 if (TwoFactorAuth.Id != null)
                 {
@@ -194,6 +196,7 @@ namespace CypherKeeper.DataAccess.SQL.Impl
                     TwoFactorAuthModel.KeyId = KeysModel_Save.Id;
                     TwoFactorAuthModel.UpdatedDate = DateTime.UtcNow;
                     TwoFactorAuthModel.Step = TwoFactorAuth.Step;
+                    TwoFactorAuthModel.ArrangePosition = TwoFAIndex;
                     TwoFactorAuthModel = _CF.EncryptModel(TwoFactorAuthModel);
 
                     List<SqlParameter> Parameters = new List<SqlParameter>();

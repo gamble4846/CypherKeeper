@@ -117,6 +117,13 @@
           <div><b>Name:</b> {{CusField.Name}}</div>
           <div><b>Value:</b> {{CusField.Value}}</div>
         </div>
+        <br>
+        <b>TWO Factor Auths</b>
+        <div *ngFor="let TWO_FA of JsonObjectHistory(history.KeysJSON).TwoFactorAuths"
+          style="border: 1px solid grey; padding: 5px; border-radius: 5px; margin-bottom: 2px;">
+          <div><b>Name:</b> {{TWO_FA.Name}}</div>
+          <div><b>SecretKey:</b> {{TWO_FA.SecretKey}}</div>
+        </div>
       </div>
     </ng-container>
   </nz-drawer>
