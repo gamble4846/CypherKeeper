@@ -1,0 +1,12 @@
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.deps.json
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.dll
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.pdb
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.csproj.AssemblyReference.cache
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.AssemblyInfoInputs.cache
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.AssemblyInfo.cs
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.csproj.CoreCompileInputs.cache
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.dll
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\refint\CypherKeeper.DataAccess.GoogleSheets.dll
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.pdb
+D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\ref\CypherKeeper.DataAccess.GoogleSheets.dll

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="EasyCrudLibrary" Version="1.0.7" />
     <PackageReference Include="FastMember" Version="1.5.0" />
+    <PackageReference Include="GoogleSheetsCrudLibrary" Version="1.0.1" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
@@ -23,6 +24,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
     <PackageReference Include="Otp.NET" Version="1.3.0" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
   </ItemGroup>
