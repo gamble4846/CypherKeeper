@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using CypherKeeper.Manager.Interface;
 using CypherKeeper.Model;
 using CypherKeeper.AuthLayer.ActionFilters;
+using CypherKeeper.DataAccess.GoogleSheets.Impl;
 
 namespace CypherKeeper.API.Controllers
 {
@@ -117,6 +118,22 @@ namespace CypherKeeper.API.Controllers
             try
             {
                 return Ok(AdminManager.GetImages());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new APIResponse(ResponseCode.ERROR, ex.Message, JsonConvert.SerializeObject(ex)));
+            }
+        }
+
+        [HttpGet]
+        [Route("/api/TEST/")]
+        public ActionResult TEST()
+        {
+            try
+            {
+                var x = new CypherKeeper.DataAccess.GoogleSheets.Impl.TbGroupsDataAccess("1e3XFN67BJBSsJjxuCnrMYUafCIqy2m1iQT2K0CfT4OM", CommonFunctions);
+                var y = x.Get();
+                return Ok(null);
             }
             catch (Exception ex)
             {

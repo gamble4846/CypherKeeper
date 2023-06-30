@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CPZmWQcEqtFeaBGnI4lgWhtEZMnY21Jkr9F0TepbRUekzQzH9BVU57O7Kq/jRyx5wlogXCAr+S2XKDNUchjJww==",
+  "dgSpecHash": "ffMzXPgWrtW63mARvXlqmQdQo9UugIBqJP6lO5J0cY5zP97AK4uo6r9fJtYph1fu2XnNcWDaVbBumrA8zy6Lpg==",
   "success": true,
   "projectFilePath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
   "expectedPackageFiles": [
@@ -15,7 +15,7 @@
     "C:\\Users\\chint\\.nuget\\packages\\google.apis.auth\\1.60.0\\google.apis.auth.1.60.0.nupkg.sha512",
     "C:\\Users\\chint\\.nuget\\packages\\google.apis.core\\1.60.0\\google.apis.core.1.60.0.nupkg.sha512",
     "C:\\Users\\chint\\.nuget\\packages\\google.apis.sheets.v4\\1.60.0.3085\\google.apis.sheets.v4.1.60.0.3085.nupkg.sha512",
-    "C:\\Users\\chint\\.nuget\\packages\\googlesheetscrudlibrary\\1.0.1\\googlesheetscrudlibrary.1.0.1.nupkg.sha512",
+    "C:\\Users\\chint\\.nuget\\packages\\googlesheetscrudlibrary\\1.0.2\\googlesheetscrudlibrary.1.0.2.nupkg.sha512",
     "C:\\Users\\chint\\.nuget\\packages\\humanizer.core\\2.2.0\\humanizer.core.2.2.0.nupkg.sha512",
     "C:\\Users\\chint\\.nuget\\packages\\ini-parser\\2.5.2\\ini-parser.2.5.2.nupkg.sha512",
     "C:\\Users\\chint\\.nuget\\packages\\log4net\\2.0.13\\log4net.2.0.13.nupkg.sha512",

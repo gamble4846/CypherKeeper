@@ -22,6 +22,7 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbGroupsDataAccess SQLTbGroupsDataAccess { get; set; }
+        CypherKeeper.DataAccess.GoogleSheets.Interface.ITbGroupsDataAccess GoogleSheetTbGroupsDataAccess { get; set; }
         public SelectedServerModel CurrentServer { get; set; }
 
         public TbGroupsManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -32,6 +33,8 @@ namespace CypherKeeper.Manager.Impl
             {
                 throw new Exception("Server Not Found");
             }
+            SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+            GoogleSheetTbGroupsDataAccess = new CypherKeeper.DataAccess.GoogleSheets.Impl.TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
         }
 
         public APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
@@ -41,12 +44,23 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-                    var result = SQLTbGroupsDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
-                    if (result != null && result.Count > 0)
+                    var resultSQLServer = SQLTbGroupsDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
+                    if (resultSQLServer != null && resultSQLServer.Count > 0)
                     {
-                        GlobalResult = result;
+                        GlobalResult = resultSQLServer;
                         GlobalTotal = SQLTbGroupsDataAccess.Total();
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "No Records Found");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheets = GoogleSheetTbGroupsDataAccess.Get(page, itemsPerPage, onlyNonDeleted);
+                    if (resultGoogleSheets != null && resultGoogleSheets.Count > 0)
+                    {
+                        GlobalResult = resultGoogleSheets;
+                        GlobalTotal = GoogleSheetTbGroupsDataAccess.Total();
                         break;
                     }
                     else
@@ -89,13 +103,23 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
                     model.ArrangePosition = SQLTbGroupsDataAccess.GetTotalByParentGroupId(model.ParentGroupId);
-                    var result = SQLTbGroupsDataAccess.Add(model);
-                    if (result != null)
+                    var resultSQLServer = SQLTbGroupsDataAccess.Add(model);
+                    if (resultSQLServer != null)
                     {
-                        FinalResult = result;
+                        FinalResult = resultSQLServer;
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Inserted");
+                    }
+                case "GoogleSheets":
+                    model.ArrangePosition = GoogleSheetTbGroupsDataAccess.GetTotalByParentGroupId(model.ParentGroupId);
+                    var resultGoogleSheets = GoogleSheetTbGroupsDataAccess.Add(model);
+                    if (resultGoogleSheets != null)
+                    {
+                        FinalResult = resultGoogleSheets;
                         break;
                     }
                     else
@@ -118,12 +142,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbGroupsDataAccess.Update(Id, model);
-                    if (result)
+                    var resultSQLServer = SQLTbGroupsDataAccess.Update(Id, model);
+                    if (resultSQLServer)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", resultSQLServer);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Updated");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheets = GoogleSheetTbGroupsDataAccess.Update(Id, model);
+                    if (resultGoogleSheets)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", resultGoogleSheets);
                     }
                     else
                     {
@@ -139,12 +171,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbGroupsDataAccess.Delete(Id);
-                    if (result)
+                    var resultSQLServer = SQLTbGroupsDataAccess.Delete(Id);
+                    if (resultSQLServer)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", resultSQLServer);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Deleted");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheets = GoogleSheetTbGroupsDataAccess.Delete(Id);
+                    if (resultGoogleSheets)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", resultGoogleSheets);
                     }
                     else
                     {
@@ -160,12 +200,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbGroupsDataAccess.Restore(Id);
-                    if (result)
+                    var resultSQLServer = SQLTbGroupsDataAccess.Restore(Id);
+                    if (resultSQLServer)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", resultSQLServer);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Restored");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheets = GoogleSheetTbGroupsDataAccess.Restore(Id);
+                    if (resultGoogleSheets)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", resultGoogleSheets);
                     }
                     else
                     {
@@ -181,19 +229,30 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var OldGroupData = SQLTbGroupsDataAccess.GetById(Id);
-                    OldGroupData = CommonFunctions.DecryptModel(OldGroupData);
-                    if (OldGroupData == null)
+                    var OldGroupDataSQLServer = SQLTbGroupsDataAccess.GetById(Id);
+                    OldGroupDataSQLServer = CommonFunctions.DecryptModel(OldGroupDataSQLServer);
+                    if (OldGroupDataSQLServer == null)
                     {
                         return new APIResponse(ResponseCode.ERROR, "Group Not Found");
                     }
                     else
                     {
-                        OldGroupData.Name = NewName;
-                        OldGroupData.UpdatedDate = DateTime.UtcNow;
-                        return Update(OldGroupData.Id, OldGroupData);
+                        OldGroupDataSQLServer.Name = NewName;
+                        OldGroupDataSQLServer.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupDataSQLServer.Id, OldGroupDataSQLServer);
+                    }
+                case "GoogleSheets":
+                    var OldGroupDataGoogleSheets = GoogleSheetTbGroupsDataAccess.GetById(Id);
+                    OldGroupDataGoogleSheets = CommonFunctions.DecryptModel(OldGroupDataGoogleSheets);
+                    if (OldGroupDataGoogleSheets == null)
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Group Not Found");
+                    }
+                    else
+                    {
+                        OldGroupDataGoogleSheets.Name = NewName;
+                        OldGroupDataGoogleSheets.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupDataGoogleSheets.Id, OldGroupDataGoogleSheets);
                     }
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
@@ -205,19 +264,30 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbGroupsDataAccess = new TbGroupsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var OldGroupData = SQLTbGroupsDataAccess.GetById(Id);
-                    OldGroupData = CommonFunctions.DecryptModel(OldGroupData);
-                    if (OldGroupData == null)
+                    var OldGroupDataSQLServer = SQLTbGroupsDataAccess.GetById(Id);
+                    OldGroupDataSQLServer = CommonFunctions.DecryptModel(OldGroupDataSQLServer);
+                    if (OldGroupDataSQLServer == null)
                     {
                         return new APIResponse(ResponseCode.ERROR, "Group Not Found");
                     }
                     else
                     {
-                        OldGroupData.IconId = IconId;
-                        OldGroupData.UpdatedDate = DateTime.UtcNow;
-                        return Update(OldGroupData.Id, OldGroupData);
+                        OldGroupDataSQLServer.IconId = IconId;
+                        OldGroupDataSQLServer.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupDataSQLServer.Id, OldGroupDataSQLServer);
+                    }
+                case "GoogleSheets":
+                    var OldGroupDataGoogleSheets = GoogleSheetTbGroupsDataAccess.GetById(Id);
+                    OldGroupDataGoogleSheets = CommonFunctions.DecryptModel(OldGroupDataGoogleSheets);
+                    if (OldGroupDataGoogleSheets == null)
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Group Not Found");
+                    }
+                    else
+                    {
+                        OldGroupDataGoogleSheets.IconId = IconId;
+                        OldGroupDataGoogleSheets.UpdatedDate = DateTime.UtcNow;
+                        return Update(OldGroupDataGoogleSheets.Id, OldGroupDataGoogleSheets);
                     }
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);

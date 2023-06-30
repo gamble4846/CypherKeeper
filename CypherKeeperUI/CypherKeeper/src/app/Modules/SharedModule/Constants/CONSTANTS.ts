@@ -14,7 +14,8 @@ KkzsaePTT5K+inuJvQIDAQAB
 -----END PUBLIC KEY-----`;
 
 export const AllowedDatabaseTypes = [
-    "SQLServer"
+    "SQLServer",
+    "GoogleSheets"
 ]
 
 export const MenuStylesConstant: Array<MenuStyles> = [

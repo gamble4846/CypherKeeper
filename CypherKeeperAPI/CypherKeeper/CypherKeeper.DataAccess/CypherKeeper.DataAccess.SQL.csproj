@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="EasyCrudLibrary" Version="1.0.7" />
     <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="GoogleSheetsCrudLibrary" Version="1.0.1" />
+    <PackageReference Include="GoogleSheetsCrudLibrary" Version="1.0.2" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />

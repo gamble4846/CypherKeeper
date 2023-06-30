@@ -512,5 +512,27 @@ namespace CypherKeeper.AuthLayer.Utility
             model.SecretKey = Decrypt(model.SecretKey, GetCurrentServer().Key);
             return model;
         }
+
+        public string GetGoogleSheetAPIJSON()
+        {
+            var GoogleSheetAPISection = Configuration.GetSection("GoogleSheetAPI");
+            var Auth_JSONDATA = GoogleSheetAPISection.GetValue<string>("Auth_JSONDATA");
+            return Auth_JSONDATA;
+        }
+
+        public List<T> GetByPage<T>(List<T> list, int pageNumber, int itemsPerPage)
+        {
+            int totalPages = (int)Math.Ceiling((double)list.Count / itemsPerPage);
+
+            if (pageNumber <= 0 || pageNumber > totalPages)
+            {
+                return new List<T>(); 
+            }
+
+            int startIndex = (pageNumber - 1) * itemsPerPage;
+            int endIndex = Math.Min(startIndex + itemsPerPage, list.Count);
+
+            return list.GetRange(startIndex, endIndex - startIndex);
+        }
     }
 }
