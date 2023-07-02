@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = CypherKeeper.DataAccess.GoogleSheets
-build_property.ProjectDir = D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\
+build_property.ProjectDir = D:\Github\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\
