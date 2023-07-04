@@ -1,16 +1,41 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+EXPOSE 4846
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["/CypherKeeper.API/CypherKeeper.API.csproj", "."]
+RUN dotnet restore "./CypherKeeper.API.csproj"
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY ["/CypherKeeper.AuthLayer/CypherKeeper.AuthLayer.csproj", "."]
+RUN dotnet restore "./CypherKeeper.AuthLayer.csproj"
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+COPY ["/CypherKeeper.DataAccess/CypherKeeper.DataAccess.SQL.csproj", "."]
+RUN dotnet restore "./CypherKeeper.DataAccess.SQL.csproj"
+
+COPY ["/CypherKeeper.DataAccess.GoogleSheets/CypherKeeper.DataAccess.GoogleSheets.csproj", "."]
+RUN dotnet restore "./CypherKeeper.DataAccess.GoogleSheets.csproj"
+
+COPY ["/CypherKeeper.DataAccess.MongoDB/CypherKeeper.DataAccess.MongoDB.csproj", "."]
+RUN dotnet restore "./CypherKeeper.DataAccess.MongoDB.csproj"
+
+COPY ["/CypherKeeper.Manager/CypherKeeper.Manager.csproj", "."]
+RUN dotnet restore "./CypherKeeper.Manager.csproj"
+
+COPY ["/CypherKeeper.Model/CypherKeeper.Model.csproj", "."]
+RUN dotnet restore "./CypherKeeper.Model.csproj"
+
+COPY ["/CypherKeeper.Utility/CypherKeeper.Utility.csproj", "."]
+RUN dotnet restore "./CypherKeeper.Utility.csproj"
+
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "CypherKeeper.API/CypherKeeper.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "CypherKeeper.API/CypherKeeper.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CypherKeeper.API.dll"]
