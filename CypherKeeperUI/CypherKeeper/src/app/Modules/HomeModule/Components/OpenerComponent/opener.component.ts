@@ -101,6 +101,17 @@ export class OpenerComponent {
         this.AllIcons_Completed = true;
         if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
       }
+      else{
+        if(response.message == "No Records Found"){
+          this.AllIcons_Completed = true;
+          if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
+        }
+      }
+    }, (error:any) => {
+      if(error.message == "No Records Found"){
+        this.AllIcons_Completed = true;
+        if (this.AllGroups_Completed && this.AllIcons_Completed) { this.SetupGroupsMenuData(); }
+      }
     })
   }
 
@@ -118,6 +129,7 @@ export class OpenerComponent {
   }
 
   SetupGroupsMenuData() {
+    console.log("here");
     let Old_AllGroups_IM_Data = structuredClone(this.AllGroups_IM_Data);
 
     let MenuGroupWithoutChildren: Array<MenuData> = [];

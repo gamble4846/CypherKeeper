@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj": {}
+    "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj": {}
   },
   "projects": {
-    "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
+    "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
+        "projectUniqueName": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
         "projectName": "CypherKeeper.AuthLayer",
-        "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\obj\\",
+        "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj",
+        "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
+        "outputPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
-                "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
+              "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
+                "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
               }
             }
           }
@@ -141,21 +141,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj": {
+    "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
+        "projectUniqueName": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
         "projectName": "CypherKeeper.DataAccess.GoogleSheets",
-        "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\obj\\",
+        "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
+        "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
+        "outputPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -169,11 +169,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
-                "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj"
+              "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
+                "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj"
               },
-              "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
-                "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
+              "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
+                "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
               }
             }
           }
@@ -285,21 +285,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
+    "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj",
+        "projectUniqueName": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj",
         "projectName": "CypherKeeper.Model",
-        "projectPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\obj\\",
+        "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj",
+        "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
+        "outputPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -422,7 +422,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
