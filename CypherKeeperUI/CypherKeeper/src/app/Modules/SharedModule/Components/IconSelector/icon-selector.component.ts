@@ -54,7 +54,7 @@ export class IconSelectorComponent {
     this._ImageControllerService.UploadImage(file).subscribe((response:any) => {
       if(response.code == 1){
         let NewIconModel:tbIconsModel = {
-          id: crypto.randomUUID(),
+          id: this._CommonService.GenerateUUID(),
           link: response.document.newImageLink,
           isDeleted: false,
           createdDate: new Date().toISOString(),
