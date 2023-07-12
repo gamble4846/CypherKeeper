@@ -20,6 +20,7 @@ namespace CypherKeeper.Manager.Impl
     {
         public CommonFunctions CommonFunctions { get; set; }
         CypherKeeper.DataAccess.SQL.Interface.ITbIconsDataAccess SQLTbIconsDataAccess { get; set; }
+        CypherKeeper.DataAccess.GoogleSheets.Interface.ITbIconsDataAccess GoogleSheetTbIconsDataAccess { get; set; }
         public SelectedServerModel CurrentServer { get; set; }
 
         public TbIconsManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -30,6 +31,9 @@ namespace CypherKeeper.Manager.Impl
             {
                 throw new Exception("Server Not Found");
             }
+
+            SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
+            GoogleSheetTbIconsDataAccess = new CypherKeeper.DataAccess.GoogleSheets.Impl.TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
         }
 
         public APIResponse Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true)
@@ -39,17 +43,28 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-                    var result = SQLTbIconsDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
-                    if (result != null && result.Count > 0)
+                    var resultSQL = SQLTbIconsDataAccess.Get(page, itemsPerPage, orderBy, onlyNonDeleted);
+                    if (resultSQL != null && resultSQL.Count > 0)
                     {
-                        GlobalResult = result;
+                        GlobalResult = resultSQL;
                         GlobalTotal = SQLTbIconsDataAccess.Total();
                         break;
                     }
                     else
                     {
                         return new APIResponse(ResponseCode.ERROR, "No Records Found");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheets = GoogleSheetTbIconsDataAccess.Get(page, itemsPerPage, onlyNonDeleted);
+                    if (resultGoogleSheets != null)
+                    {
+                        GlobalResult = resultGoogleSheets;
+                        GlobalTotal = GoogleSheetTbIconsDataAccess.Total();
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Inserted");
                     }
                 default:
                     return new APIResponse(ResponseCode.ERROR, "Invalid Database Type", CurrentServer.DatabaseType);
@@ -65,12 +80,21 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbIconsDataAccess.Add(model);
-                    if (result != null)
+                    var resultSQL = SQLTbIconsDataAccess.Add(model);
+                    if (resultSQL != null)
                     {
-                        FinalResult = result;
+                        FinalResult = resultSQL;
+                        break;
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Inserted");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheet = GoogleSheetTbIconsDataAccess.Add(model);
+                    if (resultGoogleSheet != null)
+                    {
+                        FinalResult = resultGoogleSheet;
                         break;
                     }
                     else
@@ -90,12 +114,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbIconsDataAccess.Update(Id,model);
-                    if (result)
+                    var resultSQL = SQLTbIconsDataAccess.Update(Id,model);
+                    if (resultSQL)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", resultSQL);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Updated");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheet = GoogleSheetTbIconsDataAccess.Update(Id, model);
+                    if (resultGoogleSheet)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Updated", resultGoogleSheet);
                     }
                     else
                     {
@@ -111,12 +143,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbIconsDataAccess.Delete(Id);
-                    if (result)
+                    var resultSQL = SQLTbIconsDataAccess.Delete(Id);
+                    if (resultSQL)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", resultSQL);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Deleted");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheet = GoogleSheetTbIconsDataAccess.Delete(Id);
+                    if (resultGoogleSheet)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Deleted", resultGoogleSheet);
                     }
                     else
                     {
@@ -132,12 +172,20 @@ namespace CypherKeeper.Manager.Impl
             switch (CurrentServer.DatabaseType)
             {
                 case "SQLServer":
-                    SQLTbIconsDataAccess = new TbIconsDataAccess(CurrentServer.ConnectionString, CommonFunctions);
-
-                    var result = SQLTbIconsDataAccess.Restore(Id);
-                    if (result)
+                    var resultSQL = SQLTbIconsDataAccess.Restore(Id);
+                    if (resultSQL)
                     {
-                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", result);
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", resultSQL);
+                    }
+                    else
+                    {
+                        return new APIResponse(ResponseCode.ERROR, "Record Not Restored");
+                    }
+                case "GoogleSheets":
+                    var resultGoogleSheet = GoogleSheetTbIconsDataAccess.Restore(Id);
+                    if (resultGoogleSheet)
+                    {
+                        return new APIResponse(ResponseCode.SUCCESS, "Record Restored", resultGoogleSheet);
                     }
                     else
                     {

@@ -10,7 +10,7 @@ namespace CypherKeeper.DataAccess.GoogleSheets.Interface
 {
     public interface ITbIconsDataAccess
     {
-        List<tbIconsModel> Get(int page = 1, int itemsPerPage = 100, List<OrderByModel> orderBy = null, bool onlyNonDeleted = true);
+        List<tbIconsModel> Get(int page = 1, int itemsPerPage = 100, bool onlyNonDeleted = true);
         tbIconsModel GetById(Guid Id, bool onlyNonDeleted = true);
         tbIconsModel Add(tbIconsModel model);
         bool Update(Guid Id, tbIconsModel model);
