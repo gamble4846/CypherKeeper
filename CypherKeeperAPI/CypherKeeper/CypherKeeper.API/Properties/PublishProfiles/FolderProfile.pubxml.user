@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>D:\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.API\bin\Release\net6.0\publish\</_PublishTargetUrl>
-    <History>True|2023-06-16T09:43:59.1386663Z;True|2023-06-10T16:34:28.7957800+05:30;True|2023-06-10T13:30:30.1911272+05:30;True|2023-06-09T11:35:56.8232996+05:30;</History>
+    <_PublishTargetUrl>C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.API\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2023-07-16T05:54:49.0116934Z;True|2023-06-16T02:43:59.1386663-07:00;True|2023-06-10T04:04:28.7957800-07:00;True|2023-06-10T01:00:30.1911272-07:00;True|2023-06-08T23:05:56.8232996-07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

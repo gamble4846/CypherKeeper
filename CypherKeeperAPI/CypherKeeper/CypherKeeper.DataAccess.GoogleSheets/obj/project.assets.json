@@ -12490,19 +12490,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chint\\.nuget\\packages\\": {}
+    "C:\\Users\\Rohan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
+      "projectUniqueName": "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
       "projectName": "CypherKeeper.DataAccess.GoogleSheets",
-      "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
-      "packagesPath": "C:\\Users\\chint\\.nuget\\packages\\",
-      "outputPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\obj\\",
+      "projectPath": "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\CypherKeeper.DataAccess.GoogleSheets.csproj",
+      "packagesPath": "C:\\Users\\Rohan\\.nuget\\packages\\",
+      "outputPath": "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.DataAccess.GoogleSheets\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\chint\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Rohan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12516,11 +12521,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
-              "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj"
+            "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj": {
+              "projectPath": "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.AuthLayer\\CypherKeeper.AuthLayer.csproj"
             },
-            "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
-              "projectPath": "D:\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
+            "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj": {
+              "projectPath": "C:\\Data\\Git Projects\\Rohan's Projects\\CypherKeeper\\CypherKeeperAPI\\CypherKeeper\\CypherKeeper.Model\\CypherKeeper.Model.csproj"
             }
           }
         }
@@ -12632,7 +12637,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -32,3 +32,20 @@ D:\Github\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.Goog
 D:\Github\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\refint\CypherKeeper.DataAccess.GoogleSheets.dll
 D:\Github\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.pdb
 D:\Github\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\ref\CypherKeeper.DataAccess.GoogleSheets.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.pdb
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.deps.json
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.pdb
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.AuthLayer.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.Model.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.AuthLayer.pdb
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\bin\Debug\net6.0\CypherKeeper.Model.pdb
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.csproj.AssemblyReference.cache
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.GeneratedMSBuildEditorConfig.editorconfig
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.AssemblyInfoInputs.cache
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.AssemblyInfo.cs
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.csproj.CoreCompileInputs.cache
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.csproj.CopyComplete
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\CypherKeeper.DataAccess.GoogleSheets.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\refint\CypherKeeper.DataAccess.GoogleSheets.dll
+C:\Data\Git Projects\Rohan's Projects\CypherKeeper\CypherKeeperAPI\CypherKeeper\CypherKeeper.DataAccess.GoogleSheets\obj\Debug\net6.0\ref\CypherKeeper.DataAccess.GoogleSheets.dll
